@@ -33,6 +33,7 @@ const KnitCountNavigator = createStackNavigator(
     Settings: SettingsScreen
   },
   {
+    initialRouteName: "MyProjects",
     defaultNavigationOptions: defaultStackNavOptions
   }
 );
