@@ -1,6 +1,7 @@
 class Counter {
-  constructor(id, label, value = 0, stepsPerCount = 1) {
+  constructor(id, projectId = null, label, value = 0, stepsPerCount = 1) {
     this.id = id;
+    this.projectId = projectId;
     this.label = label;
     this.value = value;
     this.stepsPerCount = stepsPerCount;
