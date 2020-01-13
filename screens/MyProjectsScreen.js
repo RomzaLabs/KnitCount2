@@ -3,17 +3,16 @@ import { View, Text, Platform, Button } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
+import KnitCountAddButton from "../components/KnitCountAddButton";
 import Colors from "../constants/Colors";
 
 const MyProjectsScreen = (props) => {
   return (
-    <View>
+    <View style={{marginLeft: 12, marginRight: 12}}>
       <Text>My Projects</Text>
-      <Button
-        color={Colors.primaryColor}
-        title="Add Project"
-        onPress={() => props.navigation.navigate("CreateProject")}
-      />
+      <View>
+        <KnitCountAddButton onPress={() => props.navigation.navigate("CreateProject")} />
+      </View>
       <Button
         color={Colors.primaryColor}
         title="Project Details"
