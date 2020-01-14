@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 3,
     elevation: 5,
-    borderRadius: 10,
+    borderRadius: 3,
     backgroundColor: "white"
   }
 });
