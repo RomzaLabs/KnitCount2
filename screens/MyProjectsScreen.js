@@ -1,23 +1,29 @@
 import React from 'react';
-import { View, Text, Platform, Button } from 'react-native';
+import { View, Platform } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
-import Colors from "../constants/Colors";
+import KnitCountProjectCard from "../components/KnitCountProjectCard";
+
+import PROJECTS from "../constants/DummyData";
 
 const MyProjectsScreen = (props) => {
+  const dummyProject = PROJECTS[0];
+
   return (
-    <View style={{marginLeft: 12, marginRight: 12}}>
-      <Text>My Projects</Text>
-      <View>
+    <View>
+      <View style={{margin: 12}}>
         <KnitCountAddButton onPress={() => props.navigation.navigate("CreateProject")} />
       </View>
-      <Button
-        color={Colors.primaryColor}
-        title="Project Details"
-        onPress={() => props.navigation.navigate("ProjectDetails")}
-      />
+      <View style={{margin: 12}}>
+        <KnitCountProjectCard
+          onPress={() => props.navigation.navigate("ProjectDetails")}
+          image={dummyProject.imageUris[0]}
+          title={dummyProject.name}
+          status={dummyProject.status}
+        />
+      </View>
     </View>
   );
 };
