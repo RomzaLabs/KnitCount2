@@ -22,8 +22,15 @@ const KnitCountAddButton = (props) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    borderRadius: 3,
-    overflow: "hidden"
+    shadowColor: "black",
+    shadowOpacity: 0.26,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 3,
+    elevation: 5,
+    borderRadius: 3
   },
   button: {
     backgroundColor: Colors.primaryColor,

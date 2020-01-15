@@ -1,10 +1,12 @@
 import Counter from "../models/Counter";
 import Project from "../models/Project";
+import {ProjectStatus} from "../models/ProjectStatus";
 
 const PROJECTS = [
   new Project(
     1,
     "Holiday Hat",
+    ProjectStatus.WIP,
     [
       new Counter(1, 1, "Increase"),
       new Counter(2, 1, "Decrease"),
@@ -20,6 +22,7 @@ const PROJECTS = [
   new Project(
     2,
     "Stripey Socks",
+    ProjectStatus.FO,
     [
       new Counter(1, 2, "Increase"),
       new Counter(2, 2, "Decrease"),
@@ -35,6 +38,7 @@ const PROJECTS = [
   new Project(
     3,
     "Mittens for Mom",
+    ProjectStatus.FO,
     [
       new Counter(1, 3, "Increase"),
       new Counter(2, 3, "Decrease"),
