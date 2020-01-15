@@ -7,15 +7,16 @@ const KnitCountProjectCard = (props) => {
   let TouchableCmp = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) TouchableCmp = TouchableNativeFeedback;
 
-  // TODO: Use default image if project doesn't have an image.
-
   return (
     <Card style={styles.project}>
       <View style={styles.touchable}>
         <TouchableCmp onPress={props.onPress} useForeground >
           <View style={styles.projectDetail}>
             <View>
-              <ImageBackground source={{uri: props.image}} style={styles.bgImageContainer} >
+              <ImageBackground
+                source={props.image ? {uri: props.image} : require('../assets/ProjectPlaceholder.png')}
+                style={styles.bgImageContainer}
+              >
                 <View style={styles.titleContainer}>
                   <Text style={styles.title} numberOfLines={2}>
                     {props.title}
