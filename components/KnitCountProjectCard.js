@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 
 import Card from "./Card";
 
@@ -9,22 +9,24 @@ const KnitCountProjectCard = (props) => {
 
   // TODO: Use default image if project doesn't have an image.
 
-  /*
-  <View style={styles.titleContainer}>
-              <Text style={styles.title} >{props.title}</Text>
-            </View>
-            <View style={styles.statusContainer}>
-              <Text style={styles.status} >{props.status}</Text>
-            </View>
-   */
-
   return (
     <Card style={styles.project}>
       <View style={styles.touchable}>
         <TouchableCmp onPress={props.onPress} useForeground >
-          <View>
-            <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{uri: props.image}} />
+          <View style={styles.projectDetail}>
+            <View>
+              <ImageBackground source={{uri: props.image}} style={styles.bgImageContainer} >
+                <View style={styles.titleContainer}>
+                  <Text style={styles.title} numberOfLines={2}>
+                    {props.title}
+                  </Text>
+                </View>
+                <View style={styles.statusContainer}>
+                  <Text style={styles.status} numberOfLines={1}>
+                    {props.status}
+                  </Text>
+                </View>
+              </ImageBackground>
             </View>
           </View>
         </TouchableCmp>
@@ -41,34 +43,36 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 3
   },
-  imageContainer: {
-    width: "100%",
-    height: "100%",
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
-    overflow: "hidden"
+  projectDetail: {
+    flexDirection: 'column'
   },
-  image: {
-    width: "100%",
-    height: "100%"
+  bgImageContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: "space-between"
   },
   titleContainer: {
-    height: "20%",
+    padding: 12
   },
   title: {
-    fontSize: 24,
-    fontFamily: "avenir-roman"
+    fontFamily: 'avenir-black',
+    fontSize: 32,
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: -1, height: 2},
+    textShadowRadius: 3
   },
   statusContainer: {
-    alignItems: "center",
-    height: "17%",
-    padding: 10
+    padding: 12
   },
   status: {
-    fontSize: 18,
-    marginVertical: 2,
-    fontFamily: "avenir-roman"
-  },
+    fontSize: 16,
+    fontFamily: 'avenir-black',
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: -1, height: 2},
+    textShadowRadius: 3
+  }
 });
 
 export default KnitCountProjectCard;
