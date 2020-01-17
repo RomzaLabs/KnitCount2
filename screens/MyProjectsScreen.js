@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { inject, observer } from "mobx-react";
 
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
@@ -10,6 +11,7 @@ import PROJECTS from "../constants/DummyData";
 
 const MyProjectsScreen = (props) => {
   const dummyProject = PROJECTS[0];
+  const { projects } = props.projectsStore;
 
   return (
     <View>
@@ -47,4 +49,4 @@ MyProjectsScreen.navigationOptions = (navData) => {
   );
 };
 
-export default MyProjectsScreen;
+export default inject("projectsStore")(observer(MyProjectsScreen));
