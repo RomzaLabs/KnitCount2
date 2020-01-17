@@ -1,6 +1,6 @@
-# Shop App
+# KnitCount
 
-Version: 1.0.0 - 03 Jan 2020
+Version: 1.0.0 - 17 Jan 2020
 
 ## Description
 
