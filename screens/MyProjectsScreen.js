@@ -2,14 +2,15 @@ import React from 'react';
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import SafeAreaView from 'react-native-safe-area-view';
-import { inject, observer } from "mobx-react";
+import { observer } from "mobx-react";
 
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
+import ProjectsStore from "../store/ProjectsStore";
 
 const MyProjectsScreen = (props) => {
-  const { projects } = props.projectsStore;
+  const { projects } = ProjectsStore;
 
   const renderKnitCountCard = (item) => {
     return (
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default inject("projectsStore")(observer(MyProjectsScreen));
+export default observer(MyProjectsScreen);

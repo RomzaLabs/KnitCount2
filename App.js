@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { AppLoading } from "expo";
 import { enableScreens } from "react-native-screens";
 import * as Font from 'expo-font';
-import { Provider } from 'mobx-react';
 import ProjectsStore from "./store/ProjectsStore";
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
@@ -33,5 +32,5 @@ export default function App() {
   ProjectsStore.loadProjects(PROJECTS);
   // End temporary handling.
 
-  return <Provider projectsStore={ProjectsStore}><KnitCountNavigator/></Provider>;
+  return <KnitCountNavigator/>;
 }
