@@ -6,6 +6,7 @@ import { Provider } from 'mobx-react';
 import ProjectsStore from "./store/ProjectsStore";
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
+import PROJECTS from "./constants/DummyData";
 
 enableScreens();
 
@@ -27,6 +28,10 @@ export default function App() {
       onError={(err) => console.log(err)}
     />;
   }
+
+  // Temporary handling.
+  ProjectsStore.loadProjects(PROJECTS);
+  // End temporary handling.
 
   return <Provider projectsStore={ProjectsStore}><KnitCountNavigator/></Provider>;
 }
