@@ -19,12 +19,6 @@ const MyProjectsScreen = (props) => {
         <KnitCountAddButton onPress={() => props.navigation.navigate("CreateProject")} />
       </View>
       <View style={styles.section}>
-        <KnitCountProjectCard
-          onPress={() => props.navigation.navigate("ProjectDetails")}
-          image={dummyProject.imageUris[0]}
-          title={dummyProject.name}
-          status={dummyProject.status}
-        />
       </View>
     </View>
   );
