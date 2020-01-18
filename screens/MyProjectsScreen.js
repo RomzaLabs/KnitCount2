@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Platform } from 'react-native';
+import { View, Platform, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { inject, observer } from "mobx-react";
 
@@ -15,10 +15,10 @@ const MyProjectsScreen = (props) => {
 
   return (
     <View>
-      <View style={{margin: 12}}>
+      <View style={styles.section}>
         <KnitCountAddButton onPress={() => props.navigation.navigate("CreateProject")} />
       </View>
-      <View style={{margin: 12}}>
+      <View style={styles.section}>
         <KnitCountProjectCard
           onPress={() => props.navigation.navigate("ProjectDetails")}
           image={dummyProject.imageUris[0]}
@@ -48,5 +48,11 @@ MyProjectsScreen.navigationOptions = (navData) => {
     }
   );
 };
+
+const styles = StyleSheet.create({
+  section: {
+    margin: 12
+  }
+});
 
 export default inject("projectsStore")(observer(MyProjectsScreen));
