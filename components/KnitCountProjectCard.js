@@ -38,7 +38,8 @@ const KnitCountProjectCard = (props) => {
 
 const styles = StyleSheet.create({
   project: {
-    height: 250
+    height: 250,
+    marginBottom: 16
   },
   touchable: {
     overflow: "hidden",

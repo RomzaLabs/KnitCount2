@@ -6,7 +6,7 @@ const PROJECTS = [
   new Project(
     1,
     "Holiday Hat",
-    ProjectStatus.WIP,
+    ProjectStatus.FO,
     [
       new Counter(1, 1, "Increase"),
       new Counter(2, 1, "Decrease"),
@@ -38,7 +38,7 @@ const PROJECTS = [
   new Project(
     3,
     "Mittens for Mom",
-    ProjectStatus.FO,
+    ProjectStatus.WIP,
     [
       new Counter(1, 3, "Increase"),
       new Counter(2, 3, "Decrease"),
@@ -50,7 +50,7 @@ const PROJECTS = [
     ["https://i.ytimg.com/vi/H79gaA_UCig/maxresdefault.jpg"],
     new Date(2019, 3, 1),
     new Date(2019, 3, 10),
-    new Date(2019, 3, 10)
+    null
   )
 ];
 

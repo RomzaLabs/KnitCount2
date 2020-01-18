@@ -1,4 +1,5 @@
 import { observable, action } from "mobx";
+import Project from "../models/Project";
 
 class ProjectsStore {
 
@@ -10,8 +11,23 @@ class ProjectsStore {
 
   // Actions
   @action
-  loadProjects = (projects) => {
-    this.projects = projects;
+  loadProjects = (jsonProjects) => {
+    const projects = jsonProjects.map(p => {
+      return new Project(
+        p.id,
+        p.name,
+        p.status,
+        p.counters,
+        p.notes,
+        p.imageUris,
+        p.startDate,
+        p.modifiedDate,
+        p.endDate
+      );
+    });
+
+    // Sort by modifiedDate in descending order, i.e. newest projects at the top
+    this.projects = projects.sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
   };
 
   @action
