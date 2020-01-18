@@ -1,26 +1,39 @@
 import React from 'react';
-import { View, Platform, StyleSheet } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import SafeAreaView from 'react-native-safe-area-view';
 import { inject, observer } from "mobx-react";
 
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
 
-import PROJECTS from "../constants/DummyData";
-
 const MyProjectsScreen = (props) => {
-  const dummyProject = PROJECTS[0];
   const { projects } = props.projectsStore;
 
+  const renderKnitCountCard = (item) => {
+    return (
+      <KnitCountProjectCard
+        onPress={() => props.navigation.navigate("ProjectDetails")}
+        image={item.imageUris[0]}
+        title={item.name}
+        status={item.status}
+      />
+    );
+  };
+
   return (
-    <View>
-      <View style={styles.section}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.addProjectContainer}>
         <KnitCountAddButton onPress={() => props.navigation.navigate("CreateProject")} />
       </View>
-      <View style={styles.section}>
-      </View>
-    </View>
+      <FlatList
+        style={styles.projectsContainer}
+        data={projects}
+        keyExtractor={item => JSON.stringify(item.id)}
+        renderItem={({item}) => renderKnitCountCard(item)}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -44,8 +57,15 @@ MyProjectsScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  section: {
+  container: {
+    flex: 1,
+    justifyContent: 'space-between'
+  },
+  addProjectContainer: {
     margin: 12
+  },
+  projectsContainer: {
+    marginHorizontal: 12
   }
 });
 
