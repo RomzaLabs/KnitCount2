@@ -12,13 +12,16 @@ import ProjectsStore from "../store/ProjectsStore";
 const MyProjectsScreen = (props) => {
   const { projects } = ProjectsStore;
 
-  const renderKnitCountCard = (item) => {
+  const renderKnitCountCard = (project) => {
     return (
       <KnitCountProjectCard
-        onPress={() => props.navigation.navigate("ProjectDetails")}
-        image={item.imageUris[0]}
-        title={item.name}
-        status={item.status}
+        onPress={() => {
+          ProjectsStore.setSelectedProject(project);
+          props.navigation.navigate("ProjectDetails");
+        }}
+        image={project.imageUris[0]}
+        title={project.name}
+        status={project.status}
       />
     );
   };
