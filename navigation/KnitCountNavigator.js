@@ -28,8 +28,18 @@ const defaultStackNavOptions = {
 
 const KnitCountNavigator = createStackNavigator(
   {
-    AddCounter: AddCounterScreen,
-    CreateProject: CreateProjectScreen,
+    AddCounter: {
+      screen: AddCounterScreen,
+      navigationOptions: {
+        headerTitle: "Add A Counter"
+      }
+    },
+    CreateProject: {
+      screen: CreateProjectScreen,
+      navigationOptions: {
+        headerTitle: ""
+      }
+    },
     MyProjects: MyProjectsScreen,
     ProjectDetails: ProjectDetailsScreen,
     Settings: SettingsScreen
