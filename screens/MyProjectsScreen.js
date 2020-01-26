@@ -4,10 +4,12 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import SafeAreaView from 'react-native-safe-area-view';
 import { observer } from "mobx-react";
 
+import AppSettingsStore from "../store/AppSettingsStore";
+import ProjectsStore from "../store/ProjectsStore";
+
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
-import ProjectsStore from "../store/ProjectsStore";
 
 const MyProjectsScreen = (props) => {
   const { projects } = ProjectsStore;
@@ -19,7 +21,7 @@ const MyProjectsScreen = (props) => {
           ProjectsStore.setSelectedProject(project);
           props.navigation.navigate("ProjectDetails");
         }}
-        image={project.imageUris[0]}
+        image={project.imageUris.length ? project.imageUris[0] : null}
         title={project.name}
         status={project.status}
       />
@@ -29,7 +31,11 @@ const MyProjectsScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.addProjectContainer}>
-        <KnitCountAddButton onPress={() => props.navigation.navigate("CreateProject")} />
+        <KnitCountAddButton
+          mainColor={AppSettingsStore.mainColor}
+          mainTextColor={AppSettingsStore.mainTextColor}
+          onPress={() => props.navigation.navigate("CreateProject")}
+        />
       </View>
       <FlatList
         style={styles.projectsContainer}
@@ -44,7 +50,6 @@ const MyProjectsScreen = (props) => {
 MyProjectsScreen.navigationOptions = (navData) => {
   return (
     {
-      headerTitle: "My Projects",
       headerLeft: () => {
         return (
           <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton}>
@@ -55,7 +60,11 @@ MyProjectsScreen.navigationOptions = (navData) => {
             />
           </HeaderButtons>
         );
-      }
+      },
+      headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
+      headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
+      headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
+      headerTintColor: AppSettingsStore.mainTextColor
     }
   );
 };

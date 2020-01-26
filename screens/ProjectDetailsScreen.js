@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, Text, Button} from 'react-native';
+import { observer } from "mobx-react";
 
-import Colors from "../constants/Colors";
+import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 
 const ProjectDetailsScreen = (props) => {
@@ -11,7 +12,7 @@ const ProjectDetailsScreen = (props) => {
     <View>
       <Text>Project Details: { selectedProject.name }</Text>
       <Button
-        color={Colors.primaryColor}
+        color={AppSettingsStore.mainColor}
         title="Add A Counter"
         onPress={() => props.navigation.navigate("AddCounter")}
       />
@@ -22,9 +23,13 @@ const ProjectDetailsScreen = (props) => {
 ProjectDetailsScreen.navigationOptions = (navData) => {
   return (
     {
-      headerTitle: ""
+      headerTitle: ProjectsStore.selectedProject.name,
+      headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
+      headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
+      headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
+      headerTintColor: AppSettingsStore.mainTextColor
     }
   );
 };
 
-export default ProjectDetailsScreen;
+export default observer(ProjectDetailsScreen);

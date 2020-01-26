@@ -4,7 +4,7 @@ import {ProjectStatus} from "../models/ProjectStatus";
 
 const PROJECTS = [
   new Project(
-    1,
+    "1",
     "Holiday Hat",
     ProjectStatus.FO,
     [
@@ -20,7 +20,7 @@ const PROJECTS = [
     new Date(2019, 1, 10)
   ),
   new Project(
-    2,
+    "2",
     "Stripey Socks",
     ProjectStatus.FO,
     [
@@ -36,7 +36,7 @@ const PROJECTS = [
     new Date(2019, 2, 10)
   ),
   new Project(
-    3,
+    "3",
     "Mittens for Mom",
     ProjectStatus.WIP,
     [
