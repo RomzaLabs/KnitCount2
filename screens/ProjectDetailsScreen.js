@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Button} from 'react-native';
 
-import Colors from "../constants/Colors";
+import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 
 const ProjectDetailsScreen = (props) => {
@@ -11,7 +11,7 @@ const ProjectDetailsScreen = (props) => {
     <View>
       <Text>Project Details: { selectedProject.name }</Text>
       <Button
-        color={Colors.primaryColor}
+        color={AppSettingsStore.mainColor}
         title="Add A Counter"
         onPress={() => props.navigation.navigate("AddCounter")}
       />
@@ -22,7 +22,7 @@ const ProjectDetailsScreen = (props) => {
 ProjectDetailsScreen.navigationOptions = (navData) => {
   return (
     {
-      headerTitle: ""
+      headerTitle: ProjectsStore.selectedProject.name
     }
   );
 };
