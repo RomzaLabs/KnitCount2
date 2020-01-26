@@ -7,14 +7,14 @@ export default {
   clearChillBGColor: "#56ABFF",
   watermelonColor: "#FF4757",
   watermelonTextColor: "#FDFDFD", // TODO
-  watermelonBGColor: "#56ABFF", // TODO
+  watermelonBGColor: "#D25579",
   brightGreekColor: "#3742FA",
   brightGreekTextColor: "#FDFDFD", // TODO
-  brightGreekBGColor: "#56ABFF", // TODO
+  brightGreekBGColor: "#3251FB",
   coralColor: "#FF7F50",
   coralTextColor: "#FDFDFD", // TODO
-  coralBGColor: "#56ABFF", // TODO
+  coralBGColor: "#D28273",
   ufoColor: "#2ED573",
   ufoTextColor: "#FDFDFD", // TODO
-  ufoBGColor: "#56ABFF" // TODO
+  ufoBGColor: "#2BC68F"
 };
