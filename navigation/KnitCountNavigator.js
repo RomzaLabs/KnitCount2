@@ -1,5 +1,4 @@
 import React from 'react';
-import { Platform } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
@@ -13,15 +12,18 @@ import SettingsScreen from "../screens/SettingsScreen";
 
 const defaultStackNavOptions = {
   headerStyle: {
-    backgroundColor: Platform.OS === "android" ? Colors.primaryColor : ""
+    backgroundColor: Colors.primaryColor,
   },
   headerTitleStyle: {
-    fontFamily: "avenir-black"
+    fontFamily: "avenir-black",
+    fontSize: 32,
+    color: Colors.primaryTextColor
   },
   headerBackTitleStyle: {
-    fontFamily: "avenir-roman"
+    fontFamily: "avenir-roman",
+    color: "white"
   },
-  headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor
+  headerTintColor: Colors.primaryTextColor
 };
 
 const KnitCountNavigator = createStackNavigator(
