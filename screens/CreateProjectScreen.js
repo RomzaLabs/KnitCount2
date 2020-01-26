@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 
-import Colors from "../constants/Colors";
+import AppSettingsStore from "../store/AppSettingsStore";
 
 const CreateProjectScreen = (props) => {
   return (
@@ -9,7 +9,7 @@ const CreateProjectScreen = (props) => {
       <View>
         <Text>Create Project</Text>
         <Button
-          color={Colors.primaryColor}
+          color={AppSettingsStore.mainColor}
           title="Enter Name"
           onPress={() => props.navigation.navigate("ProjectDetails")}
         />
@@ -21,7 +21,7 @@ const CreateProjectScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: AppSettingsStore.mainColor,
   }
 });
 

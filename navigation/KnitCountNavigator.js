@@ -2,7 +2,7 @@ import React from 'react';
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
-import Colors from "../constants/Colors";
+import AppSettingsStore from "../store/AppSettingsStore";
 
 import AddCounterScreen from "../screens/AddCounterScreen";
 import CreateProjectScreen from "../screens/CreateProjectScreen";
@@ -12,19 +12,19 @@ import SettingsScreen from "../screens/SettingsScreen";
 
 const defaultStackNavOptions = {
   headerStyle: {
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: AppSettingsStore.mainColor,
     opacity: 0.95
   },
   headerTitleStyle: {
     fontFamily: "avenir-black",
     fontSize: 32,
-    color: Colors.primaryTextColor
+    color: AppSettingsStore.mainTextColor
   },
   headerBackTitleStyle: {
     fontFamily: "avenir-roman",
     color: "white"
   },
-  headerTintColor: Colors.primaryTextColor
+  headerTintColor: AppSettingsStore.mainTextColor
 };
 
 const KnitCountNavigator = createStackNavigator(

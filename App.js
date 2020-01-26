@@ -6,6 +6,8 @@ import ProjectsStore from "./store/ProjectsStore";
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
 import PROJECTS from "./constants/DummyData";
+import AppSettingsStore from "./store/AppSettingsStore";
+import AppSettings from "./models/AppSettings";
 
 enableScreens();
 
@@ -29,6 +31,7 @@ export default function App() {
   }
 
   // Temporary handling.
+  AppSettingsStore.setSettings(new AppSettings());
   ProjectsStore.loadProjects(PROJECTS);
   // End temporary handling.
 

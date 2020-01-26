@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StyleSheet, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import Colors from "../constants/Colors";
+import AppSettingsStore from "../store/AppSettingsStore";
 
 const KnitCountAddButton = (props) => {
   let ButtonComponent = TouchableOpacity;
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderRadius: 3
   },
   button: {
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: AppSettingsStore.mainColor,
     paddingVertical: 12,
     borderRadius: 3,
     flexDirection: "row",
