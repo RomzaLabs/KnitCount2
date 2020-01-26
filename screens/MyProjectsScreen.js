@@ -21,7 +21,7 @@ const MyProjectsScreen = (props) => {
           ProjectsStore.setSelectedProject(project);
           props.navigation.navigate("ProjectDetails");
         }}
-        image={project.imageUris[0]}
+        image={project.imageUris.length ? project.imageUris[0] : null}
         title={project.name}
         status={project.status}
       />
