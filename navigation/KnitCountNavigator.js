@@ -13,6 +13,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 const defaultStackNavOptions = {
   headerStyle: {
     backgroundColor: Colors.primaryColor,
+    opacity: 0.95
   },
   headerTitleStyle: {
     fontFamily: "avenir-black",

@@ -20,7 +20,8 @@ const CreateProjectScreen = (props) => {
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1
+    flex: 1,
+    backgroundColor: Colors.primaryColor,
   }
 });
 
