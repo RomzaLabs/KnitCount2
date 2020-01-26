@@ -7,6 +7,7 @@ class AppSettingsStore {
   @observable settings = null;
   @observable mainColor = Colors.primaryColor;
   @observable mainTextColor = Colors.primaryTextColor;
+  @observable mainBGColor = Colors.primaryBGColor;
 
   // Computed Props
 
@@ -16,6 +17,7 @@ class AppSettingsStore {
     this.settings = settings;
     this.mainColor = settings.mainColor;
     this.mainTextColor = settings.mainTextColor;
+    this.mainBGColor = settings.mainBGColor;
   };
 
 }
