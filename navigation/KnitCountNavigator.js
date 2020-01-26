@@ -41,7 +41,12 @@ const KnitCountNavigator = createStackNavigator(
         headerTitle: ""
       }
     },
-    MyProjects: MyProjectsScreen,
+    MyProjects: {
+      screen: MyProjectsScreen,
+      navigationOptions: {
+        headerTitle: "My Projects"
+      }
+    },
     ProjectDetails: ProjectDetailsScreen,
     Settings: SettingsScreen
   },

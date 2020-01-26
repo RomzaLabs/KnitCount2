@@ -50,7 +50,6 @@ const MyProjectsScreen = (props) => {
 MyProjectsScreen.navigationOptions = (navData) => {
   return (
     {
-      headerTitle: "My Projects",
       headerLeft: () => {
         return (
           <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton}>
@@ -62,15 +61,9 @@ MyProjectsScreen.navigationOptions = (navData) => {
           </HeaderButtons>
         );
       },
-      headerStyle: {
-        backgroundColor: AppSettingsStore.mainColor
-      },
-      headerTitleStyle: {
-        color: AppSettingsStore.mainTextColor
-      },
-      headerBackTitleStyle: {
-        color: AppSettingsStore.mainTextColor
-      },
+      headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
+      headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
+      headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
       headerTintColor: AppSettingsStore.mainColor
     }
   );
