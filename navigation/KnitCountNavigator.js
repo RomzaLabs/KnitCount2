@@ -22,7 +22,7 @@ const defaultStackNavOptions = {
   },
   headerBackTitleStyle: {
     fontFamily: "avenir-roman",
-    color: "white"
+    color: AppSettingsStore.mainTextColor
   },
   headerTintColor: AppSettingsStore.mainTextColor
 };
