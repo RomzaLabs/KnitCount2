@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {Button, KeyboardAvoidingView, Platform, StyleSheet, Text, View} from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import Project from "../models/Project";
+import ProjectsStore from "../store/ProjectsStore";
 
 const CreateProjectScreen = (props) => {
   const [project, setProject] = useState(null);
@@ -11,6 +12,14 @@ const CreateProjectScreen = (props) => {
   if (!project) setProject(new Project(0, "My new project"));
 
   const renderProjectName = () => project ? project.name : "";
+  const handleChangeName = (text) => {
+    const updateProject = {...project, name: text};
+    setProject(updateProject);
+  };
+  const handleSubmit = () => {
+    ProjectsStore.setSelectedProject(project);
+    props.navigation.navigate("ProjectDetails");
+  };
 
   return (
     <KeyboardAvoidingView
@@ -22,10 +31,11 @@ const CreateProjectScreen = (props) => {
         <Text style={[styles.projectName, {color: AppSettingsStore.mainTextColor}]}>
           {renderProjectName()}
         </Text>
-        <Button
-          color={AppSettingsStore.mainTextColor}
-          title="Enter Name"
-          onPress={() => props.navigation.navigate("ProjectDetails")}
+        <TextInput
+          style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
+          value={project ? project.name : ''}
+          onChangeText={handleChangeName}
+          onSubmitEditing={handleSubmit}
         />
       </View>
     </KeyboardAvoidingView>
@@ -59,6 +69,14 @@ const styles = StyleSheet.create({
     fontFamily: "avenir-roman",
     width: "100%",
     textAlign: "center"
+  },
+  input: {
+    fontFamily: "avenir-roman",
+    fontSize: 18,
+    margin: 20,
+    padding: 20,
+    width: "90%",
+    borderRadius: 5
   }
 });
 
