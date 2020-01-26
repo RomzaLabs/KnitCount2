@@ -33,6 +33,13 @@ class ProjectsStore {
   @action
   setSelectedProject = (project) => {
     this.selectedProject = project;
+  };
+
+  @action
+  createNewProject = (project) => {
+    // TODO: Persistence.
+    this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
+    this.setSelectedProject(project);
   }
 
 }

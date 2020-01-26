@@ -9,7 +9,7 @@ import ProjectsStore from "../store/ProjectsStore";
 const CreateProjectScreen = (props) => {
   const [project, setProject] = useState(null);
 
-  if (!project) setProject(new Project(0, "My new project"));
+  if (!project) setProject(new Project());
 
   const renderProjectName = () => project ? project.name : "";
   const handleChangeName = (text) => {
@@ -17,7 +17,7 @@ const CreateProjectScreen = (props) => {
     setProject(updateProject);
   };
   const handleSubmit = () => {
-    ProjectsStore.setSelectedProject(project);
+    ProjectsStore.createNewProject(project);
     props.navigation.navigate("ProjectDetails");
   };
 
