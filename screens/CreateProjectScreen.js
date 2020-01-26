@@ -14,7 +14,7 @@ const CreateProjectScreen = (props) => {
       <View>
         <Text>Create Project</Text>
         <Button
-          color={AppSettingsStore.mainColor}
+          color={AppSettingsStore.mainTextColor}
           title="Enter Name"
           onPress={() => props.navigation.navigate("ProjectDetails")}
         />
