@@ -8,6 +8,7 @@ import ProjectsStore from "../store/ProjectsStore";
 
 const CreateProjectScreen = (props) => {
   const [project, setProject] = useState(null);
+  const [touched, setTouched] = useState(false);
 
   if (!project) setProject(new Project());
 
@@ -15,6 +16,7 @@ const CreateProjectScreen = (props) => {
   const handleChangeName = (text) => {
     const updateProject = {...project, name: text};
     setProject(updateProject);
+    setTouched(true);
   };
   const handleSubmit = () => {
     ProjectsStore.createNewProject(project);
@@ -33,7 +35,8 @@ const CreateProjectScreen = (props) => {
         </Text>
         <TextInput
           style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
-          value={project ? project.name : ''}
+          placeholder="Enter project name"
+          value={touched ? project.name : ''}
           onChangeText={handleChangeName}
           onSubmitEditing={handleSubmit}
         />
