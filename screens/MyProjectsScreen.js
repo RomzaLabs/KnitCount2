@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import SafeAreaView from 'react-native-safe-area-view';
@@ -11,9 +11,10 @@ import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
+import {ProjectStatus} from "../models/ProjectStatus";
 
 const MyProjectsScreen = (props) => {
-  const { projects } = ProjectsStore;
+  const [projects, setProjects] = useState(ProjectsStore.projects.filter(p => p.status === ProjectStatus.WIP));
 
   const renderKnitCountCard = (project) => {
     return (
@@ -52,7 +53,10 @@ const MyProjectsScreen = (props) => {
               style={[styles.filterButton]}
               title="All Projects"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
-              onPress={() => {}}
+              onPress={() => {
+                setProjects(ProjectsStore.projects);
+                ProjectsStore.toggleProjectModalVisible();
+              }}
             />
           </View>
           <View style={styles.filterBtnContainer}>
@@ -60,7 +64,10 @@ const MyProjectsScreen = (props) => {
               style={[styles.filterButton]}
               title="Only WIPs"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
-              onPress={() => {}}
+              onPress={() => {
+                setProjects(ProjectsStore.projects.filter(p => p.status === ProjectStatus.WIP));
+                ProjectsStore.toggleProjectModalVisible();
+              }}
             />
           </View>
           <View style={styles.filterBtnContainer}>
@@ -68,7 +75,10 @@ const MyProjectsScreen = (props) => {
               style={[styles.filterButton]}
               title="Only FOs"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
-              onPress={() => {}}
+              onPress={() => {
+                setProjects(ProjectsStore.projects.filter(p => p.status === ProjectStatus.FO));
+                ProjectsStore.toggleProjectModalVisible();
+              }}
             />
           </View>
         </View>

@@ -46,7 +46,7 @@ class ProjectsStore {
   @action
   toggleProjectModalVisible = () => {
     this.isProjectModalVisible = !this.isProjectModalVisible;
-  }
+  };
 
 }
 
