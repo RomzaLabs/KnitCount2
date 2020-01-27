@@ -12,9 +12,17 @@ import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountAddButton from "../components/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
 import {ProjectStatus} from "../models/ProjectStatus";
+import {FilterPreference} from "../models/FilterPreference";
 
 const MyProjectsScreen = (props) => {
-  const [projects, setProjects] = useState(ProjectsStore.projects.filter(p => p.status === ProjectStatus.WIP));
+  const filterPreference = AppSettingsStore.filterPreference;
+  const [projects, setProjects] = useState(
+    ProjectsStore.projects.filter(p => {
+      if (filterPreference === FilterPreference.WIP) return p.status === ProjectStatus.WIP;
+      if (filterPreference === FilterPreference.FO) return p.status === ProjectStatus.FO;
+      return true;
+    })
+  );
 
   const renderKnitCountCard = (project) => {
     return (
