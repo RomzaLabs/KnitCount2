@@ -17,8 +17,10 @@ const defaultStackNavOptions = {
   },
   headerTitleStyle: {
     fontFamily: "avenir-black",
-    fontSize: 32,
-    color: AppSettingsStore.mainTextColor
+    fontSize: 22,
+    color: AppSettingsStore.mainTextColor,
+    width: '100%',
+    maxWidth: 250
   },
   headerBackTitleStyle: {
     fontFamily: "avenir-roman",
