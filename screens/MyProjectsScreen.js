@@ -59,7 +59,7 @@ const MyProjectsScreen = (props) => {
           <View style={styles.filterBtnContainer}>
             <Button
               style={[styles.filterButton]}
-              title="All Projects"
+              title="💪 All Projects 💪"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
                 setProjects(ProjectsStore.projects);
@@ -71,7 +71,7 @@ const MyProjectsScreen = (props) => {
           <View style={styles.filterBtnContainer}>
             <Button
               style={[styles.filterButton]}
-              title="Only WIPs"
+              title="🚧 Only WIPs 🚧"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
                 setProjects(ProjectsStore.projects.filter(p => p.status === ProjectStatus.WIP));
@@ -83,7 +83,7 @@ const MyProjectsScreen = (props) => {
           <View style={styles.filterBtnContainer}>
             <Button
               style={[styles.filterButton]}
-              title="Only FOs"
+              title="✨ Only FOs ✨"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
                 setProjects(ProjectsStore.projects.filter(p => p.status === ProjectStatus.FO));
