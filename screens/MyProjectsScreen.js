@@ -61,6 +61,17 @@ MyProjectsScreen.navigationOptions = (navData) => {
           </HeaderButtons>
         );
       },
+      headerRight: () => {
+        return (
+          <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton} title="Filter">
+            <Item
+              title="Filter"
+              iconName={Platform.OS === "android" ? "md-funnel" : "ios-funnel"}
+              onPress={() => console.log("funnel me")}
+            />
+          </HeaderButtons>
+        );
+      },
       headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
       headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
       headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
