@@ -1,9 +1,11 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import {Button, Platform, Text, View} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
+import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
+import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
 const ProjectDetailsScreen = (props) => {
   const { selectedProject } = ProjectsStore;
@@ -25,11 +27,13 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
     {
       headerLeft: () => {
         return (
-          <Button
-            onPress={() => navData.navigation.popToTop()}
-            title="My Projects"
-            color={AppSettingsStore.mainTextColor}
-          />
+          <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton} title="My Projects">
+            <Item
+              title="My Projects"
+              iconName={Platform.OS === "android" ? "md-home" : "ios-home"}
+              onPress={() => navData.navigation.popToTop()}
+            />
+          </HeaderButtons>
         );
       },
       headerTitle: ProjectsStore.selectedProject.name,
