@@ -6,6 +6,7 @@ class ProjectsStore {
   // Observable Props
   @observable projects = [];
   @observable selectedProject = null;
+  @observable isProjectModalVisible = false;
 
   // Computed Props
 
@@ -40,7 +41,12 @@ class ProjectsStore {
     // TODO: Persistence.
     this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
     this.setSelectedProject(project);
-  }
+  };
+
+  @action
+  toggleProjectModalVisible = () => {
+    this.isProjectModalVisible = !this.isProjectModalVisible;
+  };
 
 }
 

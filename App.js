@@ -8,6 +8,8 @@ import KnitCountNavigator from "./navigation/KnitCountNavigator";
 import PROJECTS from "./constants/DummyData";
 import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
+import {FilterPreference} from "./models/FilterPreference";
+import Colors from "./constants/Colors";
 
 enableScreens();
 
@@ -31,7 +33,14 @@ export default function App() {
   }
 
   // Temporary handling.
-  AppSettingsStore.setSettings(new AppSettings());
+  const appSettings = new AppSettings(
+    true,
+    Colors.primaryColor,
+    Colors.primaryTextColor,
+    Colors.primaryBGColor,
+    FilterPreference.WIP
+  );
+  AppSettingsStore.setSettings(appSettings);
   ProjectsStore.loadProjects(PROJECTS);
   // End temporary handling.
 
