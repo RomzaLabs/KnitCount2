@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -23,6 +23,15 @@ const ProjectDetailsScreen = (props) => {
 ProjectDetailsScreen.navigationOptions = (navData) => {
   return (
     {
+      headerLeft: () => {
+        return (
+          <Button
+            onPress={() => navData.navigation.popToTop()}
+            title="My Projects"
+            color={AppSettingsStore.mainTextColor}
+          />
+        );
+      },
       headerTitle: ProjectsStore.selectedProject.name,
       headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
       headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
