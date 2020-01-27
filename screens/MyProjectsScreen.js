@@ -52,7 +52,7 @@ MyProjectsScreen.navigationOptions = (navData) => {
     {
       headerLeft: () => {
         return (
-          <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton}>
+          <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton} title="My Projects">
             <Item
               title="Settings"
               iconName={Platform.OS === "android" ? "md-settings" : "ios-settings"}
