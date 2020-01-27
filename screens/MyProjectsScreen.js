@@ -1,8 +1,9 @@
 import React from 'react';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import SafeAreaView from 'react-native-safe-area-view';
 import { observer } from "mobx-react";
+import Modal from "react-native-modal";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -43,6 +44,11 @@ const MyProjectsScreen = (props) => {
         keyExtractor={item => JSON.stringify(item.id)}
         renderItem={({item}) => renderKnitCountCard(item)}
       />
+      <Modal isVisible={ProjectsStore.isProjectModalVisible} onBackdropPress={ProjectsStore.toggleProjectModalVisible}>
+        <View style={styles.filterContent}>
+          <Text>Hi 👋!</Text>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -67,7 +73,7 @@ MyProjectsScreen.navigationOptions = (navData) => {
             <Item
               title="Filter"
               iconName={Platform.OS === "android" ? "md-funnel" : "ios-funnel"}
-              onPress={() => console.log("funnel me")}
+              onPress={() => ProjectsStore.toggleProjectModalVisible()}
             />
           </HeaderButtons>
         );
@@ -90,6 +96,14 @@ const styles = StyleSheet.create({
   },
   projectsContainer: {
     marginHorizontal: 12
+  },
+  filterContent: {
+    backgroundColor: '#FDFDFD',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   }
 });
 
