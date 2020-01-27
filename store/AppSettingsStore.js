@@ -23,6 +23,12 @@ class AppSettingsStore {
     this.filterPreference = settings.filterPreference;
   };
 
+  @action
+  updateFilterPreference = (filterPreference) => {
+    // TODO: Filter Preference persistence.
+    this.filterPreference = filterPreference;
+  };
+
 }
 
 export default new AppSettingsStore();

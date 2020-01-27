@@ -63,6 +63,7 @@ const MyProjectsScreen = (props) => {
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
                 setProjects(ProjectsStore.projects);
+                AppSettingsStore.updateFilterPreference(FilterPreference.ALL);
                 ProjectsStore.toggleProjectModalVisible();
               }}
             />
@@ -74,6 +75,7 @@ const MyProjectsScreen = (props) => {
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
                 setProjects(ProjectsStore.projects.filter(p => p.status === ProjectStatus.WIP));
+                AppSettingsStore.updateFilterPreference(FilterPreference.WIP);
                 ProjectsStore.toggleProjectModalVisible();
               }}
             />
@@ -85,6 +87,7 @@ const MyProjectsScreen = (props) => {
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
                 setProjects(ProjectsStore.projects.filter(p => p.status === ProjectStatus.FO));
+                AppSettingsStore.updateFilterPreference(FilterPreference.FO);
                 ProjectsStore.toggleProjectModalVisible();
               }}
             />
