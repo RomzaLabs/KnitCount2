@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -20,7 +21,7 @@ const CreateProjectScreen = (props) => {
   };
   const handleSubmit = () => {
     ProjectsStore.createNewProject(project);
-    props.navigation.navigate("ProjectDetails");
+    props.navigation.navigate("Main", {}, NavigationActions.navigate({ routeName: "ProjectDetails" }));
   };
 
   return (

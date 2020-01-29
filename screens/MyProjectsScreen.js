@@ -48,7 +48,7 @@ const MyProjectsScreen = (props) => {
         <KnitCountAddButton
           mainColor={AppSettingsStore.mainColor}
           mainTextColor={AppSettingsStore.mainTextColor}
-          onPress={() => props.navigation.navigate("CreateProject")}
+          onPress={() => props.navigation.navigate("Create")}
         />
       </View>
       <FlatList
