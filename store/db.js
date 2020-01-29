@@ -17,24 +17,44 @@ export const init = () => {
               modifiedDate INTEGER NOT NULL,
               endDate INTEGER NULL
           );
-
---           CREATE TABLE IF NOT EXISTS counters (
---             id INTEGER PRIMARY KEY NOT NULL,
---             project_id INTEGER NOT NULL,
---             label TEXT NOT NULL,
---             value INTEGER NOT NULL,
---             stepsPerCount INTEGER NOT NULL
---           );
-
---           CREATE TABLE IF NOT EXISTS image_uris (
---             id INTEGER PRIMARY KEY NOT NULL,
---             project_id INTEGER NOT NULL,
---             imageUri TEXT NOT NULL
---           );
         `,
         [],
         () => {
-          resolve();
+          db.transaction((tx) => {
+            tx.executeSql(
+              `
+                CREATE TABLE IF NOT EXISTS counters (
+                  id INTEGER PRIMARY KEY NOT NULL,
+                  project_id INTEGER NOT NULL,
+                  label TEXT NOT NULL,
+                  value INTEGER NOT NULL,
+                  stepsPerCount INTEGER NOT NULL
+                );`,
+              [],
+              () => {
+                db.transaction((tx) => {
+                  tx.executeSql(
+                    `
+                      CREATE TABLE IF NOT EXISTS image_uris (
+                        id INTEGER PRIMARY KEY NOT NULL,
+                        project_id INTEGER NOT NULL,
+                        imageUri TEXT NOT NULL
+                      );`,
+                    [],
+                    () => {
+                      resolve();
+                    },
+                    (_, err) => {
+                      reject(err);
+                    }
+                  )
+                });
+              },
+              (_, err) => {
+                reject(err);
+              }
+            )
+          });
         },
         (_, err) => {
           reject(err);
@@ -55,12 +75,12 @@ export const insertProject = (project) => {
         `,
         [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate],
         (_, result) => {
-          // if (project.counters && project.counters.length) {
-          //   insertCounters(project.counters).then(r => console.log("counters inserted"));
-          // }
-          // if (project.imageUris && project.imageUris.length) {
-          //   insertImageUris(project.imageUris).then(r => console.log("image uris inserted"))
-          // }
+          if (project.counters && project.counters.length) {
+            insertCounters(project.counters).then(r => console.log("counters inserted"));
+          }
+          if (project.imageUris && project.imageUris.length) {
+            insertImageUris(project.imageUris).then(r => console.log("image uris inserted"))
+          }
           resolve(result);
         },
         (_, err) => {
