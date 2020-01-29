@@ -75,11 +75,12 @@ export const insertProject = (project) => {
         `,
         [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate],
         (_, result) => {
+          const projectId = result.insertId;
           if (project.counters && project.counters.length) {
-            insertCounters(project.counters).then(r => console.log("counters inserted"));
+            insertCounters(projectId, project.counters).then(r => console.log("counters inserted"));
           }
           if (project.imageUris && project.imageUris.length) {
-            insertImageUris(project.imageUris).then(r => console.log("image uris inserted"))
+            insertImageUris(projectId, project.imageUris).then(r => console.log("image uris inserted"))
           }
           resolve(result);
         },
@@ -92,10 +93,10 @@ export const insertProject = (project) => {
   return promise;
 };
 
-const insertCounters = async(counters) => {
+const insertCounters = async(projectId, counters) => {
   for (const counter of counters) {
     try {
-      await insertCounter(counter);
+      await insertCounter(projectId, counter);
     } catch (e) {
       console.error(e);
       throw e;
@@ -103,7 +104,7 @@ const insertCounters = async(counters) => {
   }
 };
 
-const insertCounter = (counter) => {
+const insertCounter = (projectId, counter) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -111,7 +112,7 @@ const insertCounter = (counter) => {
           INSERT INTO counters (project_id, label, value, stepsPerCount)
           VALUES (?, ?, ?, ?);
         `,
-        [counter.project_id, counter.label, counter.value, counter.stepsPerCount],
+        [projectId, counter.label, counter.value, counter.stepsPerCount],
         (_, result) => {
           resolve(result);
         },
@@ -124,10 +125,10 @@ const insertCounter = (counter) => {
   return promise;
 };
 
-const insertImageUris = async(imageUris) => {
+const insertImageUris = async(projectId, imageUris) => {
   for (const imageUri of imageUris) {
     try {
-      await insertImageUri(imageUri);
+      await insertImageUri(projectId, imageUri);
     } catch (e) {
       console.error(e);
       throw e;
@@ -135,15 +136,15 @@ const insertImageUris = async(imageUris) => {
   }
 };
 
-const insertImageUri = (imageUri) => {
+const insertImageUri = (projectId, imageUri) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
           INSERT INTO image_uris (project_id, imageUri)
-          VALUES (?, ?, ?, ?);
+          VALUES (?, ?);
         `,
-        [counter.project_id, counter.label, counter.value, counter.stepsPerCount],
+        [projectId, imageUri],
         (_, result) => {
           resolve(result);
         },
