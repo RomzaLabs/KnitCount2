@@ -10,12 +10,13 @@ import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
 import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
-import { init, insertProject } from './store/db';
+import { init, insertProject, fetchProjects } from './store/db';
 
 init().then(async() => {
   console.log('Initialized database');
   const project = PROJECTS[0];
-  const dbResult = await insertProject(project);
+  // const dbResult = await insertProject(project);
+  const dbResult = await fetchProjects(0, 2);
   console.log("dbResult: ", dbResult)
 }).catch((err) => {
   console.log('Received error: ', err);
