@@ -40,8 +40,7 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
       headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
       headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
       headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
-      headerTintColor: AppSettingsStore.mainTextColor,
-      gestureEnabled: false
+      headerTintColor: AppSettingsStore.mainTextColor
     }
   );
 };
