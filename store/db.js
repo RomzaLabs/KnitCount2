@@ -18,19 +18,19 @@ export const init = () => {
               endDate INTEGER NULL
           );
 
-          CREATE TABLE IF NOT EXISTS counters (
-            id INTEGER PRIMARY KEY NOT NULL,
-            project_id INTEGER NOT NULL,
-            label TEXT NOT NULL,
-            value INTEGER NOT NULL,
-            stepsPerCount INTEGER NOT NULL
-          );
+--           CREATE TABLE IF NOT EXISTS counters (
+--             id INTEGER PRIMARY KEY NOT NULL,
+--             project_id INTEGER NOT NULL,
+--             label TEXT NOT NULL,
+--             value INTEGER NOT NULL,
+--             stepsPerCount INTEGER NOT NULL
+--           );
 
-          CREATE TABLE IF NOT EXISTS image_uris (
-            id INTEGER PRIMARY KEY NOT NULL,
-            project_id INTEGER NOT NULL,
-            imageUri TEXT NOT NULL
-          );
+--           CREATE TABLE IF NOT EXISTS image_uris (
+--             id INTEGER PRIMARY KEY NOT NULL,
+--             project_id INTEGER NOT NULL,
+--             imageUri TEXT NOT NULL
+--           );
         `,
         [],
         () => {
@@ -55,12 +55,12 @@ export const insertProject = (project) => {
         `,
         [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate],
         (_, result) => {
-          if (project.counters && project.counters.length) {
-            insertCounters(project.counters).then(r => console.log("counters inserted"));
-          }
-          if (project.imageUris && project.imageUris.length) {
-            insertImageUris(project.imageUris).then(r => console.log("image uris inserted"))
-          }
+          // if (project.counters && project.counters.length) {
+          //   insertCounters(project.counters).then(r => console.log("counters inserted"));
+          // }
+          // if (project.imageUris && project.imageUris.length) {
+          //   insertImageUris(project.imageUris).then(r => console.log("image uris inserted"))
+          // }
           resolve(result);
         },
         (_, err) => {
@@ -136,3 +136,26 @@ const insertImageUri = (imageUri) => {
   return promise;
 };
 
+export const fetchProjects = (offset = 0, limit = 20) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          SELECT 
+                 P.id, P.name, P.status, P.notes, P.startDate, P.modifiedDate, P.endDate
+          FROM projects AS P 
+          ORDER BY modifiedDate 
+          LIMIT ? OFFSET ?;
+        `,
+        [limit, offset],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
