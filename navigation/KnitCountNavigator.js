@@ -1,5 +1,5 @@
 import React from 'react';
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -29,18 +29,26 @@ const defaultStackNavOptions = {
   headerTintColor: AppSettingsStore.mainTextColor
 };
 
-const KnitCountNavigator = createStackNavigator(
+const ProjectCreateNavigator = createStackNavigator(
+  {
+    CreateProject: {
+      screen: CreateProjectScreen,
+      navigationOptions: {
+        headerTitle: ""
+      }
+    }
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions
+  }
+);
+
+const MainNavigator = createStackNavigator(
   {
     AddCounter: {
       screen: AddCounterScreen,
       navigationOptions: {
         headerTitle: "Add A Counter"
-      }
-    },
-    CreateProject: {
-      screen: CreateProjectScreen,
-      navigationOptions: {
-        headerTitle: ""
       }
     },
     MyProjects: {
@@ -55,6 +63,13 @@ const KnitCountNavigator = createStackNavigator(
   {
     initialRouteName: "MyProjects",
     defaultNavigationOptions: defaultStackNavOptions
+  }
+);
+
+const KnitCountNavigator = createSwitchNavigator(
+  {
+    Main: MainNavigator,
+    Create: ProjectCreateNavigator
   }
 );
 
