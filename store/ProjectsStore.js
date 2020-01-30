@@ -12,21 +12,7 @@ class ProjectsStore {
 
   // Actions
   @action
-  loadProjects = (jsonProjects) => {
-    const projects = jsonProjects.map(p => {
-      return new Project(
-        p.id,
-        p.name,
-        p.status,
-        p.counters,
-        p.notes,
-        p.imageUris,
-        p.startDate,
-        p.modifiedDate,
-        p.endDate
-      );
-    });
-
+  loadProjects = (projects) => {
     // Sort by modifiedDate in descending order, i.e. newest projects at the top
     this.projects = projects.sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
   };
