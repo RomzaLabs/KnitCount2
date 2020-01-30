@@ -181,6 +181,28 @@ export const insertProject = (project) => {
   return promise;
 };
 
+export const updateProject = (project) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          UPDATE projects
+          SET name = ?, status = ?, notes = ?, start_date = ?, modified_date = ?, end_date = ?
+          WHERE id = ?
+        `,
+        [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate, project.id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 const insertCounters = async(projectId, counters) => {
   for (const counter of counters) {
     try {
