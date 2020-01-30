@@ -15,12 +15,12 @@ const PROJECTS = [
     ],
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     ["https://d2droglu4qf8st.cloudfront.net/2017/07/337881/Knitted-Christmas-Tree-Baby-Hat-Pattern_Large600_ID-2318268.png?v=2318268"],
-    new Date(2019, 1, 1),
-    new Date(2019, 1, 10),
-    new Date(2019, 1, 10)
+    +new Date(2019, 1, 1),
+    +new Date(2019, 1, 10),
+    +new Date(2019, 1, 10)
   ),
   new Project(
-    "2",
+    2,
     "Stripey Socks",
     ProjectStatus.FO,
     [
@@ -31,12 +31,12 @@ const PROJECTS = [
     ],
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     ["https://www.knittingpatternsgalore.com/cart/photos/10665s.jpg"],
-    new Date(2019, 2, 1),
-    new Date(2019, 2, 10),
-    new Date(2019, 2, 10)
+    +new Date(2019, 2, 1),
+    +new Date(2019, 2, 10),
+    +new Date(2019, 2, 10)
   ),
   new Project(
-    "3",
+    3,
     "Mittens for Mom",
     ProjectStatus.WIP,
     [
@@ -48,8 +48,8 @@ const PROJECTS = [
     ],
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     ["https://i.ytimg.com/vi/H79gaA_UCig/maxresdefault.jpg"],
-    new Date(2019, 3, 1),
-    new Date(2019, 3, 10),
+    +new Date(2019, 3, 1),
+    +new Date(2019, 3, 10),
     null
   )
 ];
