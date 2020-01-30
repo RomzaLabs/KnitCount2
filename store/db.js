@@ -362,6 +362,24 @@ export const deleteImage = (imageId) => {
   return promise;
 };
 
+export const deleteImagesForProject = (projectId) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM images WHERE project_id = ?`,
+        [projectId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const fetchProjects = (offset = 0, limit = 20) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
