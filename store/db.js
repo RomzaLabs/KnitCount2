@@ -10,11 +10,11 @@ export const initSettings = () => {
         `
           CREATE TABLE IF NOT EXISTS settings (
             id INTEGER PRIMARY KEY NOT NULL,
-            isPremium INTEGER NOT NULL,
-            mainColor TEXT NOT NULL,
-            mainTextColor TEXT NOT NULL,
-            mainBGColor TEXT NOT NULL,
-            filterPreference TEXT NOT NULL
+            is_premium INTEGER NOT NULL,
+            main_color TEXT NOT NULL,
+            main_text_color TEXT NOT NULL,
+            main_bg_color TEXT NOT NULL,
+            filter_preference TEXT NOT NULL
           );
         `,
         [],
@@ -40,9 +40,9 @@ export const initProjects = () => {
               name TEXT NOT NULL, 
               status TEXT NOT NULL,
               notes TEXT NOT NULL,
-              startDate INTEGER NOT NULL,
-              modifiedDate INTEGER NOT NULL,
-              endDate INTEGER NULL
+              start_date INTEGER NOT NULL,
+              modified_date INTEGER NOT NULL,
+              end_date INTEGER NULL
           );
         `,
         [],
@@ -55,7 +55,7 @@ export const initProjects = () => {
                   project_id INTEGER NOT NULL,
                   label TEXT NOT NULL,
                   value INTEGER NOT NULL,
-                  stepsPerCount INTEGER NOT NULL
+                  steps_per_count INTEGER NOT NULL
                 );`,
               [],
               () => {
@@ -65,7 +65,7 @@ export const initProjects = () => {
                       CREATE TABLE IF NOT EXISTS image_uris (
                         id INTEGER PRIMARY KEY NOT NULL,
                         project_id INTEGER NOT NULL,
-                        imageUri TEXT NOT NULL
+                        image_uri TEXT NOT NULL
                       );`,
                     [],
                     () => {
@@ -96,8 +96,29 @@ export const fetchSettings = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT isPremium, mainColor, mainTextColor, mainBGColor, filterPreference FROM settings;`,
+        `SELECT is_premium, main_color, main_text_color, main_bg_color, filter_preference FROM settings;`,
         [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+export const insertSettings = (settings) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          INSERT INTO settings (is_premium, main_color, main_text_color, main_bg_color, filter_preference)
+          VALUES (?, ?, ?, ?, ?);
+        `,
+        [settings.isPremium, settings.mainColor, settings.mainTextColor, settings.mainBGColor, settings.filterPreference],
         (_, result) => {
           resolve(result);
         },
@@ -115,7 +136,7 @@ export const insertProject = (project) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          INSERT INTO projects (name, status, notes, startDate, modifiedDate, endDate)
+          INSERT INTO projects (name, status, notes, start_date, modified_date, end_date)
           VALUES (?, ?, ?, ?, ?, ?);
         `,
         [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate],
@@ -154,7 +175,7 @@ const insertCounter = (projectId, counter) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          INSERT INTO counters (project_id, label, value, stepsPerCount)
+          INSERT INTO counters (project_id, label, value, steps_per_count)
           VALUES (?, ?, ?, ?);
         `,
         [projectId, counter.label, counter.value, counter.stepsPerCount],
@@ -186,7 +207,7 @@ const insertImageUri = (projectId, imageUri) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          INSERT INTO image_uris (project_id, imageUri)
+          INSERT INTO image_uris (project_id, image_uri)
           VALUES (?, ?);
         `,
         [projectId, imageUri],
@@ -207,9 +228,9 @@ export const fetchProjects = (offset = 0, limit = 20) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          SELECT id, name, status, notes, startDate, modifiedDate, endDate
+          SELECT id, name, status, notes, start_date, modified_date, end_date
           FROM projects 
-          ORDER BY modifiedDate 
+          ORDER BY modified_date 
           LIMIT ? OFFSET ?;
         `,
         [limit, offset],
@@ -229,7 +250,7 @@ export const fetchCountersForProject = (projectId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT id, project_id, label, value, stepsPerCount FROM counters WHERE project_id = ?;`,
+        `SELECT id, project_id, label, value, steps_per_count FROM counters WHERE project_id = ?;`,
         [projectId],
         (_, result) => {
           resolve(result);
@@ -247,7 +268,7 @@ export const fetchImageUrisForProject = (projectId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT id, project_id, imageUri FROM image_uris WHERE project_id = ?;`,
+        `SELECT id, project_id, image_uri FROM image_uris WHERE project_id = ?;`,
         [projectId],
         (_, result) => {
           resolve(result);
