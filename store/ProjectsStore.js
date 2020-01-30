@@ -1,5 +1,7 @@
 import { observable, action } from "mobx";
+
 import Project from "../models/Project";
+import { insertProject } from "../store/projectsDbHelper";
 
 class ProjectsStore {
 
@@ -24,7 +26,7 @@ class ProjectsStore {
 
   @action
   createNewProject = (project) => {
-    // TODO: Persistence.
+    this.persistProject(project);
     this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
     this.setSelectedProject(project);
   };
@@ -32,6 +34,10 @@ class ProjectsStore {
   @action
   toggleProjectModalVisible = () => {
     this.isProjectModalVisible = !this.isProjectModalVisible;
+  };
+
+  persistProject = (project) => {
+    insertProject(project);
   };
 
 }
