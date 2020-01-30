@@ -92,6 +92,24 @@ export const initProjects = () => {
   return promise;
 };
 
+export const fetchSettings = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT isPremium, mainColor, mainTextColor, mainBGColor, filterPreference FROM settings;`,
+        [],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const insertProject = (project) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
