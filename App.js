@@ -35,7 +35,6 @@ const loadFonts = async () => {
 
 const loadSettings = async() => {
   const dbResult = await fetchSettings();
-  console.log("dbResult: ", dbResult);
   const isBrandNewUser = dbResult.rows.length === 0;
   if (isBrandNewUser) {
     const defaultSettings = new AppSettings(
@@ -58,7 +57,6 @@ const loadSettings = async() => {
       dbSettings.main_bg_color,
       dbSettings.filter_preference
     );
-    console.log("userSettings: ", userSettings);
     AppSettingsStore.setSettings(userSettings);
   }
 };
