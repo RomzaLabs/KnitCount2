@@ -276,6 +276,24 @@ const insertCounter = (projectId, counter) => {
   return promise;
 };
 
+export const deleteCounter = (counterId) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM counters WHERE id = ?`,
+        [counterId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 const insertImages = async(projectId, images) => {
   for (const image of images) {
     try {
