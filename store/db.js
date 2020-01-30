@@ -96,7 +96,7 @@ export const fetchSettings = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT is_premium, main_color, main_text_color, main_bg_color, filter_preference FROM settings;`,
+        `SELECT id, is_premium, main_color, main_text_color, main_bg_color, filter_preference FROM settings;`,
         [],
         (_, result) => {
           resolve(result);
@@ -117,6 +117,28 @@ export const insertSettings = (settings) => {
         `
           INSERT INTO settings (is_premium, main_color, main_text_color, main_bg_color, filter_preference)
           VALUES (?, ?, ?, ?, ?);
+        `,
+        [settings.isPremium, settings.mainColor, settings.mainTextColor, settings.mainBGColor, settings.filterPreference],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+export const updateSettings = (settings) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          UPDATE settings
+          SET is_premium = ?, main_color = ?, main_text_color = ?, main_bg_color = ?, filter_preference = ?
+          WHERE id = 1
         `,
         [settings.isPremium, settings.mainColor, settings.mainTextColor, settings.mainBGColor, settings.filterPreference],
         (_, result) => {
