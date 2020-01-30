@@ -9,12 +9,35 @@ import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
 import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
-import { init, fetchProjects, fetchCountersForProject, fetchImageUrisForProject } from './store/db';
+import { initProjects, fetchProjects, fetchCountersForProject, fetchImageUrisForProject } from './store/db';
 import Counter from "./models/Counter";
 import Project from "./models/Project";
 
-init().then(async() => {
-  console.log('Initialized database');
+enableScreens();
+initProjects();
+
+const loadFonts = async () => {
+  return await Font.loadAsync({
+    'avenir-black': require('./assets/fonts/AvenirLTStd-Black.otf'),
+    'avenir-book': require('./assets/fonts/AvenirLTStd-Book.otf'),
+    'avenir-roman': require('./assets/fonts/AvenirLTStd-Roman.otf')
+  });
+};
+
+const loadSettings = async() => {
+  // Temporary handling.
+  const appSettings = new AppSettings(
+    true,
+    Colors.primaryColor,
+    Colors.primaryTextColor,
+    Colors.primaryBGColor,
+    FilterPreference.ALL
+  );
+  AppSettingsStore.setSettings(appSettings);
+  // End temporary handling.
+};
+
+const loadProjects = async() => {
   const dbResult = await fetchProjects(0, 20);
   const dbProjects = dbResult.rows._array;
 
@@ -44,41 +67,40 @@ init().then(async() => {
     projects.push(project);
   }
   ProjectsStore.loadProjects(projects);
-}).catch((err) => {
-  console.log('Received error: ', err);
-});
+};
 
-enableScreens();
+const loadKnitCount = async () => {
+  try {
+    await loadFonts();
+  } catch (e) {
+    console.error("Error loading fonts.", e);
+  }
 
-const fetchFonts = async () => {
-  await Font.loadAsync({
-    'avenir-black': require('./assets/fonts/AvenirLTStd-Black.otf'),
-    'avenir-book': require('./assets/fonts/AvenirLTStd-Book.otf'),
-    'avenir-roman': require('./assets/fonts/AvenirLTStd-Roman.otf')
-  });
+  try {
+    await Promise.resolve("settings");
+  } catch (e) {
+    console.error("Error loading settings.", e);
+  }
+
+  try {
+    await loadProjects();
+  } catch (e) {
+    console.error("Error loading projects.", e);
+  }
 };
 
 export default function App() {
-  const [fontLoaded, setFontLoaded] = useState(false);
+  const [appLoaded, setAppLoaded] = useState(false);
 
-  if (!fontLoaded) {
-    return <AppLoading
-      startAsync={fetchFonts}
-      onFinish={() => setFontLoaded(true)}
-      onError={(err) => console.log(err)}
-    />;
+  if (!appLoaded) {
+    return (
+      <AppLoading
+        startAsync={loadKnitCount}
+        onFinish={() => setAppLoaded(true)}
+        onError={(err) => console.log(err)}
+      />
+    );
   }
-
-  // Temporary handling.
-  const appSettings = new AppSettings(
-    true,
-    Colors.primaryColor,
-    Colors.primaryTextColor,
-    Colors.primaryBGColor,
-    FilterPreference.WIP
-  );
-  AppSettingsStore.setSettings(appSettings);
-  // End temporary handling.
 
   return <KnitCountNavigator/>;
 }
