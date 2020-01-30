@@ -5,19 +5,45 @@ import * as Font from 'expo-font';
 import ProjectsStore from "./store/ProjectsStore";
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
-import PROJECTS from "./constants/DummyData";
 import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
 import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
-import { init, insertProject, fetchProjects } from './store/db';
+import { init, fetchProjects, fetchCountersForProject, fetchImageUrisForProject } from './store/db';
+import Counter from "./models/Counter";
+import Project from "./models/Project";
 
 init().then(async() => {
   console.log('Initialized database');
-  const project = PROJECTS[0];
-  const dbResult = await insertProject(project);
-  //const dbResult = await fetchProjects(0, 2);
-  console.log("dbResult: ", dbResult)
+  const dbResult = await fetchProjects(0, 20);
+  const dbProjects = dbResult.rows._array;
+
+  let projects = [];
+  for (const dbProject of dbProjects) {
+    const projectId = dbProject.id;
+
+    const dbCountersResult = await fetchCountersForProject(projectId);
+    const dbCounters = dbCountersResult.rows._array;
+    const counters = dbCounters.map(c => new Counter(c.id, c.project_id, c.label, c.value, c.stepsPerCount));
+
+    const dbImageUrisResult = await fetchImageUrisForProject(projectId);
+    const dbImageUris = dbImageUrisResult.rows._array;
+    const imageUris = dbImageUris.map(i => i.imageUri);
+
+    const project = new Project(
+      projectId,
+      dbProject.name,
+      dbProject.status,
+      counters,
+      dbProject.notes,
+      imageUris,
+      dbProject.startDate,
+      dbProject.modifiedDate,
+      dbProject.endDate
+    );
+    projects.push(project);
+  }
+  ProjectsStore.loadProjects(projects);
 }).catch((err) => {
   console.log('Received error: ', err);
 });
@@ -52,7 +78,6 @@ export default function App() {
     FilterPreference.WIP
   );
   AppSettingsStore.setSettings(appSettings);
-  ProjectsStore.loadProjects(PROJECTS);
   // End temporary handling.
 
   return <KnitCountNavigator/>;
