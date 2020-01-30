@@ -39,6 +39,7 @@ const loadSettings = async() => {
   const isBrandNewUser = dbResult.rows.length === 0;
   if (isBrandNewUser) {
     const defaultSettings = new AppSettings(
+      1,
       false,
       Colors.primaryColor,
       Colors.primaryTextColor,
@@ -50,6 +51,7 @@ const loadSettings = async() => {
   } else {
     const dbSettings = dbResult.rows._array[0];
     const userSettings = new AppSettings(
+      dbSettings.id,
       dbSettings.is_premium,
       dbSettings.main_color,
       dbSettings.main_text_color,
