@@ -9,15 +9,8 @@ import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
 import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
-import {
-  initProjects,
-  initSettings,
-  fetchSettings,
-  insertSettings,
-  fetchProjects,
-  fetchCountersForProject,
-  fetchImagesForProject
-} from './store/db';
+import { initProjects, fetchProjects, fetchCountersForProject, fetchImagesForProject } from './store/projectsDbHelper';
+import { initSettings, fetchSettings, insertSettings } from './store/settingsDbHelper';
 import Counter from "./models/Counter";
 import Project from "./models/Project";
 

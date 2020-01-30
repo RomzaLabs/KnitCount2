@@ -2,7 +2,7 @@ import {observable, action, computed} from "mobx";
 
 import Colors from "../constants/Colors";
 import {FilterPreference} from "../models/FilterPreference";
-import {updateSettings} from "../store/db";
+import { updateSettings } from "../store/settingsDbHelper";
 
 
 class AppSettingsStore {
