@@ -62,10 +62,11 @@ export const initProjects = () => {
                 db.transaction((tx) => {
                   tx.executeSql(
                     `
-                      CREATE TABLE IF NOT EXISTS image_uris (
+                      CREATE TABLE IF NOT EXISTS images (
                         id INTEGER PRIMARY KEY NOT NULL,
                         project_id INTEGER NOT NULL,
-                        image_uri TEXT NOT NULL
+                        image_uri TEXT NOT NULL,
+                        date_added INTEGER NOT NULL
                       );`,
                     [],
                     () => {
@@ -167,8 +168,8 @@ export const insertProject = (project) => {
           if (project.counters && project.counters.length) {
             insertCounters(projectId, project.counters).then(r => console.log("counters inserted"));
           }
-          if (project.imageUris && project.imageUris.length) {
-            insertImageUris(projectId, project.imageUris).then(r => console.log("image uris inserted"))
+          if (project.images && project.images.length) {
+            insertImages(projectId, project.images).then(r => console.log("images inserted"))
           }
           resolve(result);
         },
@@ -257,10 +258,10 @@ const insertCounter = (projectId, counter) => {
   return promise;
 };
 
-const insertImageUris = async(projectId, imageUris) => {
-  for (const imageUri of imageUris) {
+const insertImages = async(projectId, images) => {
+  for (const image of images) {
     try {
-      await insertImageUri(projectId, imageUri);
+      await insertImage(projectId, image);
     } catch (e) {
       console.error(e);
       throw e;
@@ -268,15 +269,15 @@ const insertImageUris = async(projectId, imageUris) => {
   }
 };
 
-const insertImageUri = (projectId, imageUri) => {
+const insertImage = (projectId, image) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          INSERT INTO image_uris (project_id, image_uri)
-          VALUES (?, ?);
+          INSERT INTO images (project_id, image_uri, date_added)
+          VALUES (?, ?, ?);
         `,
-        [projectId, imageUri],
+        [projectId, image.imageUri, image.dateAdded],
         (_, result) => {
           resolve(result);
         },
@@ -330,11 +331,11 @@ export const fetchCountersForProject = (projectId) => {
   return promise;
 };
 
-export const fetchImageUrisForProject = (projectId) => {
+export const fetchImagesForProject = (projectId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT id, project_id, image_uri FROM image_uris WHERE project_id = ?;`,
+        `SELECT id, project_id, image_uri, date_added FROM images WHERE project_id = ?;`,
         [projectId],
         (_, result) => {
           resolve(result);

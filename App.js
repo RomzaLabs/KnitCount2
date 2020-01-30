@@ -16,7 +16,7 @@ import {
   insertSettings,
   fetchProjects,
   fetchCountersForProject,
-  fetchImageUrisForProject
+  fetchImagesForProject
 } from './store/db';
 import Counter from "./models/Counter";
 import Project from "./models/Project";
@@ -75,9 +75,9 @@ const loadProjects = async() => {
     const dbCounters = dbCountersResult.rows._array;
     const counters = dbCounters.map(c => new Counter(c.id, c.project_id, c.label, c.value, c.steps_per_count));
 
-    const dbImageUrisResult = await fetchImageUrisForProject(projectId);
-    const dbImageUris = dbImageUrisResult.rows._array;
-    const imageUris = dbImageUris.map(i => i.image_uri);
+    const dbImagesResult = await fetchImagesForProject(projectId);
+    const dbImages = dbImagesResult.rows._array;
+    const images = dbImages.map(i => new Image(i.id, i.project_id, i.image_uri, i.date_added));
 
     const project = new Project(
       projectId,
@@ -85,7 +85,7 @@ const loadProjects = async() => {
       dbProject.status,
       counters,
       dbProject.notes,
-      imageUris,
+      images,
       dbProject.start_date,
       dbProject.modified_date,
       dbProject.end_date
