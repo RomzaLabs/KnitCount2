@@ -9,12 +9,13 @@ import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
 import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
-import { initProjects, fetchProjects, fetchCountersForProject, fetchImageUrisForProject } from './store/db';
+import { initProjects, initSettings, fetchProjects, fetchCountersForProject, fetchImageUrisForProject } from './store/db';
 import Counter from "./models/Counter";
 import Project from "./models/Project";
 
 enableScreens();
 initProjects();
+initSettings();
 
 const loadFonts = async () => {
   return await Font.loadAsync({

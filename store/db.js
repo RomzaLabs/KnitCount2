@@ -3,6 +3,33 @@ import * as SQLite from 'expo-sqlite';
 // Connect or create DB
 const db = SQLite.openDatabase('knitcount.db');
 
+export const initSettings = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          CREATE TABLE IF NOT EXISTS settings (
+            id INTEGER PRIMARY KEY NOT NULL,
+            isPremium INTEGER NOT NULL,
+            mainColor TEXT NOT NULL,
+            mainTextColor TEXT NOT NULL,
+            mainBGColor TEXT NOT NULL,
+            filterPreference TEXT NOT NULL
+          );
+        `,
+        [],
+        () => {
+          resolve();
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const initProjects = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
