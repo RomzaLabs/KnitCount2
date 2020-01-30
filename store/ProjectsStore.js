@@ -1,6 +1,5 @@
 import { observable, action } from "mobx";
 
-import Project from "../models/Project";
 import { insertProject } from "../store/projectsDbHelper";
 
 class ProjectsStore {
@@ -25,10 +24,10 @@ class ProjectsStore {
   };
 
   @action
-  createNewProject = (project) => {
-    this.persistProject(project);
-    this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
+  createNewProject = async(project) => {
     this.setSelectedProject(project);
+    await this.persistProject(project);
+    this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
   };
 
   @action
@@ -36,8 +35,8 @@ class ProjectsStore {
     this.isProjectModalVisible = !this.isProjectModalVisible;
   };
 
-  persistProject = (project) => {
-    insertProject(project);
+  persistProject = async(project) => {
+    await insertProject(project);
   };
 
 }
