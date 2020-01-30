@@ -203,6 +203,28 @@ export const updateProject = (project) => {
   return promise;
 };
 
+export const updateCounter = (counter) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          UPDATE counters
+          SET label = ?, value = ?, steps_per_count = ?
+          WHERE id = ?
+        `,
+        [counter.label, counter.value, counter.stepsPerCount, counter.id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 const insertCounters = async(projectId, counters) => {
   for (const counter of counters) {
     try {
