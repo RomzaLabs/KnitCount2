@@ -3,7 +3,7 @@ import * as SQLite from 'expo-sqlite';
 // Connect or create DB
 const db = SQLite.openDatabase('knitcount.db');
 
-export const init = () => {
+export const initProjects = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
