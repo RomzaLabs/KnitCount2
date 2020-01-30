@@ -162,13 +162,48 @@ export const fetchProjects = (offset = 0, limit = 20) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          SELECT 
-                 P.id, P.name, P.status, P.notes, P.startDate, P.modifiedDate, P.endDate
-          FROM projects AS P 
+          SELECT id, name, status, notes, startDate, modifiedDate, endDate
+          FROM projects 
           ORDER BY modifiedDate 
           LIMIT ? OFFSET ?;
         `,
         [limit, offset],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+export const fetchCountersForProject = (projectId) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT id, project_id, label, value, stepsPerCount FROM counters WHERE project_id = ?;`,
+        [projectId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+export const fetchImageUrisForProject = (projectId) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT id, project_id, imageUri FROM image_uris WHERE project_id = ?;`,
+        [projectId],
         (_, result) => {
           resolve(result);
         },
