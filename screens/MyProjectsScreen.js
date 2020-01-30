@@ -15,9 +15,9 @@ import {ProjectStatus} from "../models/ProjectStatus";
 import {FilterPreference} from "../models/FilterPreference";
 
 const MyProjectsScreen = (props) => {
-  const filterPreference = AppSettingsStore.filterPreference;
   const projectCount = ProjectsStore.projects.length;
   const [projects, setProjects] = useState([]);
+  const [filterPreference, setFilterPreference] = useState(AppSettingsStore.filterPreference);
 
   useEffect(() => {
     const filteredProjects = ProjectsStore.projects.filter(p => {
@@ -35,7 +35,7 @@ const MyProjectsScreen = (props) => {
           ProjectsStore.setSelectedProject(project);
           props.navigation.navigate("ProjectDetails");
         }}
-        image={project.imageUris.length ? project.imageUris[0] : null}
+        image={project.images.length ? project.images[0] : null}
         title={project.name}
         status={project.status}
       />
@@ -54,7 +54,7 @@ const MyProjectsScreen = (props) => {
       <FlatList
         style={styles.projectsContainer}
         data={projects}
-        keyExtractor={item => JSON.stringify(item.id)}
+        keyExtractor={item => projects.indexOf(item).toString()}
         renderItem={({item}) => renderKnitCountCard(item)}
       />
       <Modal isVisible={ProjectsStore.isProjectModalVisible} onBackdropPress={ProjectsStore.toggleProjectModalVisible}>
@@ -66,6 +66,7 @@ const MyProjectsScreen = (props) => {
               title="💪 All Projects 💪"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
+                setFilterPreference(FilterPreference.ALL);
                 AppSettingsStore.updateFilterPreference(FilterPreference.ALL);
                 ProjectsStore.toggleProjectModalVisible();
               }}
@@ -77,6 +78,7 @@ const MyProjectsScreen = (props) => {
               title="🚧 Only WIPs 🚧"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
+                setFilterPreference(FilterPreference.WIP);
                 AppSettingsStore.updateFilterPreference(FilterPreference.WIP);
                 ProjectsStore.toggleProjectModalVisible();
               }}
@@ -88,6 +90,7 @@ const MyProjectsScreen = (props) => {
               title="✨ Only FOs ✨"
               color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
               onPress={() => {
+                setFilterPreference(FilterPreference.FO);
                 AppSettingsStore.updateFilterPreference(FilterPreference.FO);
                 ProjectsStore.toggleProjectModalVisible();
               }}

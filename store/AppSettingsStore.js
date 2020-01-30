@@ -1,33 +1,36 @@
-import {observable, action} from "mobx";
+import {observable, action, computed} from "mobx";
+
 import Colors from "../constants/Colors";
 import {FilterPreference} from "../models/FilterPreference";
+import { updateSettings } from "../store/settingsDbHelper";
+
 
 class AppSettingsStore {
 
   // Observable Props
   @observable settings = null;
-  @observable mainColor = Colors.primaryColor;
-  @observable mainTextColor = Colors.primaryTextColor;
-  @observable mainBGColor = Colors.primaryBGColor;
-  @observable filterPreference = FilterPreference.WIP;
 
   // Computed Props
+  @computed get mainColor() { return this.settings ? this.settings.mainColor : Colors.primaryColor; }
+  @computed get mainTextColor() { return this.settings ? this.settings.mainTextColor : Colors.primaryTextColor; }
+  @computed get mainBGColor() { return this.settings ? this.settings.mainBGColor : Colors.primaryBGColor; }
+  @computed get filterPreference() { return this.settings ? this.settings.filterPreference : FilterPreference.WIP; }
 
   // Actions
   @action
   setSettings = (settings) => {
     this.settings = settings;
-    this.mainColor = settings.mainColor;
-    this.mainTextColor = settings.mainTextColor;
-    this.mainBGColor = settings.mainBGColor;
-    this.filterPreference = settings.filterPreference;
   };
 
   @action
   updateFilterPreference = (filterPreference) => {
-    // TODO: Filter Preference persistence.
-    this.filterPreference = filterPreference;
+    this.settings.filterPreference = filterPreference;
+    this.persistSettings();
   };
+
+  persistSettings = () => {
+    updateSettings(this.settings);
+  }
 
 }
 
