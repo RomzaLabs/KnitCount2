@@ -54,7 +54,7 @@ const MyProjectsScreen = (props) => {
       <FlatList
         style={styles.projectsContainer}
         data={projects}
-        keyExtractor={item => JSON.stringify(item.id)}
+        keyExtractor={item => projects.indexOf(item).toString()}
         renderItem={({item}) => renderKnitCountCard(item)}
       />
       <Modal isVisible={ProjectsStore.isProjectModalVisible} onBackdropPress={ProjectsStore.toggleProjectModalVisible}>
