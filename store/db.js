@@ -204,6 +204,24 @@ export const updateProject = (project) => {
   return promise;
 };
 
+export const deleteProject = (projectId) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM projects WHERE id = ?`,
+        [projectId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const updateCounter = (counter) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
