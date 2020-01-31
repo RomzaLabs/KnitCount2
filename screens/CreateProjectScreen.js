@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { observer } from "mobx-react";
 
@@ -49,6 +49,15 @@ const CreateProjectScreen = (props) => {
 CreateProjectScreen.navigationOptions = (navData) => {
   return (
     {
+      headerLeft: () => {
+        return (
+          <Button
+            color={AppSettingsStore.mainTextColor}
+            title="Cancel"
+            onPress={() => navData.navigation.navigate('Main')}
+          />
+        );
+      },
       headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
       headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
       headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
