@@ -26,6 +26,7 @@ const MyProjectsScreen = (props) => {
       return true;
     });
     setProjects(filteredProjects);
+    props.navigation.setParams({filterPreference});
   }, [projectCount, filterPreference]);
 
   const renderKnitCountCard = (project) => {
@@ -103,6 +104,7 @@ const MyProjectsScreen = (props) => {
 };
 
 MyProjectsScreen.navigationOptions = (navData) => {
+  const filterPreference = navData.navigation.getParam("filterPreference");
   return (
     {
       headerLeft: () => {
@@ -116,6 +118,12 @@ MyProjectsScreen.navigationOptions = (navData) => {
           </HeaderButtons>
         );
       },
+      headerTitle: () => (
+        <View style={styles.myProjectsCustomHeader}>
+          <Text style={[styles.myProjectsTitle, {color: AppSettingsStore.mainTextColor}]}>My Projects</Text>
+          <Text style={[styles.myProjectsSubtitle, {color: AppSettingsStore.mainTextColor}]}>{filterPreference}</Text>
+        </View>
+      ),
       headerRight: () => {
         return (
           <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton} title="Filter">
@@ -164,6 +172,20 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     width: 200
+  },
+  myProjectsCustomHeader: {
+    width: '100%',
+    maxWidth: 250,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  myProjectsTitle: {
+    fontFamily: "avenir-black",
+    fontSize: 22
+  },
+  myProjectsSubtitle: {
+    fontFamily: "avenir-roman",
+    fontSize: 14
   }
 });
 

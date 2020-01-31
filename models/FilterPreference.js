@@ -1,5 +1,5 @@
 export const FilterPreference = {
-  ALL: "Show all projects",
-  WIP: "Only Work in Progress",
-  FO: "Only Finished Objects"
+  ALL: "All Projects",
+  WIP: "Only WIPs",
+  FO: "Only FOs"
 };
