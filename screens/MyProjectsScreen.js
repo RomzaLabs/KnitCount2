@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 250,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: Platform.OS === "android" ? "flex-start" : "center"
   },
   myProjectsTitle: {
     fontFamily: "avenir-black",
