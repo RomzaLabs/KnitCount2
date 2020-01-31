@@ -53,9 +53,6 @@ const MainNavigator = createStackNavigator(
     },
     MyProjects: {
       screen: MyProjectsScreen,
-      navigationOptions: {
-        headerTitle: "My Projects"
-      }
     },
     ProjectDetails: ProjectDetailsScreen,
     Settings: SettingsScreen
