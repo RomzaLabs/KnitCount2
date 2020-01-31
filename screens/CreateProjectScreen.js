@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import { Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { observer } from "mobx-react";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
+import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import AppSettingsStore from "../store/AppSettingsStore";
 import Project from "../models/Project";
 import ProjectsStore from "../store/ProjectsStore";
@@ -51,11 +53,13 @@ CreateProjectScreen.navigationOptions = (navData) => {
     {
       headerLeft: () => {
         return (
-          <Button
-            color={AppSettingsStore.mainTextColor}
-            title="Cancel"
-            onPress={() => navData.navigation.navigate('Main')}
-          />
+          <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton} title="Cancel">
+            <Item
+              title="Cancel"
+              iconName={Platform.OS === "android" ? "md-close" : "ios-close"}
+              onPress={() => navData.navigation.navigate('Main')}
+            />
+          </HeaderButtons>
         );
       },
       headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
