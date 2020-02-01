@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Button, KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { observer } from "mobx-react";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
