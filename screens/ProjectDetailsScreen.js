@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, KeyboardAvoidingView, Platform, StyleSheet, Text, View} from 'react-native';
+import { Button, KeyboardAvoidingView, Platform, SectionList, StyleSheet, Text, View} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -10,20 +10,38 @@ import {HeaderButtons, Item} from "react-navigation-header-buttons";
 const ProjectDetailsScreen = (props) => {
   const { selectedProject } = ProjectsStore;
 
+  const DATA = [
+    { title: "projects", data: [] },
+    { title: 'photos', data: [] },
+    { title: 'notes', data: [] },
+    { title: 'actions', data: ['markFinishedBtn', 'updateTitleBtn', 'deleteProjectBtn'] }
+  ];
+
+  const renderActionBtn = (btnName) => {
+    let btnTitle = ''; // TODO: Refactor this.
+    if (btnName === 'markFinishedBtn') btnTitle = "Mark Finished";
+    if (btnName === 'updateTitleBtn') btnTitle = "Update Title";
+    if (btnName === 'deleteProjectBtn') btnTitle = "Delete Project";
+
+    return <View><Button title={btnTitle} onPress={() => console.log("Button pressed!")} /></View>;
+  };
+
   return (
     <KeyboardAvoidingView
       behavior='padding'
       keyboardVerticalOffset={50}
       style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
     >
-      <View>
-        <Text>Project Details: { selectedProject.name }</Text>
-        <Button
-          color={AppSettingsStore.mainColor}
-          title="Add A Counter"
-          onPress={() => props.navigation.navigate("AddCounter")}
-        />
-      </View>
+      <SectionList
+        style={{backgroundColor: AppSettingsStore.mainColor}}
+        sections={DATA}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({ section, item }) => {
+          if (section.title === 'actions') return renderActionBtn(item);
+          return null;
+        }}
+        renderSectionHeader={({ section: { title } }) => <Text style={styles.header}>{title}</Text>}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -42,7 +60,7 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
           </HeaderButtons>
         );
       },
-      headerTitle: ProjectsStore.selectedProject.name,
+      title: "",
       headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
       headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
       headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
@@ -54,6 +72,12 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1
+  },
+  header: {
+    fontSize: 32,
+  },
+  title: {
+    fontSize: 24,
   }
 });
 
