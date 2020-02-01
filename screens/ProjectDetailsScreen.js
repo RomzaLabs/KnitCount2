@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Platform, Text, View} from 'react-native';
+import { Button, KeyboardAvoidingView, Platform, StyleSheet, Text, View} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -11,14 +11,20 @@ const ProjectDetailsScreen = (props) => {
   const { selectedProject } = ProjectsStore;
 
   return (
-    <View>
-      <Text>Project Details: { selectedProject.name }</Text>
-      <Button
-        color={AppSettingsStore.mainColor}
-        title="Add A Counter"
-        onPress={() => props.navigation.navigate("AddCounter")}
-      />
-    </View>
+    <KeyboardAvoidingView
+      behavior='padding'
+      keyboardVerticalOffset={50}
+      style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
+    >
+      <View>
+        <Text>Project Details: { selectedProject.name }</Text>
+        <Button
+          color={AppSettingsStore.mainColor}
+          title="Add A Counter"
+          onPress={() => props.navigation.navigate("AddCounter")}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -44,5 +50,11 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
     }
   );
 };
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1
+  }
+});
 
 export default observer(ProjectDetailsScreen);
