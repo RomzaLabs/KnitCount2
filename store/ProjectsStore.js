@@ -1,6 +1,7 @@
 import { observable, action } from "mobx";
 
-import { insertProject } from "../store/projectsDbHelper";
+import {insertProject, updateProject} from "../store/projectsDbHelper";
+import {ProjectStatus} from "../models/ProjectStatus";
 
 class ProjectsStore {
 
@@ -33,6 +34,18 @@ class ProjectsStore {
   @action
   toggleProjectModalVisible = () => {
     this.isProjectModalVisible = !this.isProjectModalVisible;
+  };
+
+  @action
+  toggleStatusForProject = (projectId) => {
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) {
+        const project = {...p, status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP};
+        updateProject(project);
+        return project;
+      }
+      return p;
+    });
   };
 
   persistProject = async(project) => {
