@@ -42,10 +42,21 @@ const ProjectDetailsScreen = (props) => {
     }
   };
 
+  const regularBtnStyle = styles.normalActionButton;
+  const destructiveBtnStyle = styles.destructiveButton;
+  const getStylesForBtn = (btnName) => btnName === DELETE_PROJECT_BTN_ID ? destructiveBtnStyle : regularBtnStyle;
+  const getColorForBtn = (btnName) => btnName === DELETE_PROJECT_BTN_ID ? "red" : AppSettingsStore.mainTextColor;
+
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
     const handleOnPress = getHandlerForBtn(btnName);
-    return <View><Button title={btnTitle} onPress={handleOnPress} /></View>;
+    const btnColor = getColorForBtn(btnName);
+
+    return (
+      <View style={styles.actionBtnContainer}>
+        <Button color={btnColor} style={{color: "blue"}} title={btnTitle} onPress={handleOnPress} />
+      </View>
+    );
   };
 
   return (
@@ -110,6 +121,17 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 32,
+  },
+  actionBtnContainer: {
+    marginHorizontal: 12,
+    marginVertical: 2
+  },
+  normalActionButton: {
+    backgroundColor: "blue",
+    fontFamily: "avenir-bold"
+  },
+  destructiveButton: {
+    backgroundColor: "red"
   }
 });
 
