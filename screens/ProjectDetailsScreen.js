@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, KeyboardAvoidingView, Platform, SectionList, StyleSheet, Text, View} from 'react-native';
-import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -16,7 +15,11 @@ import
   } from "../constants/SECTION_DETAILS";
 
 const ProjectDetailsScreen = (props) => {
-  const { selectedProject } = ProjectsStore;
+  const [projectName, setProjectName] = useState("");
+
+  useEffect(() => {
+    setProjectName(ProjectsStore.selectedProject.name);
+  }, [projectName]);
 
   const PROJECT_DETAILS_SECTIONS = [
     { key: SECTION_DETAILS.COUNTERS.key, title: SECTION_DETAILS.COUNTERS.title, data: SECTION_DETAILS.COUNTERS.data },
@@ -40,6 +43,9 @@ const ProjectDetailsScreen = (props) => {
       keyboardVerticalOffset={50}
       style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
     >
+      <View style={styles.titleContainer}>
+        <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>{projectName}</Text>
+      </View>
       <SectionList
         style={{backgroundColor: AppSettingsStore.mainColor}}
         sections={PROJECT_DETAILS_SECTIONS}
@@ -81,12 +87,19 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1
   },
-  header: {
-    fontSize: 32,
+  titleContainer: {
+    margin: 12
   },
   title: {
-    fontSize: 24,
+    fontFamily: "avenir-black",
+    fontSize: 32,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: -1, height: 2},
+    textShadowRadius: 3
+  },
+  header: {
+    fontSize: 32,
   }
 });
 
-export default observer(ProjectDetailsScreen);
+export default ProjectDetailsScreen;
