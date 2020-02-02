@@ -2,6 +2,12 @@ export const MARK_FINISHED_BTN_ID = "markFinishedBtn";
 export const UPDATE_TITLE_BTN_ID = "updateTitleBtn";
 export const DELETE_PROJECT_BTN_ID = "deleteProjectBtn";
 
+export const ACTION_BUTTONS = {
+  "markFinishedBtn": "Mark Finished",
+  "updateTitleBtn": "Update Title",
+  "deleteProjectBtn": "Delete Project"
+};
+
 export const SECTION_DETAILS = {
   COUNTERS: {
     key: 0,

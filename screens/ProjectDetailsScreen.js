@@ -9,6 +9,7 @@ import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import
   SECTION_DETAILS,
   {
+    ACTION_BUTTONS,
     MARK_FINISHED_BTN_ID,
     UPDATE_TITLE_BTN_ID,
     DELETE_PROJECT_BTN_ID
@@ -29,11 +30,7 @@ const ProjectDetailsScreen = (props) => {
   ];
 
   const renderActionBtn = (btnName) => {
-    let btnTitle = ''; // TODO: Refactor this.
-    if (btnName === 'markFinishedBtn') btnTitle = "Mark Finished";
-    if (btnName === 'updateTitleBtn') btnTitle = "Update Title";
-    if (btnName === 'deleteProjectBtn') btnTitle = "Delete Project";
-
+    const btnTitle = ACTION_BUTTONS[btnName];
     return <View><Button title={btnTitle} onPress={() => console.log("Button pressed!")} /></View>;
   };
 
