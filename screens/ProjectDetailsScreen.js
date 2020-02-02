@@ -29,9 +29,27 @@ const ProjectDetailsScreen = (props) => {
     { key: SECTION_DETAILS.ACTIONS.key, title: SECTION_DETAILS.ACTIONS.title, data: SECTION_DETAILS.ACTIONS.data }
   ];
 
+  const handleMarkFinished = () => { console.log("TODO: Mark Finished!") }; // TODO: Implement mark finished.
+  const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
+  const handleDeleteProject = () => { console.log("TODO: Delete Project!") }; // TODO: Implement delete project.
+
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
-    return <View><Button title={btnTitle} onPress={() => console.log("Button pressed!")} /></View>;
+
+    let handleOnPress;
+    switch (btnName) {
+      case MARK_FINISHED_BTN_ID:
+        handleOnPress = handleMarkFinished;
+        break;
+      case UPDATE_TITLE_BTN_ID:
+        handleOnPress = handleUpdateTitle;
+        break;
+      case DELETE_PROJECT_BTN_ID:
+      default:
+        handleOnPress = handleDeleteProject;
+    }
+
+    return <View><Button title={btnTitle} onPress={handleOnPress} /></View>;
   };
 
   return (
