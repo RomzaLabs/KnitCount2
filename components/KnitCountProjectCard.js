@@ -18,12 +18,12 @@ const KnitCountProjectCard = (props) => {
                 style={styles.bgImageContainer}
               >
                 <View style={styles.titleContainer}>
-                  <Text style={styles.title} numberOfLines={2}>
+                  <Text style={[styles.title, {color: props.textColor}]} numberOfLines={2}>
                     {props.title}
                   </Text>
                 </View>
                 <View style={styles.statusContainer}>
-                  <Text style={styles.status} numberOfLines={1}>
+                  <Text style={[styles.status, {color: props.textColor}]} numberOfLines={1}>
                     {props.status}
                   </Text>
                 </View>
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'avenir-black',
     fontSize: 32,
-    color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: -1, height: 2},
     textShadowRadius: 3
@@ -70,7 +69,6 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 16,
     fontFamily: 'avenir-black',
-    color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: -1, height: 2},
     textShadowRadius: 3

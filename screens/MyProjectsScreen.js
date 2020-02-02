@@ -39,6 +39,7 @@ const MyProjectsScreen = (props) => {
         image={project.images.length ? project.images[0] : null}
         title={project.name}
         status={project.status}
+        textColor={AppSettingsStore.mainTextColor}
       />
     );
   };
