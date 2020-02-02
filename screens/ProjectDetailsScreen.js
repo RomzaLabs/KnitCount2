@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { KeyboardAvoidingView, Platform, SectionList, StyleSheet, Text, View} from 'react-native';
+import {Button, KeyboardAvoidingView, Platform, SafeAreaView, SectionList, StyleSheet, Text, View} from 'react-native';
+import Modal from "react-native-modal";
+import Confetti from 'reanimated-confetti';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -16,13 +18,28 @@ import
   } from "../constants/SECTION_DETAILS";
 import KnitCountActionButton from "../components/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
+import {ProjectStatus} from "../models/ProjectStatus";
+import KnitCountProjectCard from "../components/KnitCountProjectCard";
 
 const ProjectDetailsScreen = (props) => {
+  const [selectedProject, setSelectedProject] = useState(undefined);
   const [projectName, setProjectName] = useState("");
+  const [projectStatus, setProjectStatus] = useState(undefined);
+  const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
 
   useEffect(() => {
+    setSelectedProject(ProjectsStore.selectedProject);
+    setProjectStatus(ProjectsStore.selectedProject.status);
     setProjectName(ProjectsStore.selectedProject.name);
-  }, [projectName]);
+  }, [selectedProject]);
+
+  // useEffect(() => {
+  //   setProjectName(ProjectsStore.selectedProject.name);
+  // }, [projectName]);
+
+  // useEffect(() => {
+  //   setProjectStatus(ProjectsStore.selectedProject.status);
+  // }, [projectStatus]);
 
   const PROJECT_DETAILS_SECTIONS = [
     { key: SECTION_DETAILS.COUNTERS.key, title: SECTION_DETAILS.COUNTERS.title, data: SECTION_DETAILS.COUNTERS.data },
@@ -31,13 +48,27 @@ const ProjectDetailsScreen = (props) => {
     { key: SECTION_DETAILS.ACTIONS.key, title: SECTION_DETAILS.ACTIONS.title, data: SECTION_DETAILS.ACTIONS.data }
   ];
 
-  const handleMarkFinished = () => { console.log("TODO: Mark Finished!") }; // TODO: Implement mark finished.
+  const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
+
+  const handleMarkFinished = async() => {
+    ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
+    await setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    toggleFinishedModalVisible();
+  };
+
+  const handleMarkInProgress = () => {
+    ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
+    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+  };
+
   const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
   const handleDeleteProject = () => { console.log("TODO: Delete Project!") }; // TODO: Implement delete project.
 
   const getHandlerForBtn = (btnName) => {
     switch (btnName) {
-      case MARK_FINISHED_BTN_ID: return handleMarkFinished;
+      case MARK_FINISHED_BTN_ID:
+        if (projectStatus === ProjectStatus.WIP) return handleMarkFinished;
+        return handleMarkInProgress;
       case UPDATE_TITLE_BTN_ID: return handleUpdateTitle;
       case DELETE_PROJECT_BTN_ID: return handleDeleteProject;
       default: return handleDeleteProject;
@@ -46,6 +77,7 @@ const ProjectDetailsScreen = (props) => {
 
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
+    const updatedTitle = btnTitle === "Mark Finished" && projectStatus === ProjectStatus.FO ? "Mark In Progress" : btnTitle;
     const handleOnPress = getHandlerForBtn(btnName);
 
     let btnComponent;
@@ -55,7 +87,7 @@ const ProjectDetailsScreen = (props) => {
       btnComponent = (
         <KnitCountActionButton
           onPress={handleOnPress}
-          label={btnTitle}
+          label={updatedTitle}
           bgColor={AppSettingsStore.mainTextColor}
           textColor={AppSettingsStore.mainColor}
         />
@@ -70,11 +102,7 @@ const ProjectDetailsScreen = (props) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior='padding'
-      keyboardVerticalOffset={50}
-      style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
-    >
+    <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
       <View style={styles.titleContainer}>
         <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>{projectName}</Text>
       </View>
@@ -88,7 +116,19 @@ const ProjectDetailsScreen = (props) => {
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
-    </KeyboardAvoidingView>
+      <Modal isVisible={isFinishedModalVisible} onBackdropPress={toggleFinishedModalVisible}>
+        <View style={{backgroundColor: AppSettingsStore.mainColor}}>
+          <KnitCountProjectCard
+            onPress={() => {}}
+            image={null}
+            title={projectName}
+            status={projectStatus}
+            textColor={AppSettingsStore.mainTextColor}
+          />
+          {Platform.OS === "ios" && <Confetti duration={4000} />}
+        </View>
+      </Modal>
+    </SafeAreaView>
   );
 };
 
