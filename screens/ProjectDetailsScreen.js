@@ -33,22 +33,18 @@ const ProjectDetailsScreen = (props) => {
   const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
   const handleDeleteProject = () => { console.log("TODO: Delete Project!") }; // TODO: Implement delete project.
 
+  const getHandlerForBtn = (btnName) => {
+    switch (btnName) {
+      case MARK_FINISHED_BTN_ID: return handleMarkFinished;
+      case UPDATE_TITLE_BTN_ID: return handleUpdateTitle;
+      case DELETE_PROJECT_BTN_ID: return handleDeleteProject;
+      default: return handleDeleteProject;
+    }
+  };
+
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
-
-    let handleOnPress;
-    switch (btnName) {
-      case MARK_FINISHED_BTN_ID:
-        handleOnPress = handleMarkFinished;
-        break;
-      case UPDATE_TITLE_BTN_ID:
-        handleOnPress = handleUpdateTitle;
-        break;
-      case DELETE_PROJECT_BTN_ID:
-      default:
-        handleOnPress = handleDeleteProject;
-    }
-
+    const handleOnPress = getHandlerForBtn(btnName);
     return <View><Button title={btnTitle} onPress={handleOnPress} /></View>;
   };
 
