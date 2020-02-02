@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Button, KeyboardAvoidingView, Platform, SectionList, StyleSheet, Text, View} from 'react-native';
+import { KeyboardAvoidingView, Platform, SectionList, StyleSheet, Text, View} from 'react-native';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -14,6 +14,8 @@ import
     UPDATE_TITLE_BTN_ID,
     DELETE_PROJECT_BTN_ID
   } from "../constants/SECTION_DETAILS";
+import KnitCountActionButton from "../components/KnitCountActionButton";
+import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
 
 const ProjectDetailsScreen = (props) => {
   const [projectName, setProjectName] = useState("");
@@ -42,21 +44,25 @@ const ProjectDetailsScreen = (props) => {
     }
   };
 
-  const regularBtnStyle = styles.normalActionButton;
-  const destructiveBtnStyle = styles.destructiveButton;
-  const getStylesForBtn = (btnName) => btnName === DELETE_PROJECT_BTN_ID ? destructiveBtnStyle : regularBtnStyle;
-  const getColorForBtn = (btnName) => btnName === DELETE_PROJECT_BTN_ID ? "red" : AppSettingsStore.mainTextColor;
-
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
     const handleOnPress = getHandlerForBtn(btnName);
-    const btnColor = getColorForBtn(btnName);
 
-    return (
-      <View style={styles.actionBtnContainer}>
-        <Button color={btnColor} style={{color: "blue"}} title={btnTitle} onPress={handleOnPress} />
-      </View>
-    );
+    let btnComponent;
+    if (btnName === DELETE_PROJECT_BTN_ID) {
+      btnComponent = <KnitCountDestructiveButton onPress={handleOnPress} label={btnTitle} />;
+    } else {
+      btnComponent = (
+        <KnitCountActionButton
+          onPress={handleOnPress}
+          label={btnTitle}
+          bgColor={AppSettingsStore.mainTextColor}
+          textColor={AppSettingsStore.mainColor}
+        />
+      );
+    }
+
+    return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
   return (
@@ -120,18 +126,12 @@ const styles = StyleSheet.create({
     textShadowRadius: 3
   },
   header: {
-    fontSize: 32,
+    fontSize: 16,
+    marginHorizontal: 12
   },
   actionBtnContainer: {
     marginHorizontal: 12,
     marginVertical: 2
-  },
-  normalActionButton: {
-    backgroundColor: "blue",
-    fontFamily: "avenir-bold"
-  },
-  destructiveButton: {
-    backgroundColor: "red"
   }
 });
 
