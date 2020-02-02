@@ -65,6 +65,10 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const renderSectionHeader = (title, fontColor) => {
+    return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
+  };
+
   return (
     <KeyboardAvoidingView
       behavior='padding'
@@ -82,7 +86,7 @@ const ProjectDetailsScreen = (props) => {
           if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
           return null;
         }}
-        renderSectionHeader={({ section: { title } }) => <Text style={styles.header}>{title}</Text>}
+        renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
     </KeyboardAvoidingView>
   );
@@ -127,7 +131,9 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 16,
-    marginHorizontal: 12
+    marginHorizontal: 12,
+    fontFamily: "avenir-roman",
+    textTransform: "uppercase"
   },
   actionBtnContainer: {
     marginHorizontal: 12,
