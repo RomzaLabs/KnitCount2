@@ -42,15 +42,15 @@ const ProjectDetailsScreen = (props) => {
 
   const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
 
-  const handleMarkFinished = async() => {
+  const handleMarkFinished = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
-    await setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
     toggleFinishedModalVisible();
   };
 
-  const handleMarkInProgress = async() => {
+  const handleMarkInProgress = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
-    await setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
   };
 
   const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
