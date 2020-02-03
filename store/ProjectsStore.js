@@ -1,6 +1,6 @@
 import { observable, action } from "mobx";
 
-import {insertProject, updateProject} from "../store/projectsDbHelper";
+import {insertProject, updateProject, deleteProject} from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
 class ProjectsStore {
@@ -58,6 +58,13 @@ class ProjectsStore {
       }
       return p;
     });
+  };
+
+  @action
+  deleteProjectById = (projectId) => {
+    this.projects = this.projects.filter(p => p.id !== projectId);
+    this.selectedProject = null;
+    deleteProject(projectId);
   };
 
   persistProject = async(project) => {

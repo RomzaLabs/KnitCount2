@@ -27,6 +27,7 @@ const ProjectDetailsScreen = (props) => {
   const [projectStatus, setProjectStatus] = useState(undefined);
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
@@ -43,21 +44,19 @@ const ProjectDetailsScreen = (props) => {
 
   const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
   const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
+  const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
 
   const handleMarkFinished = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
     setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
     toggleFinishedModalVisible();
   };
-
   const handleMarkInProgress = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
     setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
   };
-
   const handleUpdateTitle = () => toggleUpdateTitleModalVisible();
-
-  const handleDeleteProject = () => { console.log("TODO: Delete Project!") }; // TODO: Implement delete project.
+  const handleDeleteProject = () => toggleDeleteModalVisible();
 
   const getHandlerForBtn = (btnName) => {
     switch (btnName) {
@@ -127,7 +126,7 @@ const ProjectDetailsScreen = (props) => {
             <KnitCountActionButton
               onPress={() => {
                 toggleFinishedModalVisible();
-                props.navigation.navigate("MyProjects");
+                props.navigation.popToTop();
               }}
               label={"Go to My Projects"}
               bgColor={AppSettingsStore.mainTextColor}
@@ -140,7 +139,7 @@ const ProjectDetailsScreen = (props) => {
       <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
           <View style={{alignItems: "center", margin: 12}}>
-            <Text style={[styles.updateTitleHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
+            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
             <TextInput
               style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
               placeholder="Enter project name"
@@ -151,6 +150,37 @@ const ProjectDetailsScreen = (props) => {
                 toggleUpdateTitleModalVisible();
               }}
             />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal isVisible={isDeleteModalVisible} onBackdropPress={toggleDeleteModalVisible}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
+          <View style={{alignItems: "center", margin: 12}}>
+            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>
+              Are you sure? This cannot be undone!
+            </Text>
+
+            <View style={{width: "100%", marginTop: 6}}>
+              <KnitCountActionButton
+                onPress={toggleDeleteModalVisible}
+                label={"Oops! Don't delete."}
+                bgColor={AppSettingsStore.mainTextColor}
+                textColor={AppSettingsStore.mainColor}
+              />
+            </View>
+
+            <View style={{width: "100%", margin: 6}}>
+              <KnitCountDestructiveButton
+                onPress={() => {
+                  toggleUpdateTitleModalVisible();
+                  ProjectsStore.deleteProjectById(selectedProject.id);
+                  props.navigation.popToTop();
+                }}
+                label={"Yes, delete this project."}
+              />
+            </View>
+
           </View>
         </View>
       </Modal>
@@ -214,7 +244,7 @@ const styles = StyleSheet.create({
   finishedModalActionContainer: {
     margin: 6
   },
-  updateTitleHeader: {
+  modalHeader: {
     fontSize: 16,
     marginTop: 12,
     fontFamily: "avenir-roman",
