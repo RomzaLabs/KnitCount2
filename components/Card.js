@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 const Card = (props) => {
-  return <View style={{...styles.card, ...props.style}}>{props.children}</View>;
+  const hideShadows = !!props.hideShadows;
+  return <View style={[hideShadows ? {} : styles.card, {...props.style}]}>{props.children}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -14,9 +15,7 @@ const styles = StyleSheet.create({
       height: 2
     },
     shadowRadius: 3,
-    elevation: 5,
-    borderRadius: 3,
-    backgroundColor: "white"
+    elevation: 5
   }
 });
 

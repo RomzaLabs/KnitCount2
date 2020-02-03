@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Button, KeyboardAvoidingView, Platform, SafeAreaView, SectionList, StyleSheet, Text, View} from 'react-native';
+import {Platform, SafeAreaView, SectionList, StyleSheet, Text, View} from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
 
@@ -33,14 +33,6 @@ const ProjectDetailsScreen = (props) => {
     setProjectName(ProjectsStore.selectedProject.name);
   }, [selectedProject]);
 
-  // useEffect(() => {
-  //   setProjectName(ProjectsStore.selectedProject.name);
-  // }, [projectName]);
-
-  // useEffect(() => {
-  //   setProjectStatus(ProjectsStore.selectedProject.status);
-  // }, [projectStatus]);
-
   const PROJECT_DETAILS_SECTIONS = [
     { key: SECTION_DETAILS.COUNTERS.key, title: SECTION_DETAILS.COUNTERS.title, data: SECTION_DETAILS.COUNTERS.data },
     { key: SECTION_DETAILS.PHOTOS.key, title: SECTION_DETAILS.PHOTOS.title, data: SECTION_DETAILS.PHOTOS.data },
@@ -56,9 +48,9 @@ const ProjectDetailsScreen = (props) => {
     toggleFinishedModalVisible();
   };
 
-  const handleMarkInProgress = () => {
+  const handleMarkInProgress = async() => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
-    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    await setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
   };
 
   const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
@@ -117,15 +109,28 @@ const ProjectDetailsScreen = (props) => {
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
       <Modal isVisible={isFinishedModalVisible} onBackdropPress={toggleFinishedModalVisible}>
-        <View style={{backgroundColor: AppSettingsStore.mainColor}}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
           <KnitCountProjectCard
             onPress={() => {}}
             image={null}
             title={projectName}
             status={projectStatus}
             textColor={AppSettingsStore.mainTextColor}
+            hideShadows={true}
           />
           {Platform.OS === "ios" && <Confetti duration={4000} />}
+          <View style={styles.finishedModalActionContainer}>
+            <KnitCountActionButton
+              onPress={() => {
+                toggleFinishedModalVisible();
+                props.navigation.navigate("MyProjects");
+              }}
+              label={"Go to My Projects"}
+              bgColor={AppSettingsStore.mainTextColor}
+              textColor={AppSettingsStore.mainColor}
+            />
+          </View>
+
         </View>
       </Modal>
     </SafeAreaView>
@@ -178,6 +183,14 @@ const styles = StyleSheet.create({
   actionBtnContainer: {
     marginHorizontal: 12,
     marginVertical: 2
+  },
+  modalContainer: {
+    justifyContent: 'center',
+    borderRadius: 5,
+    borderColor: 'rgba(0, 0, 0, 0.1)'
+  },
+  finishedModalActionContainer: {
+    margin: 6
   }
 });
 
