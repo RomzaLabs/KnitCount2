@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Platform, KeyboardAvoidingView, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
 
@@ -91,6 +91,25 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const renderNotes = () => {
+    return (
+      <KeyboardAvoidingView>
+        <View style={{marginHorizontal: 12}}>
+          <TextInput
+            multiline
+            editable
+            style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor, textAlignVertical: "top", minHeight: 100}]}
+            placeholder="Enter notes"
+            value={projectName}
+            onChangeText={() => {}}
+            onSubmitEditing={() => {}}
+            numberOfLines={6}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    );
+  };
+
   const renderSectionHeader = (title, fontColor) => {
     return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
   };
@@ -106,6 +125,7 @@ const ProjectDetailsScreen = (props) => {
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
           if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
+          if (section.key === SECTION_DETAILS.NOTES.key) return renderNotes();
           return null;
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
