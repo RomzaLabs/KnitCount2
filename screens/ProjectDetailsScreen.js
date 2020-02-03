@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, SafeAreaView, SectionList, StyleSheet, Text, View} from 'react-native';
+import {Platform, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
 
@@ -26,6 +26,7 @@ const ProjectDetailsScreen = (props) => {
   const [projectName, setProjectName] = useState("");
   const [projectStatus, setProjectStatus] = useState(undefined);
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
+  const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
@@ -41,6 +42,7 @@ const ProjectDetailsScreen = (props) => {
   ];
 
   const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
+  const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
 
   const handleMarkFinished = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
@@ -53,7 +55,8 @@ const ProjectDetailsScreen = (props) => {
     setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
   };
 
-  const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
+  const handleUpdateTitle = () => toggleUpdateTitleModalVisible();
+
   const handleDeleteProject = () => { console.log("TODO: Delete Project!") }; // TODO: Implement delete project.
 
   const getHandlerForBtn = (btnName) => {
@@ -108,6 +111,7 @@ const ProjectDetailsScreen = (props) => {
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
+
       <Modal isVisible={isFinishedModalVisible} onBackdropPress={toggleFinishedModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
           <KnitCountProjectCard
@@ -130,9 +134,27 @@ const ProjectDetailsScreen = (props) => {
               textColor={AppSettingsStore.mainColor}
             />
           </View>
-
         </View>
       </Modal>
+
+      <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
+          <View style={{alignItems: "center", margin: 12}}>
+            <Text style={[styles.updateTitleHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
+            <TextInput
+              style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
+              placeholder="Enter project name"
+              value={projectName}
+              onChangeText={(e) => setProjectName(e)}
+              onSubmitEditing={(e) => {
+                ProjectsStore.updateProjectName(selectedProject.id, e.nativeEvent.text);
+                toggleUpdateTitleModalVisible();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 };
@@ -191,6 +213,21 @@ const styles = StyleSheet.create({
   },
   finishedModalActionContainer: {
     margin: 6
+  },
+  updateTitleHeader: {
+    fontSize: 16,
+    marginTop: 12,
+    fontFamily: "avenir-roman",
+    textTransform: "uppercase"
+  },
+  input: {
+    fontFamily: "avenir-roman",
+    fontSize: 16,
+    width: "100%",
+    marginTop: 8,
+    marginBottom: 12,
+    padding: 8,
+    borderRadius: 5
   }
 });
 

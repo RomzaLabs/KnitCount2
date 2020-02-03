@@ -48,6 +48,18 @@ class ProjectsStore {
     });
   };
 
+  @action
+  updateProjectName = (projectId, newName) => {
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) {
+        const project = {...p, name: newName};
+        updateProject(project);
+        return project;
+      }
+      return p;
+    });
+  };
+
   persistProject = async(project) => {
     await insertProject(project);
   };
