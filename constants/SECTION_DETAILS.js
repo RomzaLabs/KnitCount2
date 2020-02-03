@@ -22,11 +22,11 @@ export const SECTION_DETAILS = {
   NOTES: {
     key: 2,
     title: "Notes",
-    data: []
+    data: ["notes"]
   },
   ACTIONS: {
     key: 3,
-    title: "",
+    title: "Actions",
     data: [MARK_FINISHED_BTN_ID, UPDATE_TITLE_BTN_ID, DELETE_PROJECT_BTN_ID]
   }
 };
