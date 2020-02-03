@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    backgroundColor: "red"
+    backgroundColor: 'rgba(255, 59, 48, 1.0)'
   },
   buttonText: {
     fontFamily: "avenir-roman",
