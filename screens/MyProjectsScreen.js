@@ -15,7 +15,6 @@ import {ProjectStatus} from "../models/ProjectStatus";
 import {FilterPreference} from "../models/FilterPreference";
 
 const MyProjectsScreen = (props) => {
-  const projectCount = ProjectsStore.projects.length;
   const [projects, setProjects] = useState([]);
   const [filterPreference, setFilterPreference] = useState(AppSettingsStore.filterPreference);
 
@@ -27,7 +26,7 @@ const MyProjectsScreen = (props) => {
     });
     setProjects(filteredProjects);
     props.navigation.setParams({filterPreference});
-  }, [projectCount, filterPreference]);
+  }, [ProjectsStore.projects, filterPreference]);
 
   const renderKnitCountCard = (project) => {
     return (

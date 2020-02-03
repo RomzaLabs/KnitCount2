@@ -8,7 +8,7 @@ const KnitCountProjectCard = (props) => {
   if (Platform.OS === "android" && Platform.Version >= 21) TouchableCmp = TouchableNativeFeedback;
 
   return (
-    <Card style={styles.project}>
+    <Card hideShadows={props.hideShadows} style={styles.project}>
       <View style={styles.touchable}>
         <TouchableCmp onPress={props.onPress} useForeground >
           <View style={styles.projectDetail}>

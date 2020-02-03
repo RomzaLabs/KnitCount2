@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { KeyboardAvoidingView, Platform, SectionList, StyleSheet, Text, View} from 'react-native';
+import {Platform, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
+import Modal from "react-native-modal";
+import Confetti from 'reanimated-confetti';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -16,13 +18,22 @@ import
   } from "../constants/SECTION_DETAILS";
 import KnitCountActionButton from "../components/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
+import {ProjectStatus} from "../models/ProjectStatus";
+import KnitCountProjectCard from "../components/KnitCountProjectCard";
 
 const ProjectDetailsScreen = (props) => {
+  const [selectedProject, setSelectedProject] = useState(undefined);
   const [projectName, setProjectName] = useState("");
+  const [projectStatus, setProjectStatus] = useState(undefined);
+  const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
+  const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
   useEffect(() => {
+    setSelectedProject(ProjectsStore.selectedProject);
+    setProjectStatus(ProjectsStore.selectedProject.status);
     setProjectName(ProjectsStore.selectedProject.name);
-  }, [projectName]);
+  }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
     { key: SECTION_DETAILS.COUNTERS.key, title: SECTION_DETAILS.COUNTERS.title, data: SECTION_DETAILS.COUNTERS.data },
@@ -31,13 +42,27 @@ const ProjectDetailsScreen = (props) => {
     { key: SECTION_DETAILS.ACTIONS.key, title: SECTION_DETAILS.ACTIONS.title, data: SECTION_DETAILS.ACTIONS.data }
   ];
 
-  const handleMarkFinished = () => { console.log("TODO: Mark Finished!") }; // TODO: Implement mark finished.
-  const handleUpdateTitle = () => { console.log("TODO: Update Title!") }; // TODO: Implement update title.
-  const handleDeleteProject = () => { console.log("TODO: Delete Project!") }; // TODO: Implement delete project.
+  const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
+  const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
+  const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
+
+  const handleMarkFinished = () => {
+    ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
+    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    toggleFinishedModalVisible();
+  };
+  const handleMarkInProgress = () => {
+    ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
+    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+  };
+  const handleUpdateTitle = () => toggleUpdateTitleModalVisible();
+  const handleDeleteProject = () => toggleDeleteModalVisible();
 
   const getHandlerForBtn = (btnName) => {
     switch (btnName) {
-      case MARK_FINISHED_BTN_ID: return handleMarkFinished;
+      case MARK_FINISHED_BTN_ID:
+        if (projectStatus === ProjectStatus.WIP) return handleMarkFinished;
+        return handleMarkInProgress;
       case UPDATE_TITLE_BTN_ID: return handleUpdateTitle;
       case DELETE_PROJECT_BTN_ID: return handleDeleteProject;
       default: return handleDeleteProject;
@@ -46,6 +71,7 @@ const ProjectDetailsScreen = (props) => {
 
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
+    const updatedTitle = btnTitle === "Mark Finished" && projectStatus === ProjectStatus.FO ? "Mark In Progress" : btnTitle;
     const handleOnPress = getHandlerForBtn(btnName);
 
     let btnComponent;
@@ -55,7 +81,7 @@ const ProjectDetailsScreen = (props) => {
       btnComponent = (
         <KnitCountActionButton
           onPress={handleOnPress}
-          label={btnTitle}
+          label={updatedTitle}
           bgColor={AppSettingsStore.mainTextColor}
           textColor={AppSettingsStore.mainColor}
         />
@@ -70,11 +96,7 @@ const ProjectDetailsScreen = (props) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior='padding'
-      keyboardVerticalOffset={50}
-      style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
-    >
+    <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
       <View style={styles.titleContainer}>
         <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>{projectName}</Text>
       </View>
@@ -88,7 +110,82 @@ const ProjectDetailsScreen = (props) => {
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
-    </KeyboardAvoidingView>
+
+      <Modal isVisible={isFinishedModalVisible} onBackdropPress={toggleFinishedModalVisible}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
+          <KnitCountProjectCard
+            onPress={() => {}}
+            image={null}
+            title={projectName}
+            status={projectStatus}
+            textColor={AppSettingsStore.mainTextColor}
+            hideShadows={true}
+          />
+          {Platform.OS === "ios" && <Confetti duration={4000} />}
+          <View style={styles.finishedModalActionContainer}>
+            <KnitCountActionButton
+              onPress={() => {
+                toggleFinishedModalVisible();
+                props.navigation.popToTop();
+              }}
+              label={"Go to My Projects"}
+              bgColor={AppSettingsStore.mainTextColor}
+              textColor={AppSettingsStore.mainColor}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
+          <View style={{alignItems: "center", margin: 12}}>
+            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
+            <TextInput
+              style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
+              placeholder="Enter project name"
+              value={projectName}
+              onChangeText={(e) => setProjectName(e)}
+              onSubmitEditing={(e) => {
+                ProjectsStore.updateProjectName(selectedProject.id, e.nativeEvent.text);
+                toggleUpdateTitleModalVisible();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal isVisible={isDeleteModalVisible} onBackdropPress={toggleDeleteModalVisible}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
+          <View style={{alignItems: "center", margin: 12}}>
+            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>
+              Are you sure? This cannot be undone!
+            </Text>
+
+            <View style={{width: "100%", marginTop: 6}}>
+              <KnitCountActionButton
+                onPress={toggleDeleteModalVisible}
+                label={"Oops! Don't delete."}
+                bgColor={AppSettingsStore.mainTextColor}
+                textColor={AppSettingsStore.mainColor}
+              />
+            </View>
+
+            <View style={{width: "100%", margin: 6}}>
+              <KnitCountDestructiveButton
+                onPress={() => {
+                  toggleUpdateTitleModalVisible();
+                  ProjectsStore.deleteProjectById(selectedProject.id);
+                  props.navigation.popToTop();
+                }}
+                label={"Yes, delete this project."}
+              />
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+
+    </SafeAreaView>
   );
 };
 
@@ -138,6 +235,29 @@ const styles = StyleSheet.create({
   actionBtnContainer: {
     marginHorizontal: 12,
     marginVertical: 2
+  },
+  modalContainer: {
+    justifyContent: 'center',
+    borderRadius: 5,
+    borderColor: 'rgba(0, 0, 0, 0.1)'
+  },
+  finishedModalActionContainer: {
+    margin: 6
+  },
+  modalHeader: {
+    fontSize: 16,
+    marginTop: 12,
+    fontFamily: "avenir-roman",
+    textTransform: "uppercase"
+  },
+  input: {
+    fontFamily: "avenir-roman",
+    fontSize: 16,
+    width: "100%",
+    marginTop: 8,
+    marginBottom: 12,
+    padding: 8,
+    borderRadius: 5
   }
 });
 
