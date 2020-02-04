@@ -61,6 +61,18 @@ class ProjectsStore {
   };
 
   @action
+  updateProjectNotes = (projectId, newNotes) => {
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) {
+        const project = {...p, notes: newNotes};
+        updateProject(project);
+        return project;
+      }
+      return p;
+    });
+  };
+
+  @action
   deleteProjectById = (projectId) => {
     this.projects = this.projects.filter(p => p.id !== projectId);
     this.selectedProject = null;

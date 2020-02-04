@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Platform, KeyboardAvoidingView, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
 
@@ -25,6 +25,8 @@ const ProjectDetailsScreen = (props) => {
   const [selectedProject, setSelectedProject] = useState(undefined);
   const [projectName, setProjectName] = useState("");
   const [projectStatus, setProjectStatus] = useState(undefined);
+  const [projectNotes, setProjectNotes] = useState("");
+
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -33,6 +35,7 @@ const ProjectDetailsScreen = (props) => {
     setSelectedProject(ProjectsStore.selectedProject);
     setProjectStatus(ProjectsStore.selectedProject.status);
     setProjectName(ProjectsStore.selectedProject.name);
+    setProjectNotes(ProjectsStore.selectedProject.notes);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -91,6 +94,34 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const renderNotes = () => {
+    return (
+      <KeyboardAvoidingView>
+        <View style={{marginHorizontal: 12}}>
+          <TextInput
+            multiline
+            editable
+            style={[
+              styles.input,
+              styles.notesInput,
+              {
+                backgroundColor: AppSettingsStore.mainBGColor,
+                color: AppSettingsStore.mainTextColor
+              }
+            ]}
+            placeholder="Enter notes"
+            value={projectNotes}
+            onChangeText={(e) => setProjectNotes(e)}
+            onSubmitEditing={(e) => {
+              ProjectsStore.updateProjectNotes(selectedProject.id, e.nativeEvent.text);
+            }}
+            numberOfLines={6}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    );
+  };
+
   const renderSectionHeader = (title, fontColor) => {
     return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
   };
@@ -106,6 +137,7 @@ const ProjectDetailsScreen = (props) => {
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
           if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
+          if (section.key === SECTION_DETAILS.NOTES.key) return renderNotes();
           return null;
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
@@ -138,7 +170,7 @@ const ProjectDetailsScreen = (props) => {
 
       <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={{alignItems: "center", margin: 12}}>
+          <View style={styles.projectNameContainer}>
             <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
             <TextInput
               style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
@@ -258,6 +290,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 8,
     borderRadius: 5
+  },
+  notesInput: {
+    textAlignVertical: "top",
+    minHeight: 100
+  },
+  projectNameContainer: {
+    alignItems: "center",
+    margin: 12
   }
 });
 
