@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, KeyboardAvoidingView, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Platform, KeyboardAvoidingView, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
 
@@ -26,6 +26,7 @@ const ProjectDetailsScreen = (props) => {
   const [projectName, setProjectName] = useState("");
   const [projectStatus, setProjectStatus] = useState(undefined);
   const [projectNotes, setProjectNotes] = useState("");
+  const [projectImages, setProjectImages] = useState([]);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
@@ -36,6 +37,7 @@ const ProjectDetailsScreen = (props) => {
     setProjectStatus(ProjectsStore.selectedProject.status);
     setProjectName(ProjectsStore.selectedProject.name);
     setProjectNotes(ProjectsStore.selectedProject.notes);
+    setProjectImages(ProjectsStore.selectedProject.images);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -94,6 +96,19 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const renderPhotos = () => {
+    return (
+      <ScrollView horizontal style={styles.photosScrollView}>
+        <View style={styles.photosItem}><Text>1</Text></View>
+        <View style={styles.photosItem}><Text>2</Text></View>
+        <View style={styles.photosItem}><Text>3</Text></View>
+        <View style={styles.photosItem}><Text>4</Text></View>
+        <View style={styles.photosItem}><Text>5</Text></View>
+        <View style={styles.photosItem}><Text>6</Text></View>
+      </ScrollView>
+    );
+  };
+
   const renderNotes = () => {
     return (
       <KeyboardAvoidingView>
@@ -136,8 +151,9 @@ const ProjectDetailsScreen = (props) => {
         sections={PROJECT_DETAILS_SECTIONS}
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
-          if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
+          if (section.key === SECTION_DETAILS.PHOTOS.key) return renderPhotos();
           if (section.key === SECTION_DETAILS.NOTES.key) return renderNotes();
+          if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
           return null;
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
@@ -298,6 +314,17 @@ const styles = StyleSheet.create({
   projectNameContainer: {
     alignItems: "center",
     margin: 12
+  },
+  photosScrollView: {
+    marginTop: 6,
+    marginBottom: 12,
+    marginHorizontal: 12
+  },
+  photosItem: {
+    width: 160,
+    height: 100,
+    backgroundColor: "red",
+    marginHorizontal: 10
   }
 });
 
