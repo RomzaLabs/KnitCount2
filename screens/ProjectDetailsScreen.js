@@ -25,6 +25,8 @@ const ProjectDetailsScreen = (props) => {
   const [selectedProject, setSelectedProject] = useState(undefined);
   const [projectName, setProjectName] = useState("");
   const [projectStatus, setProjectStatus] = useState(undefined);
+  const [projectNotes, setProjectNotes] = useState("");
+
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -33,6 +35,7 @@ const ProjectDetailsScreen = (props) => {
     setSelectedProject(ProjectsStore.selectedProject);
     setProjectStatus(ProjectsStore.selectedProject.status);
     setProjectName(ProjectsStore.selectedProject.name);
+    setProjectNotes(ProjectsStore.selectedProject.notes);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -100,9 +103,11 @@ const ProjectDetailsScreen = (props) => {
             editable
             style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor, textAlignVertical: "top", minHeight: 100}]}
             placeholder="Enter notes"
-            value={projectName}
-            onChangeText={() => {}}
-            onSubmitEditing={() => {}}
+            value={projectNotes}
+            onChangeText={(e) => setProjectNotes(e)}
+            onSubmitEditing={(e) => {
+              ProjectsStore.updateProjectNotes(selectedProject.id, e.nativeEvent.text);
+            }}
             numberOfLines={6}
           />
         </View>
