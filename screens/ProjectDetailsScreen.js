@@ -101,7 +101,14 @@ const ProjectDetailsScreen = (props) => {
           <TextInput
             multiline
             editable
-            style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor, textAlignVertical: "top", minHeight: 100}]}
+            style={[
+              styles.input,
+              styles.notesInput,
+              {
+                backgroundColor: AppSettingsStore.mainBGColor,
+                color: AppSettingsStore.mainTextColor
+              }
+            ]}
             placeholder="Enter notes"
             value={projectNotes}
             onChangeText={(e) => setProjectNotes(e)}
@@ -163,7 +170,7 @@ const ProjectDetailsScreen = (props) => {
 
       <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={{alignItems: "center", margin: 12}}>
+          <View style={styles.projectNameContainer}>
             <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
             <TextInput
               style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
@@ -283,6 +290,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 8,
     borderRadius: 5
+  },
+  notesInput: {
+    textAlignVertical: "top",
+    minHeight: 100
+  },
+  projectNameContainer: {
+    alignItems: "center",
+    margin: 12
   }
 });
 
