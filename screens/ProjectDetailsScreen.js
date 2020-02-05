@@ -20,6 +20,7 @@ import KnitCountActionButton from "../components/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
+import KnitCountImagePicker from "../components/KnitCountImagePicker";
 
 const ProjectDetailsScreen = (props) => {
   const [selectedProject, setSelectedProject] = useState(undefined);
@@ -99,7 +100,13 @@ const ProjectDetailsScreen = (props) => {
   const renderPhotos = () => {
     return (
       <ScrollView horizontal style={styles.photosScrollView}>
-        <View style={styles.photosItem}><Text>1</Text></View>
+        <View style={styles.photosImagePicker}>
+          <KnitCountImagePicker
+            onPress={() => {}} //TODO
+            mainColor={AppSettingsStore.mainColor}
+            mainTextColor={AppSettingsStore.mainTextColor}
+          />
+        </View>
         <View style={styles.photosItem}><Text>2</Text></View>
         <View style={styles.photosItem}><Text>3</Text></View>
         <View style={styles.photosItem}><Text>4</Text></View>
@@ -319,6 +326,11 @@ const styles = StyleSheet.create({
     marginTop: 6,
     marginBottom: 12,
     marginHorizontal: 12
+  },
+  photosImagePicker: {
+    width: 160,
+    height: 100,
+    marginRight: 10
   },
   photosItem: {
     width: 160,
