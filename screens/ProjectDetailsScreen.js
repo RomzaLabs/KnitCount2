@@ -98,20 +98,26 @@ const ProjectDetailsScreen = (props) => {
   };
 
   const renderPhotos = () => {
+
+    const renderImageCards = () => {
+      if (projectImages.length) {
+        return projectImages.map(image => {
+          return <View key={image.id} style={styles.photosItem}><Text>2</Text></View>;
+        });
+      }
+      return null;
+    };
+
     return (
       <ScrollView horizontal style={styles.photosScrollView}>
         <View style={styles.photosImagePicker}>
           <KnitCountImagePicker
-            onPress={() => {}} //TODO
+            projectId={selectedProject && selectedProject.id ? selectedProject.id : null}
             mainColor={AppSettingsStore.mainColor}
             mainTextColor={AppSettingsStore.mainTextColor}
           />
         </View>
-        <View style={styles.photosItem}><Text>2</Text></View>
-        <View style={styles.photosItem}><Text>3</Text></View>
-        <View style={styles.photosItem}><Text>4</Text></View>
-        <View style={styles.photosItem}><Text>5</Text></View>
-        <View style={styles.photosItem}><Text>6</Text></View>
+        {renderImageCards()}
       </ScrollView>
     );
   };
@@ -170,7 +176,7 @@ const ProjectDetailsScreen = (props) => {
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
           <KnitCountProjectCard
             onPress={() => {}}
-            image={null}
+            image={projectImages.length ? projectImages[0] : null}
             title={projectName}
             status={projectStatus}
             textColor={AppSettingsStore.mainTextColor}
