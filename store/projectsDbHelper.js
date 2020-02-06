@@ -235,7 +235,7 @@ const insertImages = async(projectId, images) => {
   }
 };
 
-const insertImage = (projectId, image) => {
+export const insertImage = (projectId, image) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
