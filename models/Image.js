@@ -1,9 +1,9 @@
 class Image {
-  constructor(id, projectId, imageUri, dateAdded) {
+  constructor(id, projectId, imageUri) {
     this.id = id;
     this.projectId = projectId;
     this.imageUri = imageUri;
-    this.dateAdded = dateAdded;
+    this.dateAdded = +new Date();
   }
 }
 
