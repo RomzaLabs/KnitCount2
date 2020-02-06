@@ -1,6 +1,6 @@
 import { observable, action } from "mobx";
 
-import {insertProject, updateProject, deleteProject} from "../store/projectsDbHelper";
+import {insertProject, updateProject, deleteProject, insertImage} from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
 class ProjectsStore {
@@ -26,8 +26,9 @@ class ProjectsStore {
 
   @action
   createNewProject = async(project) => {
+    const dbResult = await insertProject(project);
+    project.id = dbResult.insertId;
     this.setSelectedProject(project);
-    await this.persistProject(project);
     this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
   };
 
@@ -79,8 +80,13 @@ class ProjectsStore {
     deleteProject(projectId);
   };
 
-  persistProject = async(project) => {
-    await insertProject(project);
+  @action
+  addImageToProjectById = (projectId, image) => {
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) return {...p, images: p.images.concat(image)};
+      return p;
+    });
+    insertImage(projectId, image);
   };
 
 }
