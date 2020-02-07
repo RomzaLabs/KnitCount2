@@ -337,7 +337,7 @@ export const fetchImagesForProject = (projectId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT id, project_id, image_uri, date_added FROM images WHERE project_id = ?;`,
+        `SELECT id, project_id, image_uri, date_added FROM images WHERE project_id = ? ORDER BY date_added desc;`,
         [projectId],
         (_, result) => {
           resolve(result);
