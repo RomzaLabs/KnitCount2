@@ -343,16 +343,17 @@ const styles = StyleSheet.create({
   photosImagePicker: {
     width: 160,
     height: 100,
-    marginRight: 10
+    marginRight: 6
   },
   photosItem: {
     width: 160,
     height: 100,
-    marginHorizontal: 10
+    marginHorizontal: 6
   },
   image: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    borderRadius: 3
   }
 });
 
