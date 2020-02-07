@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View
 } from 'react-native';
 import Modal from "react-native-modal";
@@ -39,10 +40,12 @@ const ProjectDetailsScreen = (props) => {
   const [projectStatus, setProjectStatus] = useState(undefined);
   const [projectNotes, setProjectNotes] = useState("");
   const [projectImages, setProjectImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
@@ -62,6 +65,7 @@ const ProjectDetailsScreen = (props) => {
   const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
   const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
   const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
+  const toggleImageModalVisible = () => setIsImageModalVisible(!isImageModalVisible);
 
   const handleMarkFinished = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
@@ -110,12 +114,20 @@ const ProjectDetailsScreen = (props) => {
 
   const renderPhotos = () => {
 
+    const onImageCardPress = (image) => {
+      setSelectedImage(image);
+      toggleImageModalVisible();
+    };
+
     const renderImageCards = () => {
+      // TODO: Make Platform specific image buttons.
       if (projectImages.length) {
         return projectImages.map((image, idx) => {
           return (
             <View key={idx} style={styles.photosItem}>
-              <Image style={styles.image} source={{uri: image.imageUri}} />
+              <TouchableOpacity onPress={() => onImageCardPress(image)}>
+                <Image style={styles.image} source={{uri: image.imageUri}} />
+              </TouchableOpacity>
             </View>
           );
         });
@@ -262,6 +274,37 @@ const ProjectDetailsScreen = (props) => {
         </View>
       </Modal>
 
+      <Modal isVisible={isImageModalVisible} onBackdropPress={toggleImageModalVisible}>
+        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
+          <View style={{alignItems: "center", margin: 12}}>
+            <View style={styles.photosItemLarge}>
+              <Image style={styles.image} source={{uri: selectedImage ? selectedImage.imageUri : null}} />
+            </View>
+
+            <View style={{width: "100%", marginTop: 6}}>
+              <KnitCountActionButton
+                onPress={toggleImageModalVisible}
+                label={"Cancel"}
+                bgColor={AppSettingsStore.mainTextColor}
+                textColor={AppSettingsStore.mainColor}
+              />
+            </View>
+
+            <View style={{width: "100%", margin: 6}}>
+              <KnitCountDestructiveButton
+                onPress={() => {
+                  toggleImageModalVisible();
+                  // TODO: Remove from ProjectsStore and DB
+                  // TODO: Remove from projectImages
+                }}
+                label={"Yes, delete this image."}
+              />
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 };
@@ -358,6 +401,10 @@ const styles = StyleSheet.create({
     width: 160,
     height: 90,
     marginHorizontal: 6
+  },
+  photosItemLarge: {
+    width: "100%",
+    height: 200
   },
   image: {
     width: '100%',
