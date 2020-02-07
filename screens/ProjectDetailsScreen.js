@@ -1,6 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Image, Platform, KeyboardAvoidingView, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  SectionList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
 } from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
@@ -342,18 +351,19 @@ const styles = StyleSheet.create({
   },
   photosImagePicker: {
     width: 160,
-    height: 100,
+    height: 90,
     marginRight: 6
   },
   photosItem: {
     width: 160,
-    height: 100,
+    height: 90,
     marginHorizontal: 6
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 3
+    borderRadius: 3,
+    resizeMode: "center"
   }
 });
 
