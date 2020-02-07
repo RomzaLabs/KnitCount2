@@ -103,9 +103,9 @@ const ProjectDetailsScreen = (props) => {
 
     const renderImageCards = () => {
       if (projectImages.length) {
-        return projectImages.map(image => {
+        return projectImages.map((image, idx) => {
           return (
-            <View key={image.id} style={styles.photosItem}>
+            <View key={idx} style={styles.photosItem}>
               <Image style={styles.image} source={{uri: image.imageUri}} />
             </View>
           );
@@ -121,6 +121,7 @@ const ProjectDetailsScreen = (props) => {
             projectId={selectedProject && selectedProject.id ? selectedProject.id : null}
             mainColor={AppSettingsStore.mainColor}
             mainTextColor={AppSettingsStore.mainTextColor}
+            onImageTaken={(image) => setProjectImages([image, ...projectImages])}
           />
         </View>
         {renderImageCards()}

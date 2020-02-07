@@ -83,7 +83,7 @@ class ProjectsStore {
   @action
   addImageToProjectById = (projectId, image) => {
     this.projects = this.projects.map(p => {
-      if (p.id === projectId) return {...p, images: p.images.concat(image)};
+      if (p.id === projectId) return {...p, images: [image, ...p.images]};
       return p;
     });
     insertImage(projectId, image);

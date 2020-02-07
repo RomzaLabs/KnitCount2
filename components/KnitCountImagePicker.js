@@ -35,6 +35,7 @@ const KnitCountImagePicker = (props) => {
     });
     const pickedImage = new Image(null, props.projectId, image.uri);
     if (props.projectId && pickedImage.imageUri) ProjectsStore.addImageToProjectById(props.projectId, pickedImage);
+    props.onImageTaken(pickedImage);
   };
 
   return (
