@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, KeyboardAvoidingView, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Image, Platform, KeyboardAvoidingView, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View
+} from 'react-native';
 import Modal from "react-native-modal";
 import Confetti from 'reanimated-confetti';
 
@@ -102,7 +104,11 @@ const ProjectDetailsScreen = (props) => {
     const renderImageCards = () => {
       if (projectImages.length) {
         return projectImages.map(image => {
-          return <View key={image.id} style={styles.photosItem}><Text>2</Text></View>;
+          return (
+            <View key={image.id} style={styles.photosItem}>
+              <Image style={styles.image} source={{uri: image.imageUri}} />
+            </View>
+          );
         });
       }
       return null;
@@ -341,8 +347,11 @@ const styles = StyleSheet.create({
   photosItem: {
     width: 160,
     height: 100,
-    backgroundColor: "red",
     marginHorizontal: 10
+  },
+  image: {
+    width: '100%',
+    height: '100%'
   }
 });
 
