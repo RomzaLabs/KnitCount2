@@ -13,6 +13,7 @@ import { initProjects, fetchProjects, fetchCountersForProject, fetchImagesForPro
 import { initSettings, fetchSettings, insertSettings } from './store/settingsDbHelper';
 import Counter from "./models/Counter";
 import Project from "./models/Project";
+import Image from "./models/Image";
 
 enableScreens();
 initProjects();
