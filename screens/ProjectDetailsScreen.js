@@ -1,16 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  SectionList,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+  KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View
 } from 'react-native';
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
@@ -68,6 +58,11 @@ const ProjectDetailsScreen = (props) => {
   const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
   const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
   const toggleImageModalVisible = () => setIsImageModalVisible(!isImageModalVisible);
+
+  const handleFavoriteImageMarked = (image) => {
+    const sortedImages = [image, ...projectImages.filter(i => i.id !== image.id)];
+    setProjectImages(sortedImages);
+  };
 
   const handleMarkFinished = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
@@ -221,6 +216,7 @@ const ProjectDetailsScreen = (props) => {
 
       <KnitCountImageModal
         isVisible={isImageModalVisible}
+        onFavoriteImageMarked={(i) => handleFavoriteImageMarked(i)}
         onBackdropPress={toggleImageModalVisible}
         selectedImage={selectedImage}
         onRemoveImage={(i) => setProjectImages(projectImages.filter(image => image.id !== i.id))}

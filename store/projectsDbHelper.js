@@ -274,6 +274,28 @@ export const deleteImage = (imageId) => {
   return promise;
 };
 
+export const updateImage = (image) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          UPDATE images
+          SET project_id = ?, image_uri = ?, date_added = ?
+          WHERE id = ?
+        `,
+        [image.projectId, image.imageUri, image.dateAdded, image.id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const deleteImagesForProject = (projectId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {

@@ -19,8 +19,12 @@ const KnitCountImageModal = (props) => {
 
           <View style={{width: "100%", marginTop: 6}}>
             <KnitCountActionButton
-              onPress={props.onBackdropPress}
-              label={"Cancel"}
+              onPress={async() => {
+                await ProjectsStore.markImageAsFavorite(props.selectedImage);
+                props.onFavoriteImageMarked(props.selectedImage);
+                props.onBackdropPress();
+              }}
+              label={"Set as cover image"}
               bgColor={AppSettingsStore.mainTextColor}
               textColor={AppSettingsStore.mainColor}
             />
@@ -33,7 +37,7 @@ const KnitCountImageModal = (props) => {
                 props.onRemoveImage(props.selectedImage);
                 await ProjectsStore.deleteImageFromProjectById(props.projectId, props.selectedImage.id);
               }}
-              label={"Yes, delete this image."}
+              label={"Delete this image."}
             />
           </View>
 
@@ -45,6 +49,7 @@ const KnitCountImageModal = (props) => {
 
 KnitCountImageModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
+  onFavoriteImageMarked: PropTypes.func.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
   projectId: PropTypes.number,
   selectedImage: PropTypes.object,
