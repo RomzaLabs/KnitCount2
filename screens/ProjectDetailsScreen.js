@@ -12,11 +12,12 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
-import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import KnitCountImageButton from "../components/KnitCountImageButton";
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
 import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
@@ -121,16 +122,9 @@ const ProjectDetailsScreen = (props) => {
     };
 
     const renderImageCards = () => {
-      // TODO: Make Platform specific image buttons.
       if (projectImages.length) {
         return projectImages.map((image, idx) => {
-          return (
-            <View key={idx} style={styles.photosItem}>
-              <TouchableOpacity onPress={() => onImageCardPress(image)}>
-                <Image style={styles.image} source={{uri: image.imageUri}} />
-              </TouchableOpacity>
-            </View>
-          );
+          return <KnitCountImageButton key={idx} onPress={() => onImageCardPress(image)} image={image} />;
         });
       }
       return null;
@@ -306,17 +300,6 @@ const styles = StyleSheet.create({
     width: 160,
     height: 90,
     marginRight: 6
-  },
-  photosItem: {
-    width: 160,
-    height: 90,
-    marginHorizontal: 6
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 3,
-    resizeMode: "center"
   }
 });
 
