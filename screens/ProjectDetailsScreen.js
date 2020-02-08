@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import Modal from "react-native-modal";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -285,20 +284,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginVertical: 2
   },
-  modalContainer: {
-    justifyContent: 'center',
-    borderRadius: 5,
-    borderColor: 'rgba(0, 0, 0, 0.1)'
-  },
-  finishedModalActionContainer: {
-    margin: 6
-  },
-  modalHeader: {
-    fontSize: 16,
-    marginTop: 12,
-    fontFamily: "avenir-roman",
-    textTransform: "uppercase"
-  },
   input: {
     fontFamily: "avenir-roman",
     fontSize: 16,
@@ -311,10 +296,6 @@ const styles = StyleSheet.create({
   notesInput: {
     textAlignVertical: "top",
     minHeight: 100
-  },
-  projectNameContainer: {
-    alignItems: "center",
-    margin: 12
   },
   photosScrollView: {
     marginTop: 6,
@@ -330,10 +311,6 @@ const styles = StyleSheet.create({
     width: 160,
     height: 90,
     marginHorizontal: 6
-  },
-  photosItemLarge: {
-    width: "100%",
-    height: 200
   },
   image: {
     width: '100%',
