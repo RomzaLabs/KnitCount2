@@ -21,6 +21,7 @@ import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
 import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
+import KnitCountImageModal from "../components/modals/KnitCountImageModal";
 
 import
   SECTION_DETAILS,
@@ -225,36 +226,13 @@ const ProjectDetailsScreen = (props) => {
         navigation={props.navigation}
       />
 
-      <Modal isVisible={isImageModalVisible} onBackdropPress={toggleImageModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={{alignItems: "center", margin: 12}}>
-            <View style={styles.photosItemLarge}>
-              <Image style={styles.image} source={{uri: selectedImage ? selectedImage.imageUri : null}} />
-            </View>
-
-            <View style={{width: "100%", marginTop: 6}}>
-              <KnitCountActionButton
-                onPress={toggleImageModalVisible}
-                label={"Cancel"}
-                bgColor={AppSettingsStore.mainTextColor}
-                textColor={AppSettingsStore.mainColor}
-              />
-            </View>
-
-            <View style={{width: "100%", margin: 6}}>
-              <KnitCountDestructiveButton
-                onPress={() => {
-                  toggleImageModalVisible();
-                  // TODO: Remove from ProjectsStore and DB
-                  // TODO: Remove from projectImages
-                }}
-                label={"Yes, delete this image."}
-              />
-            </View>
-
-          </View>
-        </View>
-      </Modal>
+      <KnitCountImageModal
+        isVisible={isImageModalVisible}
+        onBackdropPress={toggleImageModalVisible}
+        selectedImage={selectedImage}
+        onRemoveImage={(i) => setProjectImages(projectImages.filter(image => image.id !== i.id))}
+        projectId={selectedProject && selectedProject.id}
+      />
 
     </SafeAreaView>
   );

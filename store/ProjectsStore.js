@@ -1,6 +1,6 @@
 import { observable, action } from "mobx";
 
-import {insertProject, updateProject, deleteProject, insertImage} from "../store/projectsDbHelper";
+import {insertProject, updateProject, deleteProject, insertImage, deleteImage} from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
 class ProjectsStore {
@@ -81,13 +81,22 @@ class ProjectsStore {
   };
 
   @action
-  addImageToProjectById = (projectId, image) => {
+  addImageToProjectById = async(projectId, image) => {
+    const dbResult = await insertImage(projectId, image);
+    image.id = dbResult.insertId;
     this.projects = this.projects.map(p => {
       if (p.id === projectId) return {...p, images: [image, ...p.images]};
       return p;
     });
-    insertImage(projectId, image);
   };
+
+  @action deleteImageFromProjectById = async (projectId, imageId) => {
+    await deleteImage(imageId);
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) return {...p, images: p.images.filter(i => i.id !== imageId)};
+      return p;
+    });
+  }
 
 }
 
