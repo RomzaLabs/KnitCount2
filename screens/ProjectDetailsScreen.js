@@ -1,6 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {
-  KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View
+  Dimensions,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  SectionList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
 } from 'react-native';
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
@@ -8,6 +18,8 @@ import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountImageButton from "../components/KnitCountImageButton";
+import KnitCountCounterButton from "../components/KnitCountCounterButton";
+
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
 import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
@@ -109,6 +121,35 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const renderCounters = () => {
+    // TODO: Implement Counters Section
+    const mockData = [{ id: "0" }, { id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }];
+
+    const renderGridItem = () => {
+      return (
+        <View style={styles.gridItem}>
+          <KnitCountCounterButton
+            mainTextColor={AppSettingsStore.mainTextColor}
+            mainColor={AppSettingsStore.mainColor}
+            mainBGColor={AppSettingsStore.mainBGColor}
+            count={42}
+          />
+          <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>Increment</Text>
+        </View>
+      );
+    };
+
+    return (
+      <FlatList
+        style={styles.countersSectionContainer}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        data={mockData}
+        renderItem={renderGridItem}
+      />
+    );
+  };
+
   const renderPhotos = () => {
 
     const onImageCardPress = (image) => {
@@ -182,10 +223,13 @@ const ProjectDetailsScreen = (props) => {
         sections={PROJECT_DETAILS_SECTIONS}
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
-          if (section.key === SECTION_DETAILS.PHOTOS.key) return renderPhotos();
-          if (section.key === SECTION_DETAILS.NOTES.key) return renderNotes();
-          if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
-          return null;
+          switch (section.key) {
+            case SECTION_DETAILS.COUNTERS.key: return renderCounters();
+            case SECTION_DETAILS.PHOTOS.key: return renderPhotos();
+            case SECTION_DETAILS.NOTES.key: return renderNotes();
+            case SECTION_DETAILS.ACTIONS.key: return renderActionBtn(item);
+            default: return null;
+          }
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
@@ -296,6 +340,23 @@ const styles = StyleSheet.create({
     width: 160,
     height: 90,
     marginRight: 6
+  },
+  countersSectionContainer: {
+    marginHorizontal: 12,
+    marginBottom: 12
+  },
+  gridItem: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginVertical: 6,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  gridItemLabel: {
+    fontFamily: "avenir-roman",
+    fontSize: 18,
+    marginTop: 6,
+    marginHorizontal: 6
   }
 });
 
