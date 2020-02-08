@@ -1,12 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Platform, KeyboardAvoidingView, SafeAreaView, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
-import Modal from "react-native-modal";
-import Confetti from 'reanimated-confetti';
+import {
+  KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View
+} from 'react-native';
+import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
-import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import KnitCountImageButton from "../components/KnitCountImageButton";
+import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
+import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
+import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
+import KnitCountImageModal from "../components/modals/KnitCountImageModal";
 
 import
   SECTION_DETAILS,
@@ -19,23 +24,27 @@ import
 import KnitCountActionButton from "../components/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
 import {ProjectStatus} from "../models/ProjectStatus";
-import KnitCountProjectCard from "../components/KnitCountProjectCard";
+import KnitCountImagePicker from "../components/KnitCountImagePicker";
 
 const ProjectDetailsScreen = (props) => {
   const [selectedProject, setSelectedProject] = useState(undefined);
   const [projectName, setProjectName] = useState("");
   const [projectStatus, setProjectStatus] = useState(undefined);
   const [projectNotes, setProjectNotes] = useState("");
+  const [projectImages, setProjectImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
     setProjectStatus(ProjectsStore.selectedProject.status);
     setProjectName(ProjectsStore.selectedProject.name);
     setProjectNotes(ProjectsStore.selectedProject.notes);
+    setProjectImages(ProjectsStore.selectedProject.images);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -48,6 +57,12 @@ const ProjectDetailsScreen = (props) => {
   const toggleFinishedModalVisible = () => setIsFinishedModalVisible(!isFinishedModalVisible);
   const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
   const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
+  const toggleImageModalVisible = () => setIsImageModalVisible(!isImageModalVisible);
+
+  const handleFavoriteImageMarked = (image) => {
+    const sortedImages = [image, ...projectImages.filter(i => i.id !== image.id)];
+    setProjectImages(sortedImages);
+  };
 
   const handleMarkFinished = () => {
     ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
@@ -94,6 +109,37 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const renderPhotos = () => {
+
+    const onImageCardPress = (image) => {
+      setSelectedImage(image);
+      toggleImageModalVisible();
+    };
+
+    const renderImageCards = () => {
+      if (projectImages.length) {
+        return projectImages.map((image, idx) => {
+          return <KnitCountImageButton key={idx} onPress={() => onImageCardPress(image)} image={image} />;
+        });
+      }
+      return null;
+    };
+
+    return (
+      <ScrollView horizontal style={styles.photosScrollView}>
+        <View style={styles.photosImagePicker}>
+          <KnitCountImagePicker
+            projectId={selectedProject && selectedProject.id ? selectedProject.id : null}
+            mainColor={AppSettingsStore.mainColor}
+            mainTextColor={AppSettingsStore.mainTextColor}
+            onImageTaken={(image) => setProjectImages([image, ...projectImages])}
+          />
+        </View>
+        {renderImageCards()}
+      </ScrollView>
+    );
+  };
+
   const renderNotes = () => {
     return (
       <KeyboardAvoidingView>
@@ -136,86 +182,46 @@ const ProjectDetailsScreen = (props) => {
         sections={PROJECT_DETAILS_SECTIONS}
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
-          if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
+          if (section.key === SECTION_DETAILS.PHOTOS.key) return renderPhotos();
           if (section.key === SECTION_DETAILS.NOTES.key) return renderNotes();
+          if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
           return null;
         }}
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
 
-      <Modal isVisible={isFinishedModalVisible} onBackdropPress={toggleFinishedModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <KnitCountProjectCard
-            onPress={() => {}}
-            image={null}
-            title={projectName}
-            status={projectStatus}
-            textColor={AppSettingsStore.mainTextColor}
-            hideShadows={true}
-          />
-          {Platform.OS === "ios" && <Confetti duration={4000} />}
-          <View style={styles.finishedModalActionContainer}>
-            <KnitCountActionButton
-              onPress={() => {
-                toggleFinishedModalVisible();
-                props.navigation.popToTop();
-              }}
-              label={"Go to My Projects"}
-              bgColor={AppSettingsStore.mainTextColor}
-              textColor={AppSettingsStore.mainColor}
-            />
-          </View>
-        </View>
-      </Modal>
+      <KnitCountFinishedModal
+        isVisible={isFinishedModalVisible}
+        onBackdropPress={toggleFinishedModalVisible}
+        image={projectImages.length ? projectImages[0] : null}
+        name={projectName}
+        status={projectStatus}
+        navigation={props.navigation}
+      />
 
-      <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={styles.projectNameContainer}>
-            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
-            <TextInput
-              style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
-              placeholder="Enter project name"
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-              onSubmitEditing={(e) => {
-                ProjectsStore.updateProjectName(selectedProject.id, e.nativeEvent.text);
-                toggleUpdateTitleModalVisible();
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
+      <KnitCountUpdateTitleModal
+        isVisible={isUpdateTitleModalVisible}
+        onBackdropPress={toggleUpdateTitleModalVisible}
+        title={projectName}
+        onChangeText={setProjectName}
+        projectId={selectedProject && selectedProject.id}
+      />
 
-      <Modal isVisible={isDeleteModalVisible} onBackdropPress={toggleDeleteModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={{alignItems: "center", margin: 12}}>
-            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>
-              Are you sure? This cannot be undone!
-            </Text>
+      <KnitCountDeleteModal
+        isVisible={isDeleteModalVisible}
+        onBackdropPress={toggleDeleteModalVisible}
+        projectId={selectedProject && selectedProject.id}
+        navigation={props.navigation}
+      />
 
-            <View style={{width: "100%", marginTop: 6}}>
-              <KnitCountActionButton
-                onPress={toggleDeleteModalVisible}
-                label={"Oops! Don't delete."}
-                bgColor={AppSettingsStore.mainTextColor}
-                textColor={AppSettingsStore.mainColor}
-              />
-            </View>
-
-            <View style={{width: "100%", margin: 6}}>
-              <KnitCountDestructiveButton
-                onPress={() => {
-                  toggleUpdateTitleModalVisible();
-                  ProjectsStore.deleteProjectById(selectedProject.id);
-                  props.navigation.popToTop();
-                }}
-                label={"Yes, delete this project."}
-              />
-            </View>
-
-          </View>
-        </View>
-      </Modal>
+      <KnitCountImageModal
+        isVisible={isImageModalVisible}
+        onFavoriteImageMarked={(i) => handleFavoriteImageMarked(i)}
+        onBackdropPress={toggleImageModalVisible}
+        selectedImage={selectedImage}
+        onRemoveImage={(i) => setProjectImages(projectImages.filter(image => image.id !== i.id))}
+        projectId={selectedProject && selectedProject.id}
+      />
 
     </SafeAreaView>
   );
@@ -268,20 +274,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginVertical: 2
   },
-  modalContainer: {
-    justifyContent: 'center',
-    borderRadius: 5,
-    borderColor: 'rgba(0, 0, 0, 0.1)'
-  },
-  finishedModalActionContainer: {
-    margin: 6
-  },
-  modalHeader: {
-    fontSize: 16,
-    marginTop: 12,
-    fontFamily: "avenir-roman",
-    textTransform: "uppercase"
-  },
   input: {
     fontFamily: "avenir-roman",
     fontSize: 16,
@@ -295,9 +287,15 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     minHeight: 100
   },
-  projectNameContainer: {
-    alignItems: "center",
-    margin: 12
+  photosScrollView: {
+    marginTop: 6,
+    marginBottom: 12,
+    marginHorizontal: 12
+  },
+  photosImagePicker: {
+    width: 160,
+    height: 90,
+    marginRight: 6
   }
 });
 

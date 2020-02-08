@@ -17,7 +17,7 @@ export const SECTION_DETAILS = {
   PHOTOS: {
     key: 1,
     title: "Photos",
-    data: []
+    data: ["photos"]
   },
   NOTES: {
     key: 2,

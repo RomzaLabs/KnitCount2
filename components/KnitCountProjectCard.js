@@ -14,7 +14,7 @@ const KnitCountProjectCard = (props) => {
           <View style={styles.projectDetail}>
             <View>
               <ImageBackground
-                source={props.image ? {uri: props.image} : require('../assets/ProjectPlaceholder.png')}
+                source={props.image ? {uri: props.image.imageUri} : require('../assets/ProjectPlaceholder.png')}
                 style={styles.bgImageContainer}
               >
                 <View style={styles.titleContainer}>

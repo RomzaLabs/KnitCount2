@@ -21,8 +21,8 @@ const CreateProjectScreen = (props) => {
     setProject(updateProject);
     setTouched(true);
   };
-  const handleSubmit = () => {
-    ProjectsStore.createNewProject(project);
+  const handleSubmit = async() => {
+    await ProjectsStore.createNewProject(project);
     props.navigation.navigate("Main", {}, NavigationActions.navigate({ routeName: "ProjectDetails" }));
   };
 

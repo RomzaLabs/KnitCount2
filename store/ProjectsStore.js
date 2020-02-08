@@ -1,6 +1,8 @@
 import { observable, action } from "mobx";
 
-import {insertProject, updateProject, deleteProject} from "../store/projectsDbHelper";
+import {
+  insertProject, updateProject, deleteProject, insertImage, deleteImage, updateImage
+} from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
 class ProjectsStore {
@@ -26,8 +28,9 @@ class ProjectsStore {
 
   @action
   createNewProject = async(project) => {
+    const dbResult = await insertProject(project);
+    project.id = dbResult.insertId;
     this.setSelectedProject(project);
-    await this.persistProject(project);
     this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
   };
 
@@ -79,9 +82,37 @@ class ProjectsStore {
     deleteProject(projectId);
   };
 
-  persistProject = async(project) => {
-    await insertProject(project);
+  @action
+  addImageToProjectById = async(projectId, image) => {
+    const dbResult = await insertImage(projectId, image);
+    image.id = dbResult.insertId;
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) return {...p, images: [image, ...p.images]};
+      return p;
+    });
   };
+
+  @action
+  deleteImageFromProjectById = async(projectId, imageId) => {
+    await deleteImage(imageId);
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) return {...p, images: p.images.filter(i => i.id !== imageId)};
+      return p;
+    });
+  };
+
+  @action
+  markImageAsFavorite = async(image) => {
+    const updatedImage = {...image, dateAdded: +new Date()};
+    await updateImage(updatedImage);
+    this.projects = this.projects.map(p => {
+      if (p.id === image.projectId) {
+        const images = [updatedImage, ...p.images.filter(i => i.id !== updatedImage.id)];
+        return {...p, images};
+      }
+      return p;
+    });
+  }
 
 }
 

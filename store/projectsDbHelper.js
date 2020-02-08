@@ -235,7 +235,7 @@ const insertImages = async(projectId, images) => {
   }
 };
 
-const insertImage = (projectId, image) => {
+export const insertImage = (projectId, image) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
@@ -262,6 +262,28 @@ export const deleteImage = (imageId) => {
       tx.executeSql(
         `DELETE FROM images WHERE id = ?`,
         [imageId],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+export const updateImage = (image) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+          UPDATE images
+          SET project_id = ?, image_uri = ?, date_added = ?
+          WHERE id = ?
+        `,
+        [image.projectId, image.imageUri, image.dateAdded, image.id],
         (_, result) => {
           resolve(result);
         },
@@ -337,7 +359,7 @@ export const fetchImagesForProject = (projectId) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT id, project_id, image_uri, date_added FROM images WHERE project_id = ?;`,
+        `SELECT id, project_id, image_uri, date_added FROM images WHERE project_id = ? ORDER BY date_added desc;`,
         [projectId],
         (_, result) => {
           resolve(result);
