@@ -20,6 +20,7 @@ import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
+import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
 
 import
   SECTION_DETAILS,
@@ -217,36 +218,12 @@ const ProjectDetailsScreen = (props) => {
         projectId={selectedProject && selectedProject.id}
       />
 
-      <Modal isVisible={isDeleteModalVisible} onBackdropPress={toggleDeleteModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={{alignItems: "center", margin: 12}}>
-            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>
-              Are you sure? This cannot be undone!
-            </Text>
-
-            <View style={{width: "100%", marginTop: 6}}>
-              <KnitCountActionButton
-                onPress={toggleDeleteModalVisible}
-                label={"Oops! Don't delete."}
-                bgColor={AppSettingsStore.mainTextColor}
-                textColor={AppSettingsStore.mainColor}
-              />
-            </View>
-
-            <View style={{width: "100%", margin: 6}}>
-              <KnitCountDestructiveButton
-                onPress={() => {
-                  toggleUpdateTitleModalVisible();
-                  ProjectsStore.deleteProjectById(selectedProject.id);
-                  props.navigation.popToTop();
-                }}
-                label={"Yes, delete this project."}
-              />
-            </View>
-
-          </View>
-        </View>
-      </Modal>
+      <KnitCountDeleteModal
+        isVisible={isDeleteModalVisible}
+        onBackdropPress={toggleDeleteModalVisible}
+        projectId={selectedProject && selectedProject.id}
+        navigation={props.navigation}
+      />
 
       <Modal isVisible={isImageModalVisible} onBackdropPress={toggleImageModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
