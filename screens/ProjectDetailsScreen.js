@@ -37,6 +37,7 @@ import KnitCountActionButton from "../components/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
+import {IncreaseCounter} from "../models/Counter";
 
 const ProjectDetailsScreen = (props) => {
   const [selectedProject, setSelectedProject] = useState(undefined);
@@ -45,6 +46,7 @@ const ProjectDetailsScreen = (props) => {
   const [projectNotes, setProjectNotes] = useState("");
   const [projectImages, setProjectImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [dummyCounter, setDummyCounter] = useState(IncreaseCounter);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
@@ -123,7 +125,7 @@ const ProjectDetailsScreen = (props) => {
 
   const renderCounters = () => {
     // TODO: Implement Counters Section
-    const mockData = [{ id: "0" }, { id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }];
+    const mockData = [dummyCounter];
 
     const renderGridItem = () => {
       return (
@@ -132,7 +134,11 @@ const ProjectDetailsScreen = (props) => {
             mainTextColor={AppSettingsStore.mainTextColor}
             mainColor={AppSettingsStore.mainColor}
             mainBGColor={AppSettingsStore.mainBGColor}
-            count={42}
+            count={dummyCounter.value}
+            onCountValueChange={() => {
+              const {stepsPerCount, value} = dummyCounter;
+              setDummyCounter({...dummyCounter, value: dummyCounter.value + stepsPerCount});
+            }}
           />
           <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>Increment</Text>
         </View>
