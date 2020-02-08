@@ -19,6 +19,7 @@ import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
+import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
 
 import
   SECTION_DETAILS,
@@ -208,23 +209,13 @@ const ProjectDetailsScreen = (props) => {
         navigation={props.navigation}
       />
 
-      <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <View style={styles.projectNameContainer}>
-            <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>Enter new title</Text>
-            <TextInput
-              style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
-              placeholder="Enter project name"
-              value={projectName}
-              onChangeText={(e) => setProjectName(e)}
-              onSubmitEditing={(e) => {
-                ProjectsStore.updateProjectName(selectedProject.id, e.nativeEvent.text);
-                toggleUpdateTitleModalVisible();
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
+      <KnitCountUpdateTitleModal
+        isVisible={isUpdateTitleModalVisible}
+        onBackdropPress={toggleUpdateTitleModalVisible}
+        title={projectName}
+        onChangeText={setProjectName}
+        projectId={selectedProject && selectedProject.id}
+      />
 
       <Modal isVisible={isDeleteModalVisible} onBackdropPress={toggleDeleteModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
