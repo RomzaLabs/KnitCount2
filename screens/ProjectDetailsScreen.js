@@ -13,12 +13,12 @@ import {
   View
 } from 'react-native';
 import Modal from "react-native-modal";
-import Confetti from 'reanimated-confetti';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 
 import
   SECTION_DETAILS,
@@ -31,7 +31,6 @@ import
 import KnitCountActionButton from "../components/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
 import {ProjectStatus} from "../models/ProjectStatus";
-import KnitCountProjectCard from "../components/KnitCountProjectCard";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 
 const ProjectDetailsScreen = (props) => {
@@ -200,30 +199,14 @@ const ProjectDetailsScreen = (props) => {
         renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
       />
 
-      <Modal isVisible={isFinishedModalVisible} onBackdropPress={toggleFinishedModalVisible}>
-        <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-          <KnitCountProjectCard
-            onPress={() => {}}
-            image={projectImages.length ? projectImages[0] : null}
-            title={projectName}
-            status={projectStatus}
-            textColor={AppSettingsStore.mainTextColor}
-            hideShadows={true}
-          />
-          {Platform.OS === "ios" && <Confetti duration={4000} />}
-          <View style={styles.finishedModalActionContainer}>
-            <KnitCountActionButton
-              onPress={() => {
-                toggleFinishedModalVisible();
-                props.navigation.popToTop();
-              }}
-              label={"Go to My Projects"}
-              bgColor={AppSettingsStore.mainTextColor}
-              textColor={AppSettingsStore.mainColor}
-            />
-          </View>
-        </View>
-      </Modal>
+      <KnitCountFinishedModal
+        isVisible={isFinishedModalVisible}
+        onBackdropPress={toggleFinishedModalVisible}
+        image={projectImages.length ? projectImages[0] : null}
+        name={projectName}
+        status={projectStatus}
+        navigation={props.navigation}
+      />
 
       <Modal isVisible={isUpdateTitleModalVisible} onBackdropPress={toggleUpdateTitleModalVisible}>
         <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
