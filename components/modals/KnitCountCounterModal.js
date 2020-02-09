@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import Modal from "react-native-modal";
 import PropTypes from "prop-types";
@@ -8,37 +8,55 @@ import ProjectsStore from "../../store/ProjectsStore";
 import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
 
 const KnitCountCounterModal = (props) => {
+  const [counterLabel, setCounterLabel] = useState(props.counter.label);
+
   return (
     <Modal isVisible={props.isVisible} onBackdropPress={props.onBackdropPress}>
       <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
-        <View style={styles.projectNameContainer}>
+        <View style={styles.actionsContainer}>
           <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>
             Counter Actions
           </Text>
-          <View>
-            <Text>Label:</Text>
+          <View style={styles.actionContainer}>
+            <Text style={[styles.actionLabel, {color: AppSettingsStore.mainTextColor}]}>
+              Label
+            </Text>
             <TextInput
               style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
-              placeholder="Enter project name"
-              value={props.counter.label}
-              onChangeText={(e) => props.onChangeText(e)}
+              placeholder="Enter counter label"
+              value={counterLabel}
+              onChangeText={(e) => setCounterLabel(e)}
               onSubmitEditing={(e) => {
                 ProjectsStore.updateCounterLabel(props.counter, e.nativeEvent.text);
                 props.onBackdropPress();
               }}
             />
           </View>
-          <View>
-            <Text>Steps per count:</Text>
-          </View>
-          <View>
-            <KnitCountDestructiveButton
-              onPress={() => {
+          <View style={styles.actionContainer}>
+            <Text style={[styles.actionLabel, {color: AppSettingsStore.mainTextColor}]}>
+              Steps per count
+            </Text>
+            <TextInput
+              style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
+              placeholder="Enter counter label"
+              value={counterLabel}
+              onChangeText={(e) => setCounterLabel(e)}
+              onSubmitEditing={(e) => {
+                ProjectsStore.updateCounterLabel(props.counter, e.nativeEvent.text);
                 props.onBackdropPress();
-                ProjectsStore.deleteCounter(props.counter);
               }}
-              label={"Yes, delete this project."}
             />
+          </View>
+          <View style={styles.actionContainer}>
+            <View style={{width: "100%"}}>
+              <KnitCountDestructiveButton
+                onPress={() => {
+                  props.onBackdropPress();
+                  ProjectsStore.deleteCounter(props.counter);
+                }}
+                label={"Delete counter"}
+              />
+            </View>
           </View>
         </View>
       </View>
@@ -49,8 +67,7 @@ const KnitCountCounterModal = (props) => {
 KnitCountCounterModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
-  counter: PropTypes.object.isRequired,
-  onChangeText: PropTypes.func.isRequired
+  counter: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -59,9 +76,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'rgba(0, 0, 0, 0.1)'
   },
-  projectNameContainer: {
+  actionsContainer: {
     alignItems: "center",
-    margin: 12
+    marginHorizontal: 6,
+    marginVertical: 12
   },
   modalHeader: {
     fontSize: 16,
@@ -72,11 +90,21 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "avenir-roman",
     fontSize: 16,
-    width: "100%",
-    marginTop: 8,
-    marginBottom: 12,
+    width: "70%",
     padding: 8,
     borderRadius: 5
+  },
+  actionContainer: {
+    flexDirection: "row",
+    margin: 12,
+    fontFamily: "avenir-roman",
+    fontSize: 16,
+    justifyContent: "space-between"
+  },
+  actionLabel: {
+    fontSize: 16,
+    width: "30%",
+    padding: 8
   }
 });
 
