@@ -25,7 +25,11 @@ const KnitCountCounterModal = (props) => {
               style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
               placeholder="Enter counter label"
               value={counterLabel}
-              onChangeText={(e) => setCounterLabel(e)}
+              onChangeText={(e) => {
+                setCounterLabel(e);
+                const newCounter = {...props.counter, label: e};
+                props.onCounterChanged(newCounter);
+              }}
               onSubmitEditing={(e) => {
                 ProjectsStore.updateCounterLabel(props.counter, e.nativeEvent.text);
                 props.onBackdropPress();
@@ -67,7 +71,8 @@ const KnitCountCounterModal = (props) => {
 KnitCountCounterModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
-  counter: PropTypes.object.isRequired
+  counter: PropTypes.object.isRequired,
+  onCounterChanged: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

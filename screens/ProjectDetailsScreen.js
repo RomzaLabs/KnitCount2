@@ -292,6 +292,14 @@ const ProjectDetailsScreen = (props) => {
         isVisible={isCounterModalVisible}
         onBackdropPress={toggleCounterModalVisible}
         counter={selectedCounter ? selectedCounter : IncreaseCounter}
+        onCounterChanged={(updatedCounter) => {
+          const newCounters = projectCounters.map(c => {
+            if (c.id === updatedCounter.id) return updatedCounter;
+            return c;
+          });
+          setProjectCounters(newCounters);
+          setSelectedCounter(updatedCounter);
+        }}
       />
 
     </SafeAreaView>
