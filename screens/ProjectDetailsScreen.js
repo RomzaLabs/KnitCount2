@@ -23,6 +23,7 @@ import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal"
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
 import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
 import KnitCountImageModal from "../components/modals/KnitCountImageModal";
+import KnitCountCounterModal from "../components/modals/KnitCountCounterModal";
 
 import
   SECTION_DETAILS,
@@ -44,13 +45,16 @@ const ProjectDetailsScreen = (props) => {
   const [projectStatus, setProjectStatus] = useState(undefined);
   const [projectNotes, setProjectNotes] = useState("");
   const [projectImages, setProjectImages] = useState([]);
+  const [projectCounters, setProjectCounters] = useState([]);
+
   const [selectedImage, setSelectedImage] = useState(null);
-  const [dummyCounter, setDummyCounter] = useState(IncreaseCounter);
+  const [selectedCounter, setSelectedCounter] = useState(null);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
@@ -58,6 +62,7 @@ const ProjectDetailsScreen = (props) => {
     setProjectName(ProjectsStore.selectedProject.name);
     setProjectNotes(ProjectsStore.selectedProject.notes);
     setProjectImages(ProjectsStore.selectedProject.images);
+    setProjectCounters(ProjectsStore.selectedProject.counters);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -71,6 +76,7 @@ const ProjectDetailsScreen = (props) => {
   const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
   const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
   const toggleImageModalVisible = () => setIsImageModalVisible(!isImageModalVisible);
+  const toggleCounterModalVisible = () => setIsCounterModalVisible(!isCounterModalVisible);
 
   const handleFavoriteImageMarked = (image) => {
     const sortedImages = [image, ...projectImages.filter(i => i.id !== image.id)];
@@ -123,27 +129,33 @@ const ProjectDetailsScreen = (props) => {
   };
 
   const handleLongPressForCounter = (counter) => {
-    console.log("Handle Long Press for counter id: ", counter.id);
-    console.log("Handle Long Press for counter value: ", counter.value);
-    console.log("Handle Long Press for counter stepsPerCount: ", counter.stepsPerCount);
+    setSelectedCounter(counter);
+    toggleCounterModalVisible();
   };
 
   const renderCounters = () => {
     // TODO: Implement Counters Section
-    const mockData = [dummyCounter];
-
-    const renderGridItem = () => {
+    const renderGridItem = (gridItem) => {
+      const counter = gridItem.item;
       return (
         <View style={styles.gridItem}>
           <KnitCountCounterButton
             mainTextColor={AppSettingsStore.mainTextColor}
             mainColor={AppSettingsStore.mainColor}
             mainBGColor={AppSettingsStore.mainBGColor}
-            counter={dummyCounter}
-            onCountValueChange={(count) => setDummyCounter({...dummyCounter, value: count})}
+            counter={counter}
+            onCountValueChange={(count) => {
+              const updatedCounters = projectCounters.map(c => {
+                if (c.id === counter.id) {
+                  return {...c, value: count};
+                }
+                return c;
+              });
+              setProjectCounters(updatedCounters);
+            }}
             onLongPress={handleLongPressForCounter}
           />
-          <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>Increment</Text>
+          <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>{counter.label}</Text>
         </View>
       );
     };
@@ -153,7 +165,7 @@ const ProjectDetailsScreen = (props) => {
         style={styles.countersSectionContainer}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        data={mockData}
+        data={projectCounters}
         renderItem={renderGridItem}
       />
     );
@@ -274,6 +286,12 @@ const ProjectDetailsScreen = (props) => {
         selectedImage={selectedImage}
         onRemoveImage={(i) => setProjectImages(projectImages.filter(image => image.id !== i.id))}
         projectId={selectedProject && selectedProject.id}
+      />
+
+      <KnitCountCounterModal
+        isVisible={isCounterModalVisible}
+        onBackdropPress={toggleCounterModalVisible}
+        counter={selectedCounter ? selectedCounter : IncreaseCounter}
       />
 
     </SafeAreaView>
