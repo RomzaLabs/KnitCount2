@@ -135,9 +135,9 @@ const ProjectDetailsScreen = (props) => {
             mainColor={AppSettingsStore.mainColor}
             mainBGColor={AppSettingsStore.mainBGColor}
             count={dummyCounter.value}
-            onCountValueChange={() => {
-              const {stepsPerCount, value} = dummyCounter;
-              setDummyCounter({...dummyCounter, value: dummyCounter.value + stepsPerCount});
+            stepsPerCount={dummyCounter.stepsPerCount}
+            onCountValueChange={(count) => {
+              setDummyCounter({...dummyCounter, value: count});
             }}
           />
           <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>Increment</Text>

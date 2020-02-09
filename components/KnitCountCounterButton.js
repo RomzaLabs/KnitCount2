@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import PropTypes from "prop-types";
-import { TapGestureHandler, State } from 'react-native-gesture-handler';
+import { TapGestureHandler, PanGestureHandler, State } from 'react-native-gesture-handler';
 
 const MAX_ZEROES = 5;
 
@@ -12,18 +12,37 @@ const KnitCountCounterButton = (props) => {
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      props.onCountValueChange();
+      const newCount = props.count + props.stepsPerCount;
+      props.onCountValueChange(newCount);
+    }
+  };
+
+  const onDragEvent = (e) => e.nativeEvent.translationX > 0 ? onDragRight(e) : onDragLeft(e);
+  const onDragRight = (e) => {
+    const { state } = e.nativeEvent;
+    if (state === State.END) {
+      const newCount = props.count + props.stepsPerCount;
+      props.onCountValueChange(newCount);
+    }
+  };
+  const onDragLeft = (e) => {
+    const { state } = e.nativeEvent;
+    if (state === State.END) {
+      const newCount = props.count - props.stepsPerCount;
+      props.onCountValueChange(newCount < 0 ? 0 : newCount);
     }
   };
 
   return (
     <TapGestureHandler numberOfTaps={1} onHandlerStateChange={onSingleTapEvent}>
-      <View style={[styles.countButton, {borderColor: props.mainTextColor, backgroundColor: props.mainColor}]}>
-        <Text style={styles.countLabel}>
-          <Text style={{color: props.mainBGColor}}>{leadingZeroes(props.count)}</Text>
-          <Text style={{color: props.mainTextColor}}>{props.count}</Text>
-        </Text>
-      </View>
+      <PanGestureHandler activeOffsetX={[-10, 10]} onHandlerStateChange={onDragEvent}>
+        <View style={[styles.countButton, {borderColor: props.mainTextColor, backgroundColor: props.mainColor}]}>
+          <Text style={styles.countLabel}>
+            <Text style={{color: props.mainBGColor}}>{leadingZeroes(props.count)}</Text>
+            <Text style={{color: props.mainTextColor}}>{props.count}</Text>
+          </Text>
+        </View>
+      </PanGestureHandler>
     </TapGestureHandler>
   );
 };
@@ -33,6 +52,7 @@ KnitCountCounterButton.propTypes = {
   mainColor: PropTypes.string.isRequired,
   mainBGColor: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired,
+  stepsPerCount: PropTypes.number.isRequired,
   onCountValueChange: PropTypes.func.isRequired
 };
 
@@ -47,8 +67,8 @@ const styles = StyleSheet.create({
     shadowColor: "black",
     shadowOpacity: 0.26,
     shadowOffset: {
-      width: 2,
-      height: 2
+      width: 3,
+      height: 3
     },
     shadowRadius: 3,
     elevation: 5
