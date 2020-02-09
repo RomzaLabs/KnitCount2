@@ -1,7 +1,15 @@
+import _ from "lodash";
 import { observable, action } from "mobx";
 
 import {
-  insertProject, updateProject, deleteProject, insertImage, deleteImage, updateImage, updateCounter, deleteCounter
+  insertProject,
+  updateProject,
+  deleteProject,
+  insertImage,
+  deleteImage,
+  updateImage,
+  updateCounter,
+  deleteCounter
 } from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
@@ -24,6 +32,7 @@ class ProjectsStore {
   @action
   setSelectedProject = (project) => {
     this.selectedProject = project;
+    this.updateSelectedProjectInProjects();
   };
 
   @action
@@ -56,18 +65,6 @@ class ProjectsStore {
     this.projects = this.projects.map(p => {
       if (p.id === projectId) {
         const project = {...p, name: newName};
-        updateProject(project);
-        return project;
-      }
-      return p;
-    });
-  };
-
-  @action
-  updateProjectNotes = (projectId, newNotes) => {
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) {
-        const project = {...p, notes: newNotes};
         updateProject(project);
         return project;
       }
@@ -140,6 +137,67 @@ class ProjectsStore {
     });
   };
 
+  @action updateCounter = (counter, newCount) => {
+    const {id, projectId} = counter;
+    const updatedCounter = {...counter, value: newCount};
+    updateCounter(updatedCounter);
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) {
+        const counters = p.counters.map(c => {
+          if (c.id === id) return updatedCounter;
+          return c;
+        });
+        const updatedProject = {...p, counters};
+        this.selectedProject = updatedProject;
+        return updatedProject;
+      }
+      return p;
+    });
+  };
+
+  @action setImagesForSelectedProject = (images) => {
+    if (this.selectedProject) {
+      this.selectedProject = {...this.selectedProject, images};
+      this.updateSelectedProjectInProjects();
+      this.saveSelectedProject();
+    }
+  };
+
+  @action setNotesForSelectedProject = (notes) => {
+    if (this.selectedProject) {
+      this.selectedProject = {...this.selectedProject, notes};
+      this.updateSelectedProjectInProjects();
+      this.saveSelectedProject();
+    }
+  };
+
+  @action setNameForSelectedProject = (name) => {
+    if (this.selectedProject) {
+      this.selectedProject = {...this.selectedProject, name};
+      this.updateSelectedProjectInProjects();
+      this.saveSelectedProject();
+    }
+  };
+
+  @action setCountersForSelectedProject = (counters) => {
+    if (this.selectedProject) {
+      this.selectedProject = {...this.selectedProject, counters};
+      this.updateSelectedProjectInProjects();
+      this.saveSelectedProject();
+    }
+  };
+
+  @action updateSelectedProjectInProjects = () => {
+    this.projects = this.projects.map(p => {
+      if (p.id === this.selectedProject.id) return this.selectedProject;
+      return p;
+    });
+  };
+
+  @action saveSelectedProject = _.debounce(() => {
+    console.log("saving selected project... ");
+    updateProject(this.selectedProject);
+  }, 800, { trailing: true });
 
 }
 

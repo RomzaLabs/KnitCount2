@@ -6,15 +6,13 @@ import { TapGestureHandler, PanGestureHandler, LongPressGestureHandler, State } 
 const MAX_ZEROES = 5;
 
 const KnitCountCounterButton = (props) => {
-  const {value, stepsPerCount} = props.counter;
-
   const digitsForCount = (count) => count.toString().length;
   const leadingZeroes = (count) => "0".repeat(MAX_ZEROES - digitsForCount(count));
 
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      const newValue = value + stepsPerCount;
+      const newValue = props.value + props.stepsPerCount;
       props.onCountValueChange(newValue);
     }
   };
@@ -23,33 +21,34 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      const newValue = value + stepsPerCount;
+      const newValue = props.value + props.stepsPerCount;
       props.onCountValueChange(newValue);
     }
   };
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      const newValue = value - stepsPerCount;
-      props.onCountValueChange(newValue < 0 ? 0 : newValue);
+      const newValue = props.value - props.stepsPerCount;
+      const newValueOrZero = newValue < 0 ? 0 : newValue;
+      props.onCountValueChange(newValueOrZero);
     }
   };
 
   const onLongPressEvent = (e) => {
     const { state } = e.nativeEvent;
-    if (state === State.END) {
-      props.onLongPress(props.counter);
+    if (state === State.ACTIVE) {
+      props.onLongPress(props.counterId);
     }
   };
 
   return (
-    <LongPressGestureHandler minDurationMs={800} onHandlerStateChange={onLongPressEvent}>
+    <LongPressGestureHandler minDurationMs={600} onHandlerStateChange={onLongPressEvent}>
       <TapGestureHandler numberOfTaps={1} onHandlerStateChange={onSingleTapEvent}>
         <PanGestureHandler activeOffsetX={[-10, 10]} onHandlerStateChange={onDragEvent}>
           <View style={[styles.countButton, {borderColor: props.mainTextColor, backgroundColor: props.mainColor}]}>
             <Text style={styles.countLabel}>
-              <Text style={{color: props.mainBGColor}}>{leadingZeroes(value)}</Text>
-              <Text style={{color: props.mainTextColor}}>{value}</Text>
+              <Text style={{color: props.mainBGColor}}>{leadingZeroes(props.value)}</Text>
+              <Text style={{color: props.mainTextColor}}>{props.value}</Text>
             </Text>
           </View>
         </PanGestureHandler>
@@ -62,7 +61,9 @@ KnitCountCounterButton.propTypes = {
   mainTextColor: PropTypes.string.isRequired,
   mainColor: PropTypes.string.isRequired,
   mainBGColor: PropTypes.string.isRequired,
-  counter: PropTypes.object.isRequired,
+  counterId: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+  stepsPerCount: PropTypes.number.isRequired,
   onCountValueChange: PropTypes.func.isRequired,
   onLongPress: PropTypes.func.isRequired
 };
