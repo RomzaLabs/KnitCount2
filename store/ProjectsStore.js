@@ -1,7 +1,7 @@
 import { observable, action } from "mobx";
 
 import {
-  insertProject, updateProject, deleteProject, insertImage, deleteImage, updateImage
+  insertProject, updateProject, deleteProject, insertImage, deleteImage, updateImage, updateCounter, deleteCounter
 } from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
@@ -112,7 +112,34 @@ class ProjectsStore {
       }
       return p;
     });
-  }
+  };
+
+  @action updateCounterLabel = (counter, newLabel) => {
+    const updatedCounter = {...counter, label: newLabel};
+    updateCounter(updatedCounter);
+    this.projects = this.projects.map(p => {
+      if (p.id === counter.projectId) {
+        const counters = p.counters.map(c => {
+          if (c.id === counter.id) return updatedCounter;
+          return c;
+        });
+        return {...p, counters};
+      }
+      return p;
+    });
+  };
+
+  @action deleteCounter = (counter) => {
+    const {id, projectId} = counter;
+    deleteCounter(id);
+    this.projects = this.projects.map(p => {
+      if (p.id === projectId) {
+        return {...p, counters: p.counters.filter(c => c.id !== id)};
+      }
+      return p;
+    });
+  };
+
 
 }
 
