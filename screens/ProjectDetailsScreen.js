@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {
-  Dimensions,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -123,6 +122,12 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const handleLongPressForCounter = (counter) => {
+    console.log("Handle Long Press for counter id: ", counter.id);
+    console.log("Handle Long Press for counter value: ", counter.value);
+    console.log("Handle Long Press for counter stepsPerCount: ", counter.stepsPerCount);
+  };
+
   const renderCounters = () => {
     // TODO: Implement Counters Section
     const mockData = [dummyCounter];
@@ -134,11 +139,9 @@ const ProjectDetailsScreen = (props) => {
             mainTextColor={AppSettingsStore.mainTextColor}
             mainColor={AppSettingsStore.mainColor}
             mainBGColor={AppSettingsStore.mainBGColor}
-            count={dummyCounter.value}
-            stepsPerCount={dummyCounter.stepsPerCount}
-            onCountValueChange={(count) => {
-              setDummyCounter({...dummyCounter, value: count});
-            }}
+            counter={dummyCounter}
+            onCountValueChange={(count) => setDummyCounter({...dummyCounter, value: count})}
+            onLongPress={handleLongPressForCounter}
           />
           <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>Increment</Text>
         </View>
