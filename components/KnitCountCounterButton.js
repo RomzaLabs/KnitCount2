@@ -66,11 +66,6 @@ KnitCountCounterButton.propTypes = {
   mainBGColor: PropTypes.string.isRequired,
   counter: PropTypes.object.isRequired,
   onCounterChanged: PropTypes.func.isRequired,
-  // counterId: PropTypes.number.isRequired,
-  // value: PropTypes.number.isRequired,
-  // stepsPerCount: PropTypes.number.isRequired,
-
-  // onCountValueChange: PropTypes.func.isRequired,
   onLongPress: PropTypes.func.isRequired
 };
 

@@ -127,15 +127,10 @@ class ProjectsStore {
     });
   };
 
-  @action deleteCounter = (counter) => {
-    const {id, projectId} = counter;
-    deleteCounter(id);
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) {
-        return {...p, counters: p.counters.filter(c => c.id !== id)};
-      }
-      return p;
-    });
+  @action deleteCounter = async(counter) => {
+    await deleteCounter(counter.id);
+    const newCounters = this.selectedProject.counters.filter(c => c.id !== counter.id);
+    this.setCountersForSelectedProject(newCounters);
   };
 
   @action setImagesForSelectedProject = (images) => {

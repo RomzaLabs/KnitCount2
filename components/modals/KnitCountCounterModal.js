@@ -34,8 +34,7 @@ const KnitCountCounterModal = (props) => {
                   const newCounter = {...props.counter, label: e};
                   props.onCounterChanged(newCounter);
                 }}
-                onSubmitEditing={(e) => {
-                  ProjectsStore.updateCounterLabel(props.counter, e.nativeEvent.text);
+                onSubmitEditing={() => {
                   props.onBackdropPress();
                 }}
               />
@@ -84,8 +83,8 @@ const KnitCountCounterModal = (props) => {
               <View style={{margin: 6}}>
                 <KnitCountDestructiveButton
                   onPress={() => {
+                    props.onCounterDeleted(props.counter);
                     props.onBackdropPress();
-                    ProjectsStore.deleteCounter(props.counter);
                   }}
                   label={"Delete Counter"}
                 />
@@ -102,7 +101,8 @@ KnitCountCounterModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
   counter: PropTypes.object.isRequired,
-  onCounterChanged: PropTypes.func.isRequired
+  onCounterChanged: PropTypes.func.isRequired,
+  onCounterDeleted: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

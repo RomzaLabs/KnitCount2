@@ -151,6 +151,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     const renderGridItem = (gridItem) => {
       const counterId = gridItem.item.id;
       const counter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
+      if (!counter) return null;
       return (
         <View style={styles.gridItem}>
           <KnitCountCounterButton
@@ -322,6 +323,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
                   return c;
                 });
                 ProjectsStore.setCountersForSelectedProject(newCounters);
+              }}
+              onCounterDeleted={(counter) => {
+                const newCounters = counters.filter(c => c.id !== counter.id);
+                setCounters(newCounters);
+                ProjectsStore.deleteCounter(counter);
               }}
             />
           )
