@@ -8,18 +8,12 @@ import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import AppSettingsStore from "../store/AppSettingsStore";
 import Project from "../models/Project";
 import ProjectsStore from "../store/ProjectsStore";
-import {IncreaseCounter} from "../models/Counter";
 
 const CreateProjectScreen = (props) => {
   const [project, setProject] = useState(null);
   const [touched, setTouched] = useState(false);
 
-  if (!project) {
-    // TODO: Temporarily adding a default counter. Remove this temporary logic.
-    const newProject = new Project();
-    newProject.counters = [IncreaseCounter];
-    setProject(newProject);
-  }
+  if (!project) setProject(new Project());
 
   const renderProjectName = () => project ? project.name : "";
   const handleChangeName = (text) => {
