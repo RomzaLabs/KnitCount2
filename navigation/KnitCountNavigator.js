@@ -43,14 +43,22 @@ const ProjectCreateNavigator = createStackNavigator(
   }
 );
 
-const MainNavigator = createStackNavigator(
+const CounterCreateNavigator = createStackNavigator(
   {
     AddCounter: {
       screen: AddCounterScreen,
       navigationOptions: {
         headerTitle: "Add A Counter"
       }
-    },
+    }
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions
+  }
+);
+
+const MainNavigator = createStackNavigator(
+  {
     MyProjects: {
       screen: MyProjectsScreen,
     },
@@ -66,7 +74,8 @@ const MainNavigator = createStackNavigator(
 const KnitCountNavigator = createSwitchNavigator(
   {
     Main: MainNavigator,
-    Create: ProjectCreateNavigator
+    Create: ProjectCreateNavigator,
+    CreateCounter: CounterCreateNavigator
   }
 );
 

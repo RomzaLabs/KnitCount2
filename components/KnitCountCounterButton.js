@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width * 0.33,
     aspectRatio: 1,
     borderRadius: Math.round(Dimensions.get('window').width * 0.33) / 2,
-    borderWidth: 3,
+    borderWidth: 5,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "black",
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   countLabel: {
     fontFamily: "avenir-roman",
-    fontSize: 30,
+    fontSize: 36,
     marginTop: Platform.OS === "ios" ? 15 : 0
   }
 });

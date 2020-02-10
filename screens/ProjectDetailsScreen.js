@@ -19,6 +19,7 @@ import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountImageButton from "../components/KnitCountImageButton";
+import KnitCountCounterAddButton from "../components/KnitCountCounterAddButton";
 import KnitCountCounterButton from "../components/KnitCountCounterButton";
 
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
@@ -40,6 +41,7 @@ import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 
+const ADD_BUTTON_ID = 0;
 
 const ProjectDetailsScreen = observer(({ navigation }) => {
   const [selectedProject, setSelectedProject] = useState(ProjectsStore.selectedProject);
@@ -149,6 +151,19 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const renderCounters = () => {
     const renderGridItem = (gridItem) => {
       const counterId = gridItem.item.id;
+      if (counterId === ADD_BUTTON_ID) {
+        return (
+          <View style={styles.gridItem}>
+            <KnitCountCounterAddButton
+              mainTextColor={AppSettingsStore.mainTextColor}
+              mainColor={AppSettingsStore.mainColor}
+              onPress={() => navigation.navigate("CreateCounter")}
+            />
+            <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>Add Counter</Text>
+          </View>
+        );
+      }
+
       const counter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
       if (!counter) return null;
       return (
@@ -172,12 +187,14 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
       );
     };
 
+    const addButtonData = {id: ADD_BUTTON_ID};
+    const counterGridData = [addButtonData, ...counters];
     return (
       <FlatList
         style={styles.countersSectionContainer}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        data={counters}
+        data={counterGridData}
         renderItem={renderGridItem}
       />
     );
