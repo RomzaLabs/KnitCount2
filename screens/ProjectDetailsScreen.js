@@ -142,7 +142,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleLongPressForCounter = (counterId) => {
-    const foundCounter = counters.find(counter => counter.id === counterId);
+    const foundCounter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
     setSelectedCounter(foundCounter);
     toggleCounterModalVisible();
   };
