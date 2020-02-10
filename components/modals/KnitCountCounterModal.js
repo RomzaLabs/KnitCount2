@@ -6,6 +6,7 @@ import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
 import ProjectsStore from "../../store/ProjectsStore";
+import KnitCountActionButton from "../KnitCountActionButton";
 import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
 
 const KnitCountCounterModal = (props) => {
@@ -68,13 +69,27 @@ const KnitCountCounterModal = (props) => {
           </View>
           <View style={styles.actionContainer}>
             <View style={{width: "100%"}}>
-              <KnitCountDestructiveButton
-                onPress={() => {
-                  props.onBackdropPress();
-                  ProjectsStore.deleteCounter(props.counter);
-                }}
-                label={"Delete counter"}
-              />
+              <View style={{margin: 6}}>
+                <KnitCountActionButton
+                  onPress={() => {
+                    const newCounter = {...props.counter, value: 0};
+                    props.onCounterChanged(newCounter);
+                    props.onBackdropPress();
+                  }}
+                  label={"Reset to Zero"}
+                  bgColor={AppSettingsStore.mainTextColor}
+                  textColor={AppSettingsStore.mainColor}
+                />
+              </View>
+              <View style={{margin: 6}}>
+                <KnitCountDestructiveButton
+                  onPress={() => {
+                    props.onBackdropPress();
+                    ProjectsStore.deleteCounter(props.counter);
+                  }}
+                  label={"Delete Counter"}
+                />
+              </View>
             </View>
           </View>
         </View>
