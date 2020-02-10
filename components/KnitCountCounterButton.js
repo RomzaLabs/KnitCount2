@@ -12,8 +12,9 @@ const KnitCountCounterButton = (props) => {
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      const newValue = props.value + props.stepsPerCount;
-      props.onCountValueChange(newValue);
+      const newValue = props.counter.value + props.counter.stepsPerCount;
+      const newCounter = {...props.counter, value: newValue};
+      props.onCounterChanged(newCounter);
     }
   };
 
@@ -21,38 +22,40 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      const newValue = props.value + props.stepsPerCount;
-      props.onCountValueChange(newValue);
+      const newValue = props.counter.value + props.counter.stepsPerCount;
+      const newCounter = {...props.counter, value: newValue};
+      props.onCounterChanged(newCounter);
     }
   };
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.END) {
-      const newValue = props.value - props.stepsPerCount;
+      const newValue = props.counter.value - props.counter.stepsPerCount;
       const newValueOrZero = newValue < 0 ? 0 : newValue;
-      props.onCountValueChange(newValueOrZero);
+      const newCounter = {...props.counter, value: newValueOrZero};
+      props.onCounterChanged(newCounter);
     }
   };
 
   const onLongPressEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      props.onLongPress(props.counterId);
+      props.onLongPress(props.counter.id);
     }
   };
 
   return (
     <LongPressGestureHandler minDurationMs={600} onHandlerStateChange={onLongPressEvent}>
-      <TapGestureHandler numberOfTaps={1} onHandlerStateChange={onSingleTapEvent}>
-        <PanGestureHandler activeOffsetX={[-10, 10]} onHandlerStateChange={onDragEvent}>
+      <PanGestureHandler activeOffsetX={[-10, 10]} onHandlerStateChange={onDragEvent}>
+        <TapGestureHandler numberOfTaps={1} onHandlerStateChange={onSingleTapEvent}>
           <View style={[styles.countButton, {borderColor: props.mainTextColor, backgroundColor: props.mainColor}]}>
             <Text style={styles.countLabel}>
-              <Text style={{color: props.mainBGColor}}>{leadingZeroes(props.value)}</Text>
-              <Text style={{color: props.mainTextColor}}>{props.value}</Text>
+              <Text style={{color: props.mainBGColor}}>{leadingZeroes(props.counter.value)}</Text>
+              <Text style={{color: props.mainTextColor}}>{props.counter.value}</Text>
             </Text>
           </View>
-        </PanGestureHandler>
-      </TapGestureHandler>
+        </TapGestureHandler>
+      </PanGestureHandler>
     </LongPressGestureHandler>
   );
 };
@@ -61,10 +64,13 @@ KnitCountCounterButton.propTypes = {
   mainTextColor: PropTypes.string.isRequired,
   mainColor: PropTypes.string.isRequired,
   mainBGColor: PropTypes.string.isRequired,
-  counterId: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-  stepsPerCount: PropTypes.number.isRequired,
-  onCountValueChange: PropTypes.func.isRequired,
+  counter: PropTypes.object.isRequired,
+  onCounterChanged: PropTypes.func.isRequired,
+  // counterId: PropTypes.number.isRequired,
+  // value: PropTypes.number.isRequired,
+  // stepsPerCount: PropTypes.number.isRequired,
+
+  // onCountValueChange: PropTypes.func.isRequired,
   onLongPress: PropTypes.func.isRequired
 };
 

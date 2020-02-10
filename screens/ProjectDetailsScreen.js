@@ -45,6 +45,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [selectedProject, setSelectedProject] = useState(ProjectsStore.selectedProject);
 
   const [name, setName] = useState('');
+  const [counters, setCounters] = useState([]);
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState(ProjectStatus.WIP);
 
@@ -56,6 +57,10 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
+
+  useEffect(() => {
+    setCounters(toJS(ProjectsStore.selectedProject.counters));
+  }, []);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
@@ -137,7 +142,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleLongPressForCounter = (counterId) => {
-    const foundCounter = toJS(selectedProject.counters).find(counter => counter.id === counterId);
+    const foundCounter = counters.find(counter => counter.id === counterId);
     setSelectedCounter(foundCounter);
     toggleCounterModalVisible();
   };
@@ -145,17 +150,21 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const renderCounters = () => {
     const renderGridItem = (gridItem) => {
       const counterId = gridItem.item.id;
-      const counter = toJS(selectedProject.counters).find(counter => counter.id === counterId);
+      const counter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
       return (
         <View style={styles.gridItem}>
           <KnitCountCounterButton
             mainTextColor={AppSettingsStore.mainTextColor}
             mainColor={AppSettingsStore.mainColor}
             mainBGColor={AppSettingsStore.mainBGColor}
-            counterId={counter.id}
-            value={counter.value}
-            stepsPerCount={counter.stepsPerCount}
-            onCountValueChange={(newCount) => ProjectsStore.updateCounter(counter, newCount)}
+            counter={counter}
+            onCounterChanged={(updatedCounter) => {
+              const newCounters = counters.map(c => {
+                if (c.id === updatedCounter.id) return updatedCounter;
+                return c;
+              });
+              ProjectsStore.setCountersForSelectedProject(newCounters);
+            }}
             onLongPress={handleLongPressForCounter}
           />
           <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>{counter.label}</Text>
@@ -168,7 +177,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         style={styles.countersSectionContainer}
         keyExtractor={(item) => item.id}
         numColumns={2}
-        data={toJS(selectedProject.counters)}
+        data={counters}
         renderItem={renderGridItem}
       />
     );
@@ -308,11 +317,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               onBackdropPress={toggleCounterModalVisible}
               counter={selectedCounter}
               onCounterChanged={(updatedCounter) => {
-                const counters = toJS(selectedProject.counters).map(c => {
+                const newCounters = counters.map(c => {
                   if (c.id === updatedCounter.id) return updatedCounter;
                   return c;
                 });
-                ProjectsStore.setCountersForSelectedProject(counters);
+                ProjectsStore.setCountersForSelectedProject(newCounters);
               }}
             />
           )

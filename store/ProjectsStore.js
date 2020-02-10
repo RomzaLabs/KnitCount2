@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { observable, action } from "mobx";
+import {toJS} from "mobx";
 
 import {
   insertProject,
@@ -137,24 +138,6 @@ class ProjectsStore {
     });
   };
 
-  @action updateCounter = (counter, newCount) => {
-    const {id, projectId} = counter;
-    const updatedCounter = {...counter, value: newCount};
-    updateCounter(updatedCounter);
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) {
-        const counters = p.counters.map(c => {
-          if (c.id === id) return updatedCounter;
-          return c;
-        });
-        const updatedProject = {...p, counters};
-        this.selectedProject = updatedProject;
-        return updatedProject;
-      }
-      return p;
-    });
-  };
-
   @action setImagesForSelectedProject = (images) => {
     if (this.selectedProject) {
       this.selectedProject = {...this.selectedProject, images};
@@ -194,9 +177,12 @@ class ProjectsStore {
     });
   };
 
-  @action saveSelectedProject = _.debounce(() => {
-    console.log("saving selected project... ");
-    updateProject(this.selectedProject);
+  @action saveSelectedProject = _.debounce(async() => {
+    await updateProject(toJS(this.selectedProject));
+    const counters = toJS(this.selectedProject.counters);
+    for (const c of counters) {
+      await updateCounter(c);
+    }
   }, 800, { trailing: true });
 
 }
