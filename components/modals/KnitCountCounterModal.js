@@ -47,7 +47,8 @@ const KnitCountCounterModal = (props) => {
             <View style={styles.actionItem}>
               <RNNumberStepper
                 value={stepsPerCount}
-                minValue={0}
+                minValue={1}
+                maxValue={50}
                 stepValue={1}
                 height={35}
                 width={"100%"}
