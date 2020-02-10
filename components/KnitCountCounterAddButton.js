@@ -34,7 +34,7 @@ const KnitCountCounterAddButton = (props) => {
           { transform: [{scale: bounceAnim}], borderColor: props.mainTextColor, backgroundColor: props.mainColor }
         ]
       }>
-        <Ionicons name={addIconName} size={60} color={props.mainTextColor} />
+        <Ionicons name={addIconName} size={Dimensions.get('window').width * 0.30} color={props.mainTextColor} />
       </Animated.View>
     </TapGestureHandler>
   );
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width * 0.33,
     aspectRatio: 1,
     borderRadius: Math.round(Dimensions.get('window').width * 0.33) / 2,
-    borderWidth: 3,
+    borderWidth: 5,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "black",
