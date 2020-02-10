@@ -1,17 +1,31 @@
 import React, {useState, useEffect} from 'react';
 import {
-  KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, SectionList, StyleSheet, Text, TextInput, View
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  SectionList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View
 } from 'react-native';
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountImageButton from "../components/KnitCountImageButton";
+import KnitCountCounterButton from "../components/KnitCountCounterButton";
+
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
 import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
 import KnitCountImageModal from "../components/modals/KnitCountImageModal";
+import KnitCountCounterModal from "../components/modals/KnitCountCounterModal";
 
 import
   SECTION_DETAILS,
@@ -26,25 +40,41 @@ import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 
-const ProjectDetailsScreen = (props) => {
-  const [selectedProject, setSelectedProject] = useState(undefined);
-  const [projectName, setProjectName] = useState("");
-  const [projectStatus, setProjectStatus] = useState(undefined);
-  const [projectNotes, setProjectNotes] = useState("");
-  const [projectImages, setProjectImages] = useState([]);
+
+const ProjectDetailsScreen = observer(({ navigation }) => {
+  const [selectedProject, setSelectedProject] = useState(ProjectsStore.selectedProject);
+
+  const [name, setName] = useState('');
+  const [counters, setCounters] = useState([]);
+  const [notes, setNotes] = useState('');
+  const [status, setStatus] = useState(ProjectStatus.WIP);
+
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedCounter, setSelectedCounter] = useState(null);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
+
+  useEffect(() => {
+    setCounters(toJS(ProjectsStore.selectedProject.counters));
+  }, []);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
-    setProjectStatus(ProjectsStore.selectedProject.status);
-    setProjectName(ProjectsStore.selectedProject.name);
-    setProjectNotes(ProjectsStore.selectedProject.notes);
-    setProjectImages(ProjectsStore.selectedProject.images);
+  }, [ProjectsStore.selectedProject]);
+
+  useEffect(() => {
+    const newName = selectedProject ? selectedProject.name : "";
+    setName(newName);
+
+    const newNotes = selectedProject ? selectedProject.notes : "";
+    setNotes(newNotes);
+
+    const newStatus = selectedProject ? selectedProject.status : ProjectStatus.WIP;
+    setStatus(newStatus);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -58,20 +88,21 @@ const ProjectDetailsScreen = (props) => {
   const toggleUpdateTitleModalVisible = () => setIsUpdateTitleModalVisible(!isUpdateTitleModalVisible);
   const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
   const toggleImageModalVisible = () => setIsImageModalVisible(!isImageModalVisible);
+  const toggleCounterModalVisible = () => setIsCounterModalVisible(!isCounterModalVisible);
 
   const handleFavoriteImageMarked = (image) => {
-    const sortedImages = [image, ...projectImages.filter(i => i.id !== image.id)];
-    setProjectImages(sortedImages);
+    const sortedImages = selectedProject ? [image, ...toJS(selectedProject.images).filter(i => i.id !== image.id)] : [];
+    ProjectsStore.setImagesForSelectedProject(sortedImages);
   };
 
   const handleMarkFinished = () => {
-    ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
-    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    setStatus(ProjectStatus.FO);
+    ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();
   };
   const handleMarkInProgress = () => {
-    ProjectsStore.toggleStatusForProject(ProjectsStore.selectedProject.id);
-    setProjectStatus(projectStatus === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP);
+    setStatus(ProjectStatus.WIP);
+    ProjectsStore.toggleStatusForProject(selectedProject.id);
   };
   const handleUpdateTitle = () => toggleUpdateTitleModalVisible();
   const handleDeleteProject = () => toggleDeleteModalVisible();
@@ -79,7 +110,7 @@ const ProjectDetailsScreen = (props) => {
   const getHandlerForBtn = (btnName) => {
     switch (btnName) {
       case MARK_FINISHED_BTN_ID:
-        if (projectStatus === ProjectStatus.WIP) return handleMarkFinished;
+        if (status === ProjectStatus.WIP) return handleMarkFinished;
         return handleMarkInProgress;
       case UPDATE_TITLE_BTN_ID: return handleUpdateTitle;
       case DELETE_PROJECT_BTN_ID: return handleDeleteProject;
@@ -89,7 +120,7 @@ const ProjectDetailsScreen = (props) => {
 
   const renderActionBtn = (btnName) => {
     const btnTitle = ACTION_BUTTONS[btnName];
-    const updatedTitle = btnTitle === "Mark Finished" && projectStatus === ProjectStatus.FO ? "Mark In Progress" : btnTitle;
+    const updatedTitle = btnTitle === "Mark Finished" && status === ProjectStatus.FO ? "Mark In Progress" : btnTitle;
     const handleOnPress = getHandlerForBtn(btnName);
 
     let btnComponent;
@@ -109,6 +140,49 @@ const ProjectDetailsScreen = (props) => {
     return <View style={styles.actionBtnContainer}>{btnComponent}</View>;
   };
 
+  const handleLongPressForCounter = (counterId) => {
+    const foundCounter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
+    setSelectedCounter(foundCounter);
+    toggleCounterModalVisible();
+  };
+
+  const renderCounters = () => {
+    const renderGridItem = (gridItem) => {
+      const counterId = gridItem.item.id;
+      const counter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
+      if (!counter) return null;
+      return (
+        <View style={styles.gridItem}>
+          <KnitCountCounterButton
+            mainTextColor={AppSettingsStore.mainTextColor}
+            mainColor={AppSettingsStore.mainColor}
+            mainBGColor={AppSettingsStore.mainBGColor}
+            counter={counter}
+            onCounterChanged={(updatedCounter) => {
+              const newCounters = counters.map(c => {
+                if (c.id === updatedCounter.id) return updatedCounter;
+                return c;
+              });
+              ProjectsStore.setCountersForSelectedProject(newCounters);
+            }}
+            onLongPress={handleLongPressForCounter}
+          />
+          <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>{counter.label}</Text>
+        </View>
+      );
+    };
+
+    return (
+      <FlatList
+        style={styles.countersSectionContainer}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        data={counters}
+        renderItem={renderGridItem}
+      />
+    );
+  };
+
   const renderPhotos = () => {
 
     const onImageCardPress = (image) => {
@@ -117,8 +191,9 @@ const ProjectDetailsScreen = (props) => {
     };
 
     const renderImageCards = () => {
-      if (projectImages.length) {
-        return projectImages.map((image, idx) => {
+      const images = selectedProject ? toJS(selectedProject.images) : [];
+      if (images.length) {
+        return images.map((image, idx) => {
           return <KnitCountImageButton key={idx} onPress={() => onImageCardPress(image)} image={image} />;
         });
       }
@@ -132,7 +207,9 @@ const ProjectDetailsScreen = (props) => {
             projectId={selectedProject && selectedProject.id ? selectedProject.id : null}
             mainColor={AppSettingsStore.mainColor}
             mainTextColor={AppSettingsStore.mainTextColor}
-            onImageTaken={(image) => setProjectImages([image, ...projectImages])}
+            onImageTaken={(image) => {
+              ProjectsStore.setImagesForSelectedProject([image, ...toJS(selectedProject.images)]);
+            }}
           />
         </View>
         {renderImageCards()}
@@ -142,29 +219,27 @@ const ProjectDetailsScreen = (props) => {
 
   const renderNotes = () => {
     return (
-      <KeyboardAvoidingView>
-        <View style={{marginHorizontal: 12}}>
-          <TextInput
-            multiline
-            editable
-            style={[
-              styles.input,
-              styles.notesInput,
-              {
-                backgroundColor: AppSettingsStore.mainBGColor,
-                color: AppSettingsStore.mainTextColor
-              }
-            ]}
-            placeholder="Enter notes"
-            value={projectNotes}
-            onChangeText={(e) => setProjectNotes(e)}
-            onSubmitEditing={(e) => {
-              ProjectsStore.updateProjectNotes(selectedProject.id, e.nativeEvent.text);
-            }}
-            numberOfLines={6}
-          />
-        </View>
-      </KeyboardAvoidingView>
+      <View style={{marginHorizontal: 12}}>
+        <TextInput
+          multiline
+          editable
+          style={[
+            styles.input,
+            styles.notesInput,
+            {
+              backgroundColor: AppSettingsStore.mainBGColor,
+              color: AppSettingsStore.mainTextColor
+            }
+          ]}
+          placeholder="Enter notes"
+          value={notes}
+          onChangeText={(e) => {
+            setNotes(e);
+            ProjectsStore.setNotesForSelectedProject(e);
+          }}
+          numberOfLines={6}
+        />
+      </View>
     );
   };
 
@@ -173,59 +248,114 @@ const ProjectDetailsScreen = (props) => {
   };
 
   return (
-    <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
-      <View style={styles.titleContainer}>
-        <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>{projectName}</Text>
-      </View>
-      <SectionList
-        style={{backgroundColor: AppSettingsStore.mainColor}}
-        sections={PROJECT_DETAILS_SECTIONS}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ section, item }) => {
-          if (section.key === SECTION_DETAILS.PHOTOS.key) return renderPhotos();
-          if (section.key === SECTION_DETAILS.NOTES.key) return renderNotes();
-          if (section.key === SECTION_DETAILS.ACTIONS.key) return renderActionBtn(item);
-          return null;
-        }}
-        renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
-      />
+    <KeyboardAvoidingView
+      behavior='padding'
+      keyboardVerticalOffset={50}
+      style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
+    >
+      <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
+        <View style={styles.titleContainer}>
+          <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>{name}</Text>
+        </View>
+        <SectionList
+          style={{backgroundColor: AppSettingsStore.mainColor}}
+          sections={PROJECT_DETAILS_SECTIONS}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ section, item }) => {
+            switch (section.key) {
+              case SECTION_DETAILS.COUNTERS.key: return renderCounters();
+              case SECTION_DETAILS.PHOTOS.key: return renderPhotos();
+              case SECTION_DETAILS.NOTES.key: return renderNotes();
+              case SECTION_DETAILS.ACTIONS.key: return renderActionBtn(item);
+              default: return null;
+            }
+          }}
+          renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
+        />
 
-      <KnitCountFinishedModal
-        isVisible={isFinishedModalVisible}
-        onBackdropPress={toggleFinishedModalVisible}
-        image={projectImages.length ? projectImages[0] : null}
-        name={projectName}
-        status={projectStatus}
-        navigation={props.navigation}
-      />
+        {
+          !!selectedProject && (
+            <KnitCountFinishedModal
+              isVisible={isFinishedModalVisible}
+              onBackdropPress={toggleFinishedModalVisible}
+              image={toJS(selectedProject.images).length ? toJS(selectedProject.images)[0] : null}
+              name={name}
+              status={selectedProject.status}
+              navigation={navigation}
+            />
+          )
+        }
 
-      <KnitCountUpdateTitleModal
-        isVisible={isUpdateTitleModalVisible}
-        onBackdropPress={toggleUpdateTitleModalVisible}
-        title={projectName}
-        onChangeText={setProjectName}
-        projectId={selectedProject && selectedProject.id}
-      />
+        {
+          !!selectedProject && (
+            <KnitCountUpdateTitleModal
+              isVisible={isUpdateTitleModalVisible}
+              onBackdropPress={toggleUpdateTitleModalVisible}
+              title={name}
+              onChangeText={(e) => {
+                setName(e);
+                ProjectsStore.setNameForSelectedProject(e)
+              }}
+              projectId={selectedProject && selectedProject.id}
+            />
+          )
+        }
 
-      <KnitCountDeleteModal
-        isVisible={isDeleteModalVisible}
-        onBackdropPress={toggleDeleteModalVisible}
-        projectId={selectedProject && selectedProject.id}
-        navigation={props.navigation}
-      />
+        {
+          !!selectedProject && (
+            <KnitCountDeleteModal
+              isVisible={isDeleteModalVisible}
+              onBackdropPress={toggleDeleteModalVisible}
+              projectId={selectedProject && selectedProject.id}
+              onDeleteProject={() => {
+                setSelectedProject(null);
+                ProjectsStore.setSelectedProject(null);
+                navigation.popToTop();
+              }}
+            />
+          )
+        }
 
-      <KnitCountImageModal
-        isVisible={isImageModalVisible}
-        onFavoriteImageMarked={(i) => handleFavoriteImageMarked(i)}
-        onBackdropPress={toggleImageModalVisible}
-        selectedImage={selectedImage}
-        onRemoveImage={(i) => setProjectImages(projectImages.filter(image => image.id !== i.id))}
-        projectId={selectedProject && selectedProject.id}
-      />
+        {
+          !!selectedImage && (
+            <KnitCountImageModal
+              isVisible={isImageModalVisible}
+              onFavoriteImageMarked={(i) => handleFavoriteImageMarked(i)}
+              onBackdropPress={toggleImageModalVisible}
+              selectedImage={selectedImage}
+              onRemoveImage={(i) => {
+                ProjectsStore.setImagesForSelectedProject(toJS(selectedProject.images).filter(image => image.id !== i.id));
+              }}
+              projectId={selectedProject && selectedProject.id}
+            />
+          )
+        }
 
-    </SafeAreaView>
+        {
+          !!selectedCounter && (
+            <KnitCountCounterModal
+              isVisible={isCounterModalVisible}
+              onBackdropPress={toggleCounterModalVisible}
+              counter={selectedCounter}
+              onCounterChanged={(updatedCounter) => {
+                const newCounters = counters.map(c => {
+                  if (c.id === updatedCounter.id) return updatedCounter;
+                  return c;
+                });
+                ProjectsStore.setCountersForSelectedProject(newCounters);
+              }}
+              onCounterDeleted={(counter) => {
+                const newCounters = counters.filter(c => c.id !== counter.id);
+                setCounters(newCounters);
+                ProjectsStore.deleteCounter(counter);
+              }}
+            />
+          )
+        }
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
-};
+});
 
 ProjectDetailsScreen.navigationOptions = (navData) => {
   return (
@@ -296,6 +426,23 @@ const styles = StyleSheet.create({
     width: 160,
     height: 90,
     marginRight: 6
+  },
+  countersSectionContainer: {
+    marginHorizontal: 12,
+    marginBottom: 12
+  },
+  gridItem: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginVertical: 6,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  gridItemLabel: {
+    fontFamily: "avenir-roman",
+    fontSize: 18,
+    marginTop: 6,
+    marginHorizontal: 6
   }
 });
 

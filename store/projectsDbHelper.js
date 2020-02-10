@@ -75,13 +75,13 @@ export const insertProject = (project) => {
           VALUES (?, ?, ?, ?, ?, ?);
         `,
         [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate],
-        (_, result) => {
+        async(_, result) => {
           const projectId = result.insertId;
           if (project.counters && project.counters.length) {
-            insertCounters(projectId, project.counters).then(r => console.log("counters inserted"));
+            await insertCounters(projectId, project.counters);
           }
           if (project.images && project.images.length) {
-            insertImages(projectId, project.images).then(r => console.log("images inserted"))
+            await insertImages(projectId, project.images);
           }
           resolve(result);
         },

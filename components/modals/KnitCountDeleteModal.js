@@ -27,9 +27,9 @@ const KnitCountDeleteModal = (props) => {
           <View style={{width: "100%", margin: 6}}>
             <KnitCountDestructiveButton
               onPress={() => {
+                props.onDeleteProject();
                 props.onBackdropPress();
                 ProjectsStore.deleteProjectById(props.projectId);
-                props.navigation.popToTop();
               }}
               label={"Yes, delete this project."}
             />
@@ -43,8 +43,8 @@ const KnitCountDeleteModal = (props) => {
 KnitCountDeleteModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
-  projectId: PropTypes.number,
-  navigation: PropTypes.object.isRequired
+  onDeleteProject: PropTypes.func.isRequired,
+  projectId: PropTypes.number
 };
 
 const styles = StyleSheet.create({

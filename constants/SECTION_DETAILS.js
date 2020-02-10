@@ -11,8 +11,8 @@ export const ACTION_BUTTONS = {
 export const SECTION_DETAILS = {
   COUNTERS: {
     key: 0,
-    title: "",
-    data: []
+    title: "Counters",
+    data: ["counters"]
   },
   PHOTOS: {
     key: 1,
