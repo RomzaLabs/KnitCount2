@@ -67,16 +67,15 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   }, [ProjectsStore.selectedProject]);
 
   useEffect(() => {
-    setName(selectedProject.name);
-  }, [selectedProject.name]);
+    const newName = selectedProject ? selectedProject.name : "";
+    setName(newName);
 
-  useEffect(() => {
-    setNotes(selectedProject.notes);
-  }, [selectedProject.notes]);
+    const newNotes = selectedProject ? selectedProject.notes : "";
+    setNotes(newNotes);
 
-  useEffect(() => {
-    setStatus(selectedProject.status);
-  }, [selectedProject.status]);
+    const newStatus = selectedProject ? selectedProject.status : ProjectStatus.WIP;
+    setStatus(newStatus);
+  }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
     { key: SECTION_DETAILS.COUNTERS.key, title: SECTION_DETAILS.COUNTERS.title, data: SECTION_DETAILS.COUNTERS.data },
@@ -92,7 +91,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const toggleCounterModalVisible = () => setIsCounterModalVisible(!isCounterModalVisible);
 
   const handleFavoriteImageMarked = (image) => {
-    const sortedImages = [image, ...toJS(selectedProject.images).filter(i => i.id !== image.id)];
+    const sortedImages = selectedProject ? [image, ...toJS(selectedProject.images).filter(i => i.id !== image.id)] : [];
     ProjectsStore.setImagesForSelectedProject(sortedImages);
   };
 
@@ -192,8 +191,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     };
 
     const renderImageCards = () => {
-      if (toJS(selectedProject.images).length) {
-        return toJS(selectedProject.images).map((image, idx) => {
+      const images = selectedProject ? toJS(selectedProject.images) : [];
+      if (images.length) {
+        return images.map((image, idx) => {
           return <KnitCountImageButton key={idx} onPress={() => onImageCardPress(image)} image={image} />;
         });
       }
@@ -273,43 +273,63 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
           renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
         />
 
-        <KnitCountFinishedModal
-          isVisible={isFinishedModalVisible}
-          onBackdropPress={toggleFinishedModalVisible}
-          image={toJS(selectedProject.images).length ? toJS(selectedProject.images)[0] : null}
-          name={selectedProject.name}
-          status={selectedProject.status}
-          navigation={navigation}
-        />
+        {
+          !!selectedProject && (
+            <KnitCountFinishedModal
+              isVisible={isFinishedModalVisible}
+              onBackdropPress={toggleFinishedModalVisible}
+              image={toJS(selectedProject.images).length ? toJS(selectedProject.images)[0] : null}
+              name={name}
+              status={selectedProject.status}
+              navigation={navigation}
+            />
+          )
+        }
 
-        <KnitCountUpdateTitleModal
-          isVisible={isUpdateTitleModalVisible}
-          onBackdropPress={toggleUpdateTitleModalVisible}
-          title={name}
-          onChangeText={(e) => {
-            setName(e);
-            ProjectsStore.setNameForSelectedProject(e)
-          }}
-          projectId={selectedProject && selectedProject.id}
-        />
+        {
+          !!selectedProject && (
+            <KnitCountUpdateTitleModal
+              isVisible={isUpdateTitleModalVisible}
+              onBackdropPress={toggleUpdateTitleModalVisible}
+              title={name}
+              onChangeText={(e) => {
+                setName(e);
+                ProjectsStore.setNameForSelectedProject(e)
+              }}
+              projectId={selectedProject && selectedProject.id}
+            />
+          )
+        }
 
-        <KnitCountDeleteModal
-          isVisible={isDeleteModalVisible}
-          onBackdropPress={toggleDeleteModalVisible}
-          projectId={selectedProject && selectedProject.id}
-          navigation={navigation}
-        />
+        {
+          !!selectedProject && (
+            <KnitCountDeleteModal
+              isVisible={isDeleteModalVisible}
+              onBackdropPress={toggleDeleteModalVisible}
+              projectId={selectedProject && selectedProject.id}
+              onDeleteProject={() => {
+                setSelectedProject(null);
+                ProjectsStore.setSelectedProject(null);
+                navigation.popToTop();
+              }}
+            />
+          )
+        }
 
-        <KnitCountImageModal
-          isVisible={isImageModalVisible}
-          onFavoriteImageMarked={(i) => handleFavoriteImageMarked(i)}
-          onBackdropPress={toggleImageModalVisible}
-          selectedImage={selectedImage}
-          onRemoveImage={(i) => {
-            ProjectsStore.setImagesForSelectedProject(toJS(selectedProject.images).filter(image => image.id !== i.id));
-          }}
-          projectId={selectedProject && selectedProject.id}
-        />
+        {
+          !!selectedImage && (
+            <KnitCountImageModal
+              isVisible={isImageModalVisible}
+              onFavoriteImageMarked={(i) => handleFavoriteImageMarked(i)}
+              onBackdropPress={toggleImageModalVisible}
+              selectedImage={selectedImage}
+              onRemoveImage={(i) => {
+                ProjectsStore.setImagesForSelectedProject(toJS(selectedProject.images).filter(image => image.id !== i.id));
+              }}
+              projectId={selectedProject && selectedProject.id}
+            />
+          )
+        }
 
         {
           !!selectedCounter && (

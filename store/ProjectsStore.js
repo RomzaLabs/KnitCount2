@@ -166,10 +166,12 @@ class ProjectsStore {
   };
 
   @action updateSelectedProjectInProjects = () => {
-    this.projects = this.projects.map(p => {
-      if (p.id === this.selectedProject.id) return this.selectedProject;
-      return p;
-    });
+    if (this.selectedProject) {
+      this.projects = this.projects.map(p => {
+        if (p.id === this.selectedProject.id) return this.selectedProject;
+        return p;
+      });
+    }
   };
 
   @action saveSelectedProject = _.debounce(async() => {
