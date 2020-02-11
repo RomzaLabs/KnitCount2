@@ -313,7 +313,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
                 setName(e);
                 ProjectsStore.setNameForSelectedProject(e)
               }}
-              projectId={selectedProject && selectedProject.id}
             />
           )
         }

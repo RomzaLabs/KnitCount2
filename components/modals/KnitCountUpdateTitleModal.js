@@ -4,7 +4,6 @@ import Modal from "react-native-modal";
 import PropTypes from "prop-types";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import ProjectsStore from "../../store/ProjectsStore";
 
 const KnitCountUpdateTitleModal = (props) => {
   return (
@@ -20,7 +19,7 @@ const KnitCountUpdateTitleModal = (props) => {
             value={props.title}
             onChangeText={(e) => props.onChangeText(e)}
             onSubmitEditing={(e) => {
-              ProjectsStore.updateProjectName(props.projectId, e.nativeEvent.text);
+              props.onChangeText(e.nativeEvent.text);
               props.onBackdropPress();
             }}
           />
@@ -34,8 +33,7 @@ KnitCountUpdateTitleModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  onChangeText: PropTypes.func.isRequired,
-  projectId: PropTypes.number
+  onChangeText: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
