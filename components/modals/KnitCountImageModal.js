@@ -4,7 +4,6 @@ import Modal from "react-native-modal";
 import PropTypes from "prop-types";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import ProjectsStore from "../../store/ProjectsStore";
 import KnitCountActionButton from "../KnitCountActionButton";
 import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
 
@@ -19,8 +18,7 @@ const KnitCountImageModal = (props) => {
 
           <View style={{width: "100%", marginTop: 6}}>
             <KnitCountActionButton
-              onPress={async() => {
-                await ProjectsStore.markImageAsFavorite(props.selectedImage);
+              onPress={() => {
                 props.onFavoriteImageMarked(props.selectedImage);
                 props.onBackdropPress();
               }}
@@ -32,10 +30,9 @@ const KnitCountImageModal = (props) => {
 
           <View style={{width: "100%", margin: 6}}>
             <KnitCountDestructiveButton
-              onPress={async() => {
-                props.onBackdropPress();
+              onPress={() => {
                 props.onRemoveImage(props.selectedImage);
-                await ProjectsStore.deleteImageFromProjectById(props.projectId, props.selectedImage.id);
+                props.onBackdropPress();
               }}
               label={"Delete this image."}
             />
@@ -51,7 +48,6 @@ KnitCountImageModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onFavoriteImageMarked: PropTypes.func.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
-  projectId: PropTypes.number,
   selectedImage: PropTypes.object,
   onRemoveImage: PropTypes.func.isRequired
 };

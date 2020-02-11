@@ -93,7 +93,10 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const toggleCounterModalVisible = () => setIsCounterModalVisible(!isCounterModalVisible);
 
   const handleFavoriteImageMarked = (image) => {
-    const sortedImages = selectedProject ? [image, ...toJS(selectedProject.images).filter(i => i.id !== image.id)] : [];
+    const updatedImage = {...image, dateAdded: +new Date()};
+    const sortedImages = selectedProject
+      ? [updatedImage, ...toJS(selectedProject.images).filter(i => i.id !== image.id)]
+      : [];
     ProjectsStore.setImagesForSelectedProject(sortedImages);
   };
 
@@ -339,9 +342,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               onBackdropPress={toggleImageModalVisible}
               selectedImage={selectedImage}
               onRemoveImage={(i) => {
+                ProjectsStore.deleteImageFromProjectById(selectedProject.id, i.id);
                 ProjectsStore.setImagesForSelectedProject(toJS(selectedProject.images).filter(image => image.id !== i.id));
               }}
-              projectId={selectedProject && selectedProject.id}
             />
           )
         }
