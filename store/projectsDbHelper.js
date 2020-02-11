@@ -321,7 +321,7 @@ export const fetchProjects = (offset = 0, limit = 20) => {
         `
           SELECT id, name, status, notes, start_date, modified_date, end_date
           FROM projects 
-          ORDER BY modified_date 
+          ORDER BY modified_date DESC
           LIMIT ? OFFSET ?;
         `,
         [limit, offset],
