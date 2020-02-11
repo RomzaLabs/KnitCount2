@@ -28,7 +28,7 @@ const KnitCountImagePicker = (props) => {
   const takeImageHandler = async() => {
     const hasPermission = await verifyPermissions();
     if (!hasPermission) return;
-    const image = await ImagePicker.launchCameraAsync({
+    const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [16, 9],
       quality: 0.5
