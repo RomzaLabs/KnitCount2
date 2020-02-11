@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import ProjectsStore from "../../store/ProjectsStore";
 import KnitCountActionButton from "../KnitCountActionButton";
 import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
 
