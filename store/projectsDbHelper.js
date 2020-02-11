@@ -103,7 +103,7 @@ export const updateProject = (project) => {
           SET name = ?, status = ?, notes = ?, start_date = ?, modified_date = ?, end_date = ?
           WHERE id = ?
         `,
-        [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate, project.id],
+        [project.name, project.status, project.notes, project.startDate, +new Date(), project.endDate, project.id],
         (_, result) => {
           resolve(result);
         },

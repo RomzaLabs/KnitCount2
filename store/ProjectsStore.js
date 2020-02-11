@@ -24,10 +24,7 @@ class ProjectsStore {
 
   // Actions
   @action
-  loadProjects = (projects) => {
-    // Sort by modifiedDate in descending order, i.e. newest projects at the top
-    this.projects = projects.sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
-  };
+  loadProjects = (projects) => this.projects = projects;
 
   @action
   setSelectedProject = (project) => {
@@ -52,7 +49,10 @@ class ProjectsStore {
   toggleStatusForProject = (projectId) => {
     this.projects = this.projects.map(p => {
       if (p.id === projectId) {
-        const project = {...p, status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP};
+        const project = {
+          ...p,
+          status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP
+        };
         updateProject(project);
         return project;
       }
