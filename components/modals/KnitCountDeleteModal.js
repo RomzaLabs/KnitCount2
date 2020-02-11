@@ -4,7 +4,6 @@ import Modal from "react-native-modal";
 import PropTypes from "prop-types";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import ProjectsStore from "../../store/ProjectsStore";
 import KnitCountActionButton from "../KnitCountActionButton";
 import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
 
@@ -29,7 +28,6 @@ const KnitCountDeleteModal = (props) => {
               onPress={() => {
                 props.onDeleteProject();
                 props.onBackdropPress();
-                ProjectsStore.deleteProjectById(props.projectId);
               }}
               label={"Yes, delete this project."}
             />
@@ -43,8 +41,7 @@ const KnitCountDeleteModal = (props) => {
 KnitCountDeleteModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   onBackdropPress: PropTypes.func.isRequired,
-  onDeleteProject: PropTypes.func.isRequired,
-  projectId: PropTypes.number
+  onDeleteProject: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

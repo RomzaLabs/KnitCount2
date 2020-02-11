@@ -323,10 +323,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
             <KnitCountDeleteModal
               isVisible={isDeleteModalVisible}
               onBackdropPress={toggleDeleteModalVisible}
-              projectId={selectedProject && selectedProject.id}
               onDeleteProject={() => {
+                ProjectsStore.deleteProjectById(selectedProject.id);
                 setSelectedProject(null);
-                ProjectsStore.setSelectedProject(null);
                 navigation.popToTop();
               }}
             />
