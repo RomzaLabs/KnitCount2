@@ -8,7 +8,6 @@ import {
   deleteProject,
   insertImage,
   deleteImage,
-  updateImage,
   updateCounter,
   deleteCounter
 } from "../store/projectsDbHelper";
@@ -79,25 +78,8 @@ class ProjectsStore {
   };
 
   @action
-  deleteImageFromProjectById = async(projectId, imageId) => {
-    await deleteImage(imageId);
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) return {...p, images: p.images.filter(i => i.id !== imageId)};
-      return p;
-    });
-  };
-
-  @action
-  markImageAsFavorite = async(image) => {
-    const updatedImage = {...image, dateAdded: +new Date()};
-    await updateImage(updatedImage);
-    this.projects = this.projects.map(p => {
-      if (p.id === image.projectId) {
-        const images = [updatedImage, ...p.images.filter(i => i.id !== updatedImage.id)];
-        return {...p, images};
-      }
-      return p;
-    });
+  deleteImageFromProjectById = (projectId, imageId) => {
+    deleteImage(imageId);
   };
 
   @action updateCounterLabel = (counter, newLabel) => {
