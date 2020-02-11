@@ -68,16 +68,6 @@ class ProjectsStore {
   };
 
   @action
-  addImageToProjectById = async(projectId, image) => {
-    const dbResult = await insertImage(projectId, image);
-    image.id = dbResult.insertId;
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) return {...p, images: [image, ...p.images]};
-      return p;
-    });
-  };
-
-  @action
   deleteImageFromProjectById = (projectId, imageId) => {
     deleteImage(imageId);
   };
