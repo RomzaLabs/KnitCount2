@@ -137,10 +137,8 @@ class ProjectsStore {
 
   @action updateSelectedProjectInProjects = () => {
     if (this.selectedProject) {
-      this.projects = this.projects.map(p => {
-        if (p.id === this.selectedProject.id) return this.selectedProject;
-        return p;
-      });
+      const oldProjects = this.projects.filter(p => p.id !== this.selectedProject.id);
+      this.projects = [this.selectedProject, ...oldProjects];
     }
   };
 
