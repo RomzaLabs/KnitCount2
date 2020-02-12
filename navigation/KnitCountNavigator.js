@@ -48,7 +48,7 @@ const CounterCreateNavigator = createStackNavigator(
     AddCounter: {
       screen: AddCounterScreen,
       navigationOptions: {
-        headerTitle: "Add A Counter"
+        headerTitle: ""
       }
     }
   },
