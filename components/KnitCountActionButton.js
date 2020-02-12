@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import PropTypes from "prop-types";
 
 const KnitCountActionButton = (props) => {
   let ButtonComponent = TouchableOpacity;
@@ -16,6 +17,13 @@ const KnitCountActionButton = (props) => {
       </ButtonComponent>
     </View>
   );
+};
+
+KnitCountActionButton.propTypes = {
+  label: PropTypes.string.isRequired,
+  onPress: PropTypes.func.isRequired,
+  bgColor: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
