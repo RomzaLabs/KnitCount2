@@ -56,8 +56,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCounter, setSelectedCounter] = useState(null);
-  const [cameraChosen, setCameraChosen] = useState(false);
-  const [imageLibraryChosen, setImageLibraryChosen] = useState(false);
 
   const [isFinishedModalVisible, setIsFinishedModalVisible] = useState(false);
   const [isUpdateTitleModalVisible, setIsUpdateTitleModalVisible] = useState(false);
@@ -119,18 +117,22 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const handleUpdateTitle = () => toggleUpdateTitleModalVisible();
   const handleDeleteProject = () => toggleDeleteModalVisible();
 
-  const handleTakingImage = async() => {
-    const defaultOptions = { allowsEditing: true, aspect: [16, 9], quality: 0.5 };
-    if (cameraChosen) {
-      const image = await ImagePicker.launchCameraAsync(defaultOptions);
-      const pickedImage = new Image(null, selectedProject.id, image.uri);
-      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
-    } else if (imageLibraryChosen) {
-      console.log("HERE");
-      const image = await ImagePicker.launchImageLibraryAsync(defaultOptions);
-      const pickedImage = new Image(null, selectedProject.id, image.uri);
-      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
-    }
+  const imagePickerOptions = { allowsEditing: true, aspect: [16, 9], quality: 0.5 };
+
+  const handleCamera = async() => {
+    const image = await ImagePicker.launchCameraAsync(imagePickerOptions);
+    const pickedImage = new Image(null, selectedProject.id, image.uri);
+    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    toggleImagePickerModalVisible();
+  };
+
+  const handleImageLibrary = async() => {
+    const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+    const pickedImage = new Image(null, selectedProject.id, image.uri);
+    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    toggleImagePickerModalVisible();
   };
 
   const getHandlerForBtn = (btnName) => {
@@ -393,16 +395,8 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
           <KnitCountImagePickerModal
             isVisible={isImagePickerModalVisible}
             onBackdropPress={toggleImagePickerModalVisible}
-            onCameraChosen={async() => {
-              setCameraChosen(true);
-              await handleTakingImage(); // TODO: Make camera specific handler. Remove state.
-              setCameraChosen(false);
-            }}
-            onImageLibraryChosen={async() => {
-              setImageLibraryChosen(true);
-              await handleTakingImage(); // TODO: Make image specific handler. Remove state.
-              setImageLibraryChosen(false);
-            }}
+            onCameraChosen={handleCamera}
+            onImageLibraryChosen={handleImageLibrary}
           />
         }
       </SafeAreaView>

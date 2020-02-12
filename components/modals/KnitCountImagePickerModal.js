@@ -39,7 +39,7 @@ const KnitCountImagePickerModal = (props) => {
     <Modal style={styles.view} isVisible={props.isVisible} onBackdropPress={props.onBackdropPress}>
       <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
         <View style={{alignItems: "center"}}>
-          <View style={{width: "100%", marginTop: 6}}>
+          <View style={{width: "100%", marginHorizontal: 12, marginVertical: 12 }}>
             <KnitCountActionButton
               onPress={async() => {
                 const hasCameraPermission = await verifyCameraPermissions();
@@ -47,7 +47,6 @@ const KnitCountImagePickerModal = (props) => {
                 if (hasCameraPermission && hasCameraRollPermission) {
                   props.onCameraChosen();
                 }
-                props.onBackdropPress();
               }}
               label={"Take a photo"}
               bgColor={AppSettingsStore.mainTextColor}
@@ -55,14 +54,13 @@ const KnitCountImagePickerModal = (props) => {
             />
           </View>
 
-          <View style={{width: "100%", margin: 6}}>
+          <View style={{width: "100%", marginHorizontal: 12 }}>
             <KnitCountActionButton
               onPress={async() => {
                 const hasCameraRollPermission = await verifyImageLibraryPermissions();
                 if (hasCameraRollPermission) {
                   props.onImageLibraryChosen();
                 }
-                props.onBackdropPress();
               }}
               label={"Choose from library"}
               bgColor={AppSettingsStore.mainTextColor}
@@ -91,7 +89,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     paddingHorizontal: 24,
     paddingTop: 12,
-    paddingBottom: 24,
+    paddingBottom: 60,
     justifyContent: 'center',
     borderRadius: 5,
     borderColor: 'rgba(0, 0, 0, 0.1)'
