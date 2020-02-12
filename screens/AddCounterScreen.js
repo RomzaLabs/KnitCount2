@@ -8,6 +8,7 @@ import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import {NavigationActions} from "react-navigation";
 import Counter from "../models/Counter";
 import ProjectsStore from "../store/ProjectsStore";
+import KnitCountActionButton from "../components/KnitCountActionButton";
 
 const AddCounterScreen = observer((props) => {
   const projectId = ProjectsStore.selectedProject.id;
@@ -24,6 +25,16 @@ const AddCounterScreen = observer((props) => {
       <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
         <View style={styles.titleContainer}>
           <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>Add A Counter</Text>
+        </View>
+        <View style={styles.submitContainer}>
+          <View style={styles.saveContainer}>
+            <KnitCountActionButton
+              label="Save"
+              onPress={() => console.log("TODO: Save me")}
+              bgColor={AppSettingsStore.mainTextColor}
+              textColor={AppSettingsStore.mainColor}
+            />
+          </View>
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
@@ -71,7 +82,9 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: {width: -1, height: 2},
     textShadowRadius: 3
-  }
+  },
+  submitContainer: {},
+  saveContainer: {}
 });
 
 export default AddCounterScreen;
