@@ -14,7 +14,7 @@ const AddCounterScreen = observer((props) => {
   const projectId = ProjectsStore.selectedProject.id;
   const [counter, setCounter] = useState(new Counter(null, projectId, ""));
   const [customName, setCustomName] = useState('');
-  const [canSave, setCanSave] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   return (
     <KeyboardAvoidingView
@@ -33,6 +33,7 @@ const AddCounterScreen = observer((props) => {
               onPress={() => console.log("TODO: Save me")}
               bgColor={AppSettingsStore.mainTextColor}
               textColor={AppSettingsStore.mainColor}
+              disabled={disabled}
             />
           </View>
         </View>
