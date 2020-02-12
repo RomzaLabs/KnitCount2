@@ -140,6 +140,10 @@ class ProjectsStore {
     }
   }, 800, { trailing: true });
 
+  @action saveImage = (projectId, image) => {
+    insertImage(projectId, image);
+  }
+
 }
 
 export default new ProjectsStore();
