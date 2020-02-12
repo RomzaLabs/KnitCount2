@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet} from 'react-native';
 import { observer } from "mobx-react";
 
@@ -6,8 +6,15 @@ import AppSettingsStore from "../store/AppSettingsStore";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import {NavigationActions} from "react-navigation";
+import Counter from "../models/Counter";
+import ProjectsStore from "../store/ProjectsStore";
 
 const AddCounterScreen = observer((props) => {
+  const projectId = ProjectsStore.selectedProject.id;
+  const [counter, setCounter] = useState(new Counter(null, projectId, ""));
+  const [customName, setCustomName] = useState('');
+  const [canSave, setCanSave] = useState(false);
+
   return (
     <KeyboardAvoidingView
       behavior='padding'
