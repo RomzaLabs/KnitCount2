@@ -37,7 +37,6 @@ class ProjectsStore {
     const dbResult = await insertProject(project);
     project.id = dbResult.insertId;
     this.setSelectedProject(project);
-    this.projects = [...this.projects, project].sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
   };
 
   @action
@@ -127,8 +126,17 @@ class ProjectsStore {
 
   @action updateSelectedProjectInProjects = () => {
     if (this.selectedProject) {
-      const oldProjects = this.projects.filter(p => p.id !== this.selectedProject.id);
-      this.projects = [this.selectedProject, ...oldProjects];
+      const exists = this.projects.find(p => p.id === this.selectedProject.id);
+      if (exists) {
+        this.projects = this.projects.map(p => {
+          if (p.id === this.selectedProject.id) return this.selectedProject;
+          return p;
+        })
+      } else {
+        const oldProjects = this.projects.filter(p => p.id !== this.selectedProject.id);
+        this.projects = [this.selectedProject, ...oldProjects]
+          .sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
+      }
     }
   };
 
