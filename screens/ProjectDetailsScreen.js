@@ -190,6 +190,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         );
       }
 
+      if (!ProjectsStore.selectedProject) return null;
       const counter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
       if (!counter) return null;
       return (
