@@ -103,7 +103,7 @@ export const updateProject = (project) => {
           SET name = ?, status = ?, notes = ?, start_date = ?, modified_date = ?, end_date = ?
           WHERE id = ?
         `,
-        [project.name, project.status, project.notes, project.startDate, project.modifiedDate, project.endDate, project.id],
+        [project.name, project.status, project.notes, project.startDate, +new Date(), project.endDate, project.id],
         (_, result) => {
           resolve(result);
         },
@@ -321,7 +321,7 @@ export const fetchProjects = (offset = 0, limit = 20) => {
         `
           SELECT id, name, status, notes, start_date, modified_date, end_date
           FROM projects 
-          ORDER BY modified_date 
+          ORDER BY modified_date DESC
           LIMIT ? OFFSET ?;
         `,
         [limit, offset],

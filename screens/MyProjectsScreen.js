@@ -14,19 +14,23 @@ import KnitCountProjectCard from "../components/KnitCountProjectCard";
 import {ProjectStatus} from "../models/ProjectStatus";
 import {FilterPreference} from "../models/FilterPreference";
 
-const MyProjectsScreen = (props) => {
-  const [projects, setProjects] = useState([]);
+const MyProjectsScreen = observer((props) => {
+  const [projects, setProjects] = useState(ProjectsStore.projects);
   const [filterPreference, setFilterPreference] = useState(AppSettingsStore.filterPreference);
 
   useEffect(() => {
-    const filteredProjects = ProjectsStore.projects.filter(p => {
-      if (filterPreference === FilterPreference.WIP) return p.status === ProjectStatus.WIP;
-      if (filterPreference === FilterPreference.FO) return p.status === ProjectStatus.FO;
-      return true;
-    });
+    const filteredProjects = ProjectsStore.projects
+      .filter(p => {
+        if (filterPreference === FilterPreference.WIP) return p.status === ProjectStatus.WIP;
+        if (filterPreference === FilterPreference.FO) return p.status === ProjectStatus.FO;
+        return true;
+      });
     setProjects(filteredProjects);
+  }, [ProjectsStore.projects]);
+
+  useEffect(() => {
     props.navigation.setParams({filterPreference});
-  }, [ProjectsStore.projects, filterPreference]);
+  }, [filterPreference]);
 
   const renderKnitCountCard = (project) => {
     return (
@@ -101,7 +105,7 @@ const MyProjectsScreen = (props) => {
       </Modal>
     </SafeAreaView>
   );
-};
+});
 
 MyProjectsScreen.navigationOptions = (navData) => {
   const filterPreference = navData.navigation.getParam("filterPreference");
@@ -189,4 +193,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default observer(MyProjectsScreen);
+export default MyProjectsScreen;

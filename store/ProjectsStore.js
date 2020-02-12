@@ -8,7 +8,6 @@ import {
   deleteProject,
   insertImage,
   deleteImage,
-  updateImage,
   updateCounter,
   deleteCounter
 } from "../store/projectsDbHelper";
@@ -25,10 +24,7 @@ class ProjectsStore {
 
   // Actions
   @action
-  loadProjects = (projects) => {
-    // Sort by modifiedDate in descending order, i.e. newest projects at the top
-    this.projects = projects.sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
-  };
+  loadProjects = (projects) => this.projects = projects;
 
   @action
   setSelectedProject = (project) => {
@@ -53,19 +49,10 @@ class ProjectsStore {
   toggleStatusForProject = (projectId) => {
     this.projects = this.projects.map(p => {
       if (p.id === projectId) {
-        const project = {...p, status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP};
-        updateProject(project);
-        return project;
-      }
-      return p;
-    });
-  };
-
-  @action
-  updateProjectName = (projectId, newName) => {
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) {
-        const project = {...p, name: newName};
+        const project = {
+          ...p,
+          status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP
+        };
         updateProject(project);
         return project;
       }
@@ -81,35 +68,8 @@ class ProjectsStore {
   };
 
   @action
-  addImageToProjectById = async(projectId, image) => {
-    const dbResult = await insertImage(projectId, image);
-    image.id = dbResult.insertId;
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) return {...p, images: [image, ...p.images]};
-      return p;
-    });
-  };
-
-  @action
-  deleteImageFromProjectById = async(projectId, imageId) => {
-    await deleteImage(imageId);
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) return {...p, images: p.images.filter(i => i.id !== imageId)};
-      return p;
-    });
-  };
-
-  @action
-  markImageAsFavorite = async(image) => {
-    const updatedImage = {...image, dateAdded: +new Date()};
-    await updateImage(updatedImage);
-    this.projects = this.projects.map(p => {
-      if (p.id === image.projectId) {
-        const images = [updatedImage, ...p.images.filter(i => i.id !== updatedImage.id)];
-        return {...p, images};
-      }
-      return p;
-    });
+  deleteImageFromProjectById = (projectId, imageId) => {
+    deleteImage(imageId);
   };
 
   @action updateCounterLabel = (counter, newLabel) => {
@@ -167,10 +127,8 @@ class ProjectsStore {
 
   @action updateSelectedProjectInProjects = () => {
     if (this.selectedProject) {
-      this.projects = this.projects.map(p => {
-        if (p.id === this.selectedProject.id) return this.selectedProject;
-        return p;
-      });
+      const oldProjects = this.projects.filter(p => p.id !== this.selectedProject.id);
+      this.projects = [this.selectedProject, ...oldProjects];
     }
   };
 
@@ -181,6 +139,10 @@ class ProjectsStore {
       await updateCounter(c);
     }
   }, 800, { trailing: true });
+
+  @action saveImage = (projectId, image) => {
+    insertImage(projectId, image);
+  }
 
 }
 

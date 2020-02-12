@@ -14,9 +14,11 @@ import {
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
+import * as ImagePicker from 'expo-image-picker';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
+import Image from "../models/Image";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import KnitCountImageButton from "../components/KnitCountImageButton";
 import KnitCountCounterAddButton from "../components/KnitCountCounterAddButton";
@@ -27,6 +29,7 @@ import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitle
 import KnitCountDeleteModal from "../components/modals/KnitCountDeleteModal";
 import KnitCountImageModal from "../components/modals/KnitCountImageModal";
 import KnitCountCounterModal from "../components/modals/KnitCountCounterModal";
+import KnitCountImagePickerModal from "../components/modals/KnitCountImagePickerModal";
 
 import
   SECTION_DETAILS,
@@ -59,6 +62,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
+  const [isImagePickerModalVisible, setIsImagePickerModalVisible] = useState(false);
 
   useEffect(() => {
     setCounters(toJS(ProjectsStore.selectedProject.counters));
@@ -91,9 +95,13 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const toggleDeleteModalVisible = () => setIsDeleteModalVisible(!isDeleteModalVisible);
   const toggleImageModalVisible = () => setIsImageModalVisible(!isImageModalVisible);
   const toggleCounterModalVisible = () => setIsCounterModalVisible(!isCounterModalVisible);
+  const toggleImagePickerModalVisible = () => setIsImagePickerModalVisible(!isImagePickerModalVisible);
 
   const handleFavoriteImageMarked = (image) => {
-    const sortedImages = selectedProject ? [image, ...toJS(selectedProject.images).filter(i => i.id !== image.id)] : [];
+    const updatedImage = {...image, dateAdded: +new Date()};
+    const sortedImages = selectedProject
+      ? [updatedImage, ...toJS(selectedProject.images).filter(i => i.id !== image.id)]
+      : [];
     ProjectsStore.setImagesForSelectedProject(sortedImages);
   };
 
@@ -108,6 +116,24 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
   const handleUpdateTitle = () => toggleUpdateTitleModalVisible();
   const handleDeleteProject = () => toggleDeleteModalVisible();
+
+  const imagePickerOptions = { allowsEditing: true, aspect: [16, 9], quality: 0.5 };
+
+  const handleCamera = async() => {
+    const image = await ImagePicker.launchCameraAsync(imagePickerOptions);
+    const pickedImage = new Image(null, selectedProject.id, image.uri);
+    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    toggleImagePickerModalVisible();
+  };
+
+  const handleImageLibrary = async() => {
+    const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+    const pickedImage = new Image(null, selectedProject.id, image.uri);
+    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    toggleImagePickerModalVisible();
+  };
 
   const getHandlerForBtn = (btnName) => {
     switch (btnName) {
@@ -221,12 +247,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
       <ScrollView horizontal style={styles.photosScrollView}>
         <View style={styles.photosImagePicker}>
           <KnitCountImagePicker
-            projectId={selectedProject && selectedProject.id ? selectedProject.id : null}
             mainColor={AppSettingsStore.mainColor}
             mainTextColor={AppSettingsStore.mainTextColor}
-            onImageTaken={(image) => {
-              ProjectsStore.setImagesForSelectedProject([image, ...toJS(selectedProject.images)]);
-            }}
+            onPress={toggleImagePickerModalVisible}
           />
         </View>
         {renderImageCards()}
@@ -313,7 +336,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
                 setName(e);
                 ProjectsStore.setNameForSelectedProject(e)
               }}
-              projectId={selectedProject && selectedProject.id}
             />
           )
         }
@@ -323,10 +345,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
             <KnitCountDeleteModal
               isVisible={isDeleteModalVisible}
               onBackdropPress={toggleDeleteModalVisible}
-              projectId={selectedProject && selectedProject.id}
               onDeleteProject={() => {
+                ProjectsStore.deleteProjectById(selectedProject.id);
                 setSelectedProject(null);
-                ProjectsStore.setSelectedProject(null);
                 navigation.popToTop();
               }}
             />
@@ -341,9 +362,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               onBackdropPress={toggleImageModalVisible}
               selectedImage={selectedImage}
               onRemoveImage={(i) => {
+                ProjectsStore.deleteImageFromProjectById(selectedProject.id, i.id);
                 ProjectsStore.setImagesForSelectedProject(toJS(selectedProject.images).filter(image => image.id !== i.id));
               }}
-              projectId={selectedProject && selectedProject.id}
             />
           )
         }
@@ -368,6 +389,15 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               }}
             />
           )
+        }
+
+        {
+          <KnitCountImagePickerModal
+            isVisible={isImagePickerModalVisible}
+            onBackdropPress={toggleImagePickerModalVisible}
+            onCameraChosen={handleCamera}
+            onImageLibraryChosen={handleImageLibrary}
+          />
         }
       </SafeAreaView>
     </KeyboardAvoidingView>
