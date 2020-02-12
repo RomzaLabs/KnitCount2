@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -7,18 +7,21 @@ import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 import {NavigationActions} from "react-navigation";
 
-const AddCounterScreen = (props) => {
+const AddCounterScreen = observer((props) => {
   return (
-    <View>
-      <Text>Add Counter</Text>
-      <Button
-        color={AppSettingsStore.mainColor}
-        title="Preset"
-        onPress={() => props.navigation.navigate("ProjectDetails")}
-      />
-    </View>
+    <KeyboardAvoidingView
+      behavior='padding'
+      keyboardVerticalOffset={50}
+      style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
+    >
+      <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
+        <View style={styles.titleContainer}>
+          <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>Add A Counter</Text>
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
-};
+});
 
 AddCounterScreen.navigationOptions = (navData) => {
   return (
@@ -48,4 +51,20 @@ AddCounterScreen.navigationOptions = (navData) => {
   );
 };
 
-export default observer(AddCounterScreen);
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1
+  },
+  titleContainer: {
+    margin: 12
+  },
+  title: {
+    fontFamily: "avenir-black",
+    fontSize: 32,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: {width: -1, height: 2},
+    textShadowRadius: 3
+  }
+});
+
+export default AddCounterScreen;
