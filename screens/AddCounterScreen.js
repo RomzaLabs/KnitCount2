@@ -83,8 +83,12 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: -1, height: 2},
     textShadowRadius: 3
   },
-  submitContainer: {},
-  saveContainer: {}
+  submitContainer: {
+    margin: 12
+  },
+  saveContainer: {
+    margin: 12
+  }
 });
 
 export default AddCounterScreen;
