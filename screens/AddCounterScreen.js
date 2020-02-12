@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet} from 'react-native';
+import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet, ScrollView} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -22,7 +22,7 @@ const AddCounterScreen = observer((props) => {
       keyboardVerticalOffset={50}
       style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
     >
-      <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
+      <ScrollView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
         <View style={styles.titleContainer}>
           <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>Add A Counter</Text>
         </View>
@@ -36,7 +36,7 @@ const AddCounterScreen = observer((props) => {
             />
           </View>
         </View>
-      </SafeAreaView>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 });
