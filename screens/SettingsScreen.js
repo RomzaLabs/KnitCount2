@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
 import AppSettingsStore from "../store/AppSettingsStore";
-import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
+import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
 import SECTION_SETTINGS, {SECTION_SETTINGS_DATA} from "../constants/SECTION_SETTINGS";
 
 const SettingsScreen = observer((props) => {

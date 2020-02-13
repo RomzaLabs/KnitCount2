@@ -19,10 +19,10 @@ import * as ImagePicker from 'expo-image-picker';
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 import Image from "../models/Image";
-import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
-import KnitCountImageButton from "../components/KnitCountImageButton";
-import KnitCountCounterAddButton from "../components/KnitCountCounterAddButton";
-import KnitCountCounterButton from "../components/KnitCountCounterButton";
+import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
+import KnitCountImageButton from "../components/buttons/KnitCountImageButton";
+import KnitCountCounterAddButton from "../components/buttons/KnitCountCounterAddButton";
+import KnitCountCounterButton from "../components/buttons/KnitCountCounterButton";
 
 import KnitCountFinishedModal from "../components/modals/KnitCountFinishedModal";
 import KnitCountUpdateTitleModal from "../components/modals/KnitCountUpdateTitleModal";
@@ -39,8 +39,8 @@ import
     UPDATE_TITLE_BTN_ID,
     DELETE_PROJECT_BTN_ID
   } from "../constants/SECTION_DETAILS";
-import KnitCountActionButton from "../components/KnitCountActionButton";
-import KnitCountDestructiveButton from "../components/KnitCountDestructiveButton";
+import KnitCountActionButton from "../components/buttons/KnitCountActionButton";
+import KnitCountDestructiveButton from "../components/buttons/KnitCountDestructiveButton";
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 

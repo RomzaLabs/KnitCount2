@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import KnitCountActionButton from "../KnitCountActionButton";
-import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
+import KnitCountActionButton from "../buttons/KnitCountActionButton";
+import KnitCountDestructiveButton from "../buttons/KnitCountDestructiveButton";
 
 const KnitCountCounterModal = (props) => {
   const [counterLabel, setCounterLabel] = useState(props.counter.label);

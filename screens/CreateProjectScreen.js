@@ -4,7 +4,7 @@ import { NavigationActions } from 'react-navigation';
 import { observer } from "mobx-react";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
-import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
+import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
 import AppSettingsStore from "../store/AppSettingsStore";
 import Project from "../models/Project";
 import ProjectsStore from "../store/ProjectsStore";

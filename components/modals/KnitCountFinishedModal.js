@@ -6,7 +6,7 @@ import Confetti from 'reanimated-confetti';
 
 import AppSettingsStore from "../../store/AppSettingsStore";
 import KnitCountProjectCard from "../KnitCountProjectCard";
-import KnitCountActionButton from "../KnitCountActionButton";
+import KnitCountActionButton from "../buttons/KnitCountActionButton";
 
 const KnitCountFinishedModal = (props) => {
   return (
