@@ -1,17 +1,54 @@
 import React from 'react';
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet} from 'react-native';
 import { observer } from "mobx-react";
-import AppSettingsStore from "../store/AppSettingsStore";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
-import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
 
-const SettingsScreen = (props) => {
+import AppSettingsStore from "../store/AppSettingsStore";
+import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
+import SECTION_SETTINGS, {SECTION_SETTINGS_DATA} from "../constants/SECTION_SETTINGS";
+
+const SettingsScreen = observer((props) => {
+
+  const renderSectionHeader = (title, fontColor) => {
+    return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
+  };
+
+  const renderPremium = () => {
+    return <View><Text>TODO: Premium</Text></View>;
+  };
+
+  const renderAppColor = () => {
+    return <View><Text>TODO: App Color</Text></View>;
+  };
+
+  const renderGeneral = (item) => {
+    return <View><Text>TODO: General: {item}</Text></View>;
+  };
+
+  const renderAppVersion = () => {
+    return <View><Text>TODO: Version</Text></View>;
+  };
+
   return (
-    <View>
-      <Text>Settings</Text>
-    </View>
+    <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}>
+      <SectionList
+        style={[styles.settingsList, {backgroundColor: AppSettingsStore.mainColor}]}
+        sections={SECTION_SETTINGS_DATA}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({ section, item }) => {
+          switch (section.key) {
+            case SECTION_SETTINGS.PREMIUM.key: return renderPremium();
+            case SECTION_SETTINGS.APP_COLOR.key: return renderAppColor();
+            case SECTION_SETTINGS.GENERAL.key: return renderGeneral(item);
+            case SECTION_SETTINGS.APP_VERSION.key: return renderAppVersion();
+            default: return null;
+          }
+        }}
+        renderSectionHeader={({ section: { title } }) => renderSectionHeader(title, AppSettingsStore.mainTextColor)}
+      />
+    </SafeAreaView>
   );
-};
+});
 
 SettingsScreen.navigationOptions = (navData) => {
   return (
@@ -36,4 +73,19 @@ SettingsScreen.navigationOptions = (navData) => {
   );
 };
 
-export default observer(SettingsScreen);
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1
+  },
+  settingsList: {
+    margin: 12
+  },
+  header: {
+    fontSize: 16,
+    marginHorizontal: 12,
+    fontFamily: "avenir-roman",
+    textTransform: "uppercase"
+  }
+});
+
+export default SettingsScreen;
