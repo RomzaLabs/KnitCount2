@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -23,11 +23,44 @@ const AddCounterScreen = observer((props) => {
       style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
     >
       <ScrollView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
-        <View style={styles.titleContainer}>
+        <View style={styles.container}>
           <Text style={[styles.title, {color: AppSettingsStore.mainTextColor}]}>Add A Counter</Text>
         </View>
-        <View style={styles.submitContainer}>
-          <View style={styles.saveContainer}>
+
+        <View style={styles.container}>
+          <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
+            Create your own
+          </Text>
+          <View>
+            <TextInput
+              style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
+              placeholder="Enter counter label"
+              value={customName}
+              onChangeText={(e) => {
+                setCustomName(e);
+                const newCounter = {...counter, label: e};
+                setCounter(newCounter);
+                setDisabled(false);
+              }}
+            />
+          </View>
+
+        </View>
+
+        <View style={styles.container}>
+          <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
+            Or choose a preset
+          </Text>
+        </View>
+
+        <View style={styles.container}>
+          <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
+            Steps per count
+          </Text>
+        </View>
+
+        <View style={styles.container}>
+          <View style={styles.container}>
             <KnitCountActionButton
               label="Save"
               onPress={async() => {
@@ -83,7 +116,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1
   },
-  titleContainer: {
+  container: {
     margin: 12
   },
   title: {
@@ -93,10 +126,17 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: -1, height: 2},
     textShadowRadius: 3
   },
-  submitContainer: {
-    margin: 12
+  header: {
+    fontSize: 16,
+    marginHorizontal: 12,
+    fontFamily: "avenir-roman",
+    textTransform: "uppercase"
   },
-  saveContainer: {
+  input: {
+    fontFamily: "avenir-roman",
+    fontSize: 16,
+    padding: 8,
+    borderRadius: 5,
     margin: 12
   }
 });
