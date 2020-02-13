@@ -121,17 +121,21 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
   const handleCamera = async() => {
     const image = await ImagePicker.launchCameraAsync(imagePickerOptions);
-    const pickedImage = new Image(null, selectedProject.id, image.uri);
-    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
-    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    if (image.uri) {
+      const pickedImage = new Image(null, selectedProject.id, image.uri);
+      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+      ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    }
     toggleImagePickerModalVisible();
   };
 
   const handleImageLibrary = async() => {
     const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
-    const pickedImage = new Image(null, selectedProject.id, image.uri);
-    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
-    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    if (image.uri) {
+      const pickedImage = new Image(null, selectedProject.id, image.uri);
+      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+      ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    }
     toggleImagePickerModalVisible();
   };
 
