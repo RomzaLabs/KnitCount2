@@ -30,7 +30,16 @@ const AddCounterScreen = observer((props) => {
           <View style={styles.saveContainer}>
             <KnitCountActionButton
               label="Save"
-              onPress={() => console.log("TODO: Save me")}
+              onPress={async() => {
+                const dbResult = await ProjectsStore.saveCounter(projectId, counter);
+                const insertedCounter = {...counter, id: dbResult.insertId};
+                ProjectsStore.appendCounterToSelectedProject(insertedCounter);
+                props.navigation.navigate(
+                  "Main",
+                  {},
+                  NavigationActions.navigate({ routeName: "ProjectDetails" })
+                );
+              }}
               bgColor={AppSettingsStore.mainTextColor}
               textColor={AppSettingsStore.mainColor}
               disabled={disabled}

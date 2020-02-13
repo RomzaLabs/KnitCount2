@@ -8,6 +8,7 @@ import {
   deleteProject,
   insertImage,
   deleteImage,
+  insertCounter,
   updateCounter,
   deleteCounter
 } from "../store/projectsDbHelper";
@@ -86,8 +87,8 @@ class ProjectsStore {
     });
   };
 
-  @action deleteCounter = async(counter) => {
-    await deleteCounter(counter.id);
+  @action deleteCounter = (counter) => {
+    deleteCounter(counter.id);
     const newCounters = this.selectedProject.counters.filter(c => c.id !== counter.id);
     this.setCountersForSelectedProject(newCounters);
   };
@@ -124,6 +125,14 @@ class ProjectsStore {
     }
   };
 
+  @action appendCounterToSelectedProject = (counter) => {
+    if (this.selectedProject) {
+      this.selectedProject = {...this.selectedProject, counters: [...this.selectedProject.counters, counter]};
+      this.updateSelectedProjectInProjects();
+      this.saveSelectedProject();
+    }
+  };
+
   @action updateSelectedProjectInProjects = () => {
     if (this.selectedProject) {
       const exists = this.projects.find(p => p.id === this.selectedProject.id);
@@ -150,7 +159,11 @@ class ProjectsStore {
 
   @action saveImage = (projectId, image) => {
     insertImage(projectId, image);
-  }
+  };
+
+  @action saveCounter = (projectId, counter) => {
+    return insertCounter(projectId, counter);
+  };
 
 }
 
