@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput} from 'react-native';
+import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput, TouchableWithoutFeedback} from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -9,6 +9,8 @@ import {NavigationActions} from "react-navigation";
 import Counter from "../models/Counter";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountActionButton from "../components/KnitCountActionButton";
+import KnitCountPresetButton from "../components/KnitCountPresetButton";
+import {PRESET_COUNTERS} from "../models/Counter";
 
 const AddCounterScreen = observer((props) => {
   const projectId = ProjectsStore.selectedProject.id;
@@ -51,6 +53,31 @@ const AddCounterScreen = observer((props) => {
           <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
             Or choose a preset
           </Text>
+        </View>
+        <View style={styles.cellContainer}>
+          {
+            PRESET_COUNTERS.map((counter, idx) => {
+              return (
+                <KnitCountPresetButton
+                  key={idx}
+                  onPress={async() => {
+                    const newCounter = {...counter, projectId};
+                    const dbResult = await ProjectsStore.saveCounter(projectId, newCounter);
+                    const insertedCounter = {...newCounter, id: dbResult.insertId};
+                    ProjectsStore.appendCounterToSelectedProject(insertedCounter);
+                    props.navigation.navigate(
+                      "Main",
+                      {},
+                      NavigationActions.navigate({ routeName: "ProjectDetails" })
+                    );
+                  }}
+                  label={counter.label}
+                  textColor={AppSettingsStore.mainTextColor}
+                  bgColor={AppSettingsStore.mainBGColor}
+                />
+              );
+            })
+          }
         </View>
 
         <View style={styles.container}>
@@ -118,6 +145,10 @@ const styles = StyleSheet.create({
   },
   container: {
     margin: 12
+  },
+  cellContainer: {
+    marginLeft: 12,
+    marginBottom: 12
   },
   title: {
     fontFamily: "avenir-black",
