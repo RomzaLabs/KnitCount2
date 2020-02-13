@@ -60,7 +60,7 @@ const AddCounterScreen = observer((props) => {
               minValue={1}
               maxValue={50}
               stepValue={1}
-              height={35}
+              height={50}
               width={"100%"}
               buttonsTextColor={AppSettingsStore.mainTextColor}
               buttonsBackgroundColor={AppSettingsStore.mainColor}
@@ -87,16 +87,11 @@ const AddCounterScreen = observer((props) => {
               return (
                 <KnitCountPresetButton
                   key={idx}
-                  onPress={async() => {
-                    const newCounter = {...counter, projectId};
-                    const dbResult = await ProjectsStore.saveCounter(projectId, newCounter);
-                    const insertedCounter = {...newCounter, id: dbResult.insertId};
-                    ProjectsStore.appendCounterToSelectedProject(insertedCounter);
-                    props.navigation.navigate(
-                      "Main",
-                      {},
-                      NavigationActions.navigate({ routeName: "ProjectDetails" })
-                    );
+                  onPress={() => {
+                    const newCounter = {...counter, projectId, stepsPerCount};
+                    setCounter(newCounter);
+                    setCustomName(newCounter.label);
+                    setDisabled(false);
                   }}
                   label={counter.label}
                   textColor={AppSettingsStore.mainTextColor}
