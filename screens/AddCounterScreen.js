@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Button, SafeAreaView, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput, TouchableWithoutFeedback} from 'react-native';
 import { observer } from "mobx-react";
+import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
@@ -17,6 +18,7 @@ const AddCounterScreen = observer((props) => {
   const [counter, setCounter] = useState(new Counter(null, projectId, ""));
   const [customName, setCustomName] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [stepsPerCount, setStepsPerCount] = useState(1);
 
   return (
     <KeyboardAvoidingView
@@ -84,6 +86,26 @@ const AddCounterScreen = observer((props) => {
           <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
             Steps per count
           </Text>
+          <View style={styles.container}>
+            <RNNumberStepper
+              value={stepsPerCount}
+              minValue={1}
+              maxValue={50}
+              stepValue={1}
+              height={35}
+              width={"100%"}
+              buttonsTextColor={AppSettingsStore.mainTextColor}
+              buttonsBackgroundColor={AppSettingsStore.mainColor}
+              labelTextColor={AppSettingsStore.mainTextColor}
+              labelBackgroundColor={AppSettingsStore.mainBGColor}
+              cornorRadius={5}
+              onChange={(e) => {
+                setStepsPerCount(e);
+                const newCounter = {...counter, stepsPerCount: e};
+                setCounter(newCounter);
+              }}
+            />
+          </View>
         </View>
 
         <View style={styles.container}>
