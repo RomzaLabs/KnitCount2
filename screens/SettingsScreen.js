@@ -5,7 +5,13 @@ import {HeaderButtons, Item} from "react-navigation-header-buttons";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
-import SECTION_SETTINGS, {SECTION_SETTINGS_DATA} from "../constants/SECTION_SETTINGS";
+import SECTION_SETTINGS, {
+  INSTAGRAM, RATE,
+  SECTION_SETTINGS_DATA,
+  SEND_FEEDBACK,
+  TUTORIAL
+} from "../constants/SECTION_SETTINGS";
+import KnitCountPresetButton from "../components/buttons/KnitCountPresetButton";
 
 const SettingsScreen = observer((props) => {
 
@@ -14,19 +20,65 @@ const SettingsScreen = observer((props) => {
   };
 
   const renderPremium = () => {
-    return <View><Text>TODO: Premium</Text></View>;
+    // TODO: Make a more generic "KnitCountPresetButton" with option to hide chevron and add icon
+    return (
+      <View>
+        <KnitCountPresetButton
+          onPress={() => console.log("Unlock Premium")}
+          label="Unlock Premium"
+          textColor={AppSettingsStore.mainTextColor}
+          bgColor={AppSettingsStore.mainBGColor}
+        />
+      </View>
+    );
   };
 
   const renderAppColor = () => {
-    return <View><Text>TODO: App Color</Text></View>;
+    return <View><Text>TODO: App Color ScrollView</Text></View>;
   };
 
   const renderGeneral = (item) => {
-    return <View><Text>TODO: General: {item}</Text></View>;
+    let label;
+    switch (item) {
+      case SEND_FEEDBACK:
+        label = "Send Feedback";
+        break;
+      case TUTORIAL:
+        label = "Tutorial";
+        break;
+      case INSTAGRAM:
+        label = "Instagram";
+        break;
+      case RATE:
+      default:
+        label = "Rate KnitCount";
+    }
+
+    return (
+      <View>
+        <KnitCountPresetButton
+          onPress={() => console.log(`TODO: Handle action for ${item}`)}
+          label={label}
+          textColor={AppSettingsStore.mainTextColor}
+          bgColor={AppSettingsStore.mainBGColor}
+        />
+      </View>
+    );
   };
 
   const renderAppVersion = () => {
-    return <View><Text>TODO: Version</Text></View>;
+    // TODO: Get app version
+    const version = "1.0.0";
+    return (
+      <View>
+        <KnitCountPresetButton
+          onPress={() => {}}
+          label={`KnitCount ${version}`}
+          textColor={AppSettingsStore.mainTextColor}
+          bgColor={AppSettingsStore.mainBGColor}
+        />
+      </View>
+    );
   };
 
   return (
@@ -78,13 +130,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   settingsList: {
-    margin: 12
+    marginLeft: 12
   },
   header: {
     fontSize: 16,
     marginHorizontal: 12,
+    marginTop: 24,
     fontFamily: "avenir-roman",
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   }
 });
 
