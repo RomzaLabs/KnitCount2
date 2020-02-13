@@ -167,7 +167,7 @@ const insertCounters = async(projectId, counters) => {
   }
 };
 
-const insertCounter = (projectId, counter) => {
+export const insertCounter = (projectId, counter) => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(

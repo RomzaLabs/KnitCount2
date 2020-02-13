@@ -1,13 +1,15 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import PropTypes from "prop-types";
 
 const KnitCountActionButton = (props) => {
   let ButtonComponent = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) ButtonComponent = TouchableNativeFeedback;
+  const disabled = props.disabled ? props.disabled : false;
 
   return (
-    <View style={styles.buttonContainer}>
-      <ButtonComponent onPress={props.onPress}>
+    <View style={[styles.buttonContainer, {opacity: disabled ? 0.5 : 1}]}>
+      <ButtonComponent disabled={disabled} onPress={props.onPress}>
         <View style={[styles.button, {backgroundColor: props.bgColor}]}>
           <Text style={[styles.buttonText, {color: props.textColor}]}>
             {props.label}
@@ -16,6 +18,14 @@ const KnitCountActionButton = (props) => {
       </ButtonComponent>
     </View>
   );
+};
+
+KnitCountActionButton.propTypes = {
+  label: PropTypes.string.isRequired,
+  onPress: PropTypes.func.isRequired,
+  bgColor: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
+  disabled: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

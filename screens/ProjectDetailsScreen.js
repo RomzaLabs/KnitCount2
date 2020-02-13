@@ -50,7 +50,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [selectedProject, setSelectedProject] = useState(ProjectsStore.selectedProject);
 
   const [name, setName] = useState('');
-  const [counters, setCounters] = useState([]);
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState(ProjectStatus.WIP);
 
@@ -63,10 +62,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
   const [isImagePickerModalVisible, setIsImagePickerModalVisible] = useState(false);
-
-  useEffect(() => {
-    setCounters(toJS(ProjectsStore.selectedProject.counters));
-  }, []);
 
   useEffect(() => {
     setSelectedProject(ProjectsStore.selectedProject);
@@ -121,17 +116,21 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
   const handleCamera = async() => {
     const image = await ImagePicker.launchCameraAsync(imagePickerOptions);
-    const pickedImage = new Image(null, selectedProject.id, image.uri);
-    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
-    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    if (image.uri) {
+      const pickedImage = new Image(null, selectedProject.id, image.uri);
+      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+      ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    }
     toggleImagePickerModalVisible();
   };
 
   const handleImageLibrary = async() => {
     const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
-    const pickedImage = new Image(null, selectedProject.id, image.uri);
-    ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
-    ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    if (image.uri) {
+      const pickedImage = new Image(null, selectedProject.id, image.uri);
+      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+      ProjectsStore.saveImage(selectedProject.id, pickedImage);
+    }
     toggleImagePickerModalVisible();
   };
 
@@ -191,7 +190,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
       }
 
       if (!ProjectsStore.selectedProject) return null;
-      const counter = toJS(ProjectsStore.selectedProject.counters.find(counter => counter.id === counterId));
+      const counter = toJS(ProjectsStore.selectedProject.counters).find(counter => counter.id === counterId);
       if (!counter) return null;
       return (
         <View style={styles.gridItem}>
@@ -201,7 +200,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
             mainBGColor={AppSettingsStore.mainBGColor}
             counter={counter}
             onCounterChanged={(updatedCounter) => {
-              const newCounters = counters.map(c => {
+              const newCounters = toJS(ProjectsStore.selectedProject.counters).map(c => {
                 if (c.id === updatedCounter.id) return updatedCounter;
                 return c;
               });
@@ -215,7 +214,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     };
 
     const addButtonData = {id: ADD_BUTTON_ID};
-    const counterGridData = [addButtonData, ...counters];
+    const counterGridData = [addButtonData, ...toJS(ProjectsStore.selectedProject.counters)];
     return (
       <FlatList
         style={styles.countersSectionContainer}
@@ -377,15 +376,13 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               onBackdropPress={toggleCounterModalVisible}
               counter={selectedCounter}
               onCounterChanged={(updatedCounter) => {
-                const newCounters = counters.map(c => {
+                const newCounters = toJS(ProjectsStore.selectedProject.counters).map(c => {
                   if (c.id === updatedCounter.id) return updatedCounter;
                   return c;
                 });
                 ProjectsStore.setCountersForSelectedProject(newCounters);
               }}
               onCounterDeleted={(counter) => {
-                const newCounters = counters.filter(c => c.id !== counter.id);
-                setCounters(newCounters);
                 ProjectsStore.deleteCounter(counter);
               }}
             />
