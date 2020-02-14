@@ -76,6 +76,7 @@ const SettingsScreen = observer((props) => {
           label={`KnitCount ${version}`}
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
+          hideChevron={true}
         />
       </View>
     );
