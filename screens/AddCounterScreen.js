@@ -10,7 +10,7 @@ import {NavigationActions} from "react-navigation";
 import Counter from "../models/Counter";
 import ProjectsStore from "../store/ProjectsStore";
 import KnitCountActionButton from "../components/buttons/KnitCountActionButton";
-import KnitCountPresetButton from "../components/buttons/KnitCountPresetButton";
+import KnitCountListButton from "../components/buttons/KnitCountListButton";
 import {PRESET_COUNTERS} from "../models/Counter";
 
 const AddCounterScreen = observer((props) => {
@@ -85,7 +85,7 @@ const AddCounterScreen = observer((props) => {
           {
             PRESET_COUNTERS.map((counter, idx) => {
               return (
-                <KnitCountPresetButton
+                <KnitCountListButton
                   key={idx}
                   onPress={() => {
                     const newCounter = {...counter, projectId, stepsPerCount};

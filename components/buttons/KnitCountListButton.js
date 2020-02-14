@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import PropTypes from "prop-types";
 import {Ionicons} from "@expo/vector-icons";
 
-const KnitCountPresetButton = (props) => {
+const KnitCountListButton = (props) => {
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={[styles.presetCell, {borderColor: props.bgColor}]}>
@@ -18,7 +18,7 @@ const KnitCountPresetButton = (props) => {
   );
 };
 
-KnitCountPresetButton.propTypes = {
+KnitCountListButton.propTypes = {
   onPress: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   textColor: PropTypes.string.isRequired,
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default KnitCountPresetButton;
+export default KnitCountListButton;

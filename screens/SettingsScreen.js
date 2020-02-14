@@ -11,7 +11,7 @@ import SECTION_SETTINGS, {
   SEND_FEEDBACK,
   TUTORIAL
 } from "../constants/SECTION_SETTINGS";
-import KnitCountPresetButton from "../components/buttons/KnitCountPresetButton";
+import KnitCountListButton from "../components/buttons/KnitCountListButton";
 
 const SettingsScreen = observer((props) => {
 
@@ -23,7 +23,7 @@ const SettingsScreen = observer((props) => {
     // TODO: Make a more generic "KnitCountPresetButton" with option to hide chevron and add icon
     return (
       <View>
-        <KnitCountPresetButton
+        <KnitCountListButton
           onPress={() => console.log("Unlock Premium")}
           label="Unlock Premium"
           textColor={AppSettingsStore.mainTextColor}
@@ -56,7 +56,7 @@ const SettingsScreen = observer((props) => {
 
     return (
       <View>
-        <KnitCountPresetButton
+        <KnitCountListButton
           onPress={() => console.log(`TODO: Handle action for ${item}`)}
           label={label}
           textColor={AppSettingsStore.mainTextColor}
@@ -71,7 +71,7 @@ const SettingsScreen = observer((props) => {
     const version = "1.0.0";
     return (
       <View>
-        <KnitCountPresetButton
+        <KnitCountListButton
           onPress={() => {}}
           label={`KnitCount ${version}`}
           textColor={AppSettingsStore.mainTextColor}
