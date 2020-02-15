@@ -20,7 +20,6 @@ const SettingsScreen = observer((props) => {
   };
 
   const renderPremium = () => {
-    // TODO: Make a more generic "KnitCountPresetButton" with option to hide chevron and add icon
     return (
       <View>
         <KnitCountListButton
@@ -28,6 +27,7 @@ const SettingsScreen = observer((props) => {
           label="Unlock Premium"
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
+          iconName={Platform.OS === "android" ? "md-star" : "ios-star"}
         />
       </View>
     );
@@ -39,19 +39,24 @@ const SettingsScreen = observer((props) => {
 
   const renderGeneral = (item) => {
     let label;
+    let iconName;
     switch (item) {
       case SEND_FEEDBACK:
         label = "Send Feedback";
+        iconName = Platform.OS === "android" ? "md-at" : "ios-at";
         break;
       case TUTORIAL:
         label = "Tutorial";
+        iconName = Platform.OS === "android" ? "md-school" : "ios-school";
         break;
       case INSTAGRAM:
         label = "Instagram";
+        iconName = "logo-instagram";
         break;
       case RATE:
       default:
         label = "Rate KnitCount";
+        iconName = Platform.OS === "android" ? "md-heart" : "ios-heart";
     }
 
     return (
@@ -61,6 +66,7 @@ const SettingsScreen = observer((props) => {
           label={label}
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
+          iconName={iconName}
         />
       </View>
     );
