@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet} from 'react-native';
 import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
+import Constants from 'expo-constants';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
@@ -73,8 +74,7 @@ const SettingsScreen = observer((props) => {
   };
 
   const renderAppVersion = () => {
-    // TODO: Get app version
-    const version = "1.0.0";
+    const version = Constants.manifest.version;
     return (
       <View>
         <KnitCountListButton
