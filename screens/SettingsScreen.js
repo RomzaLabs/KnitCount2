@@ -38,7 +38,13 @@ const SettingsScreen = observer((props) => {
 
   const renderAppColor = () => {
 
-    const onColorPress = (color) => AppSettingsStore.setColor(color);
+    const onColorPress = (color) => {
+      AppSettingsStore.setColor(color);
+      props.navigation.setParams({
+        mainColor: AppSettingsStore.mainColor,
+        mainTextColor: AppSettingsStore.mainTextColor
+      });
+    };
 
     const renderColorCircles = () => {
       const supportedColors = [
@@ -133,6 +139,8 @@ const SettingsScreen = observer((props) => {
 });
 
 SettingsScreen.navigationOptions = (navData) => {
+  const mainColor = navData.navigation.getParam("mainColor");
+  const mainTextColor = navData.navigation.getParam("mainTextColor");
   return (
     {
       headerLeft: () => {
@@ -146,10 +154,10 @@ SettingsScreen.navigationOptions = (navData) => {
           </HeaderButtons>
         );
       },
-      headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: AppSettingsStore.mainColor },
-      headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: AppSettingsStore.mainTextColor },
-      headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: AppSettingsStore.mainTextColor },
-      headerTintColor: AppSettingsStore.mainTextColor,
+      headerStyle: { ...navData.navigationOptions.headerStyle, backgroundColor: mainColor },
+      headerTitleStyle: { ...navData.navigationOptions.headerTitleStyle, color: mainTextColor },
+      headerBackTitleStyle: { ...navData.navigationOptions.headerBackTitleStyle, color: mainTextColor },
+      headerTintColor: mainTextColor,
       gestureDirection: "horizontal-inverted"
     }
   );
