@@ -2,6 +2,7 @@ import React from 'react';
 import { ImageBackground, Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 
 import Card from "./Card";
+import AppSettingsStore from "../store/AppSettingsStore";
 
 const KnitCountProjectCard = (props) => {
   let TouchableCmp = TouchableOpacity;
@@ -15,7 +16,8 @@ const KnitCountProjectCard = (props) => {
             <View>
               <ImageBackground
                 source={props.image ? {uri: props.image.imageUri} : require('../assets/ProjectPlaceholder.png')}
-                style={styles.bgImageContainer}
+                style={[styles.bgImageContainer, {backgroundColor: AppSettingsStore.mainColor}]}
+                imageStyle={styles.image}
               >
                 <View style={styles.titleContainer}>
                   <Text style={[styles.title, {color: props.textColor}]} numberOfLines={2}>
@@ -52,6 +54,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: "space-between"
+  },
+  image: {
+    margin: 20,
+    resizeMode: "contain"
   },
   titleContainer: {
     padding: 12
