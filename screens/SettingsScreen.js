@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet, ScrollView} from 'react-native';
 import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
@@ -17,6 +17,13 @@ import Colors from "../constants/Colors";
 import KnitCountColorButton from "../components/buttons/KnitCountColorButton";
 
 const SettingsScreen = observer((props) => {
+
+  useEffect(() => {
+    props.navigation.setParams({
+      mainColor: AppSettingsStore.mainColor,
+      mainTextColor: AppSettingsStore.mainTextColor
+    });
+  }, []);
 
   const renderSectionHeader = (title, fontColor) => {
     return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
