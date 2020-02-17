@@ -8,8 +8,8 @@ import Modal from "react-native-modal";
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
 
-import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
-import KnitCountAddButton from "../components/KnitCountAddButton";
+import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
+import KnitCountAddButton from "../components/buttons/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
 import {ProjectStatus} from "../models/ProjectStatus";
 import {FilterPreference} from "../models/FilterPreference";

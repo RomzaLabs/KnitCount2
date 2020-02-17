@@ -4,8 +4,8 @@ import Modal from "react-native-modal";
 import PropTypes from "prop-types";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import KnitCountActionButton from "../KnitCountActionButton";
-import KnitCountDestructiveButton from "../KnitCountDestructiveButton";
+import KnitCountActionButton from "../buttons/KnitCountActionButton";
+import KnitCountDestructiveButton from "../buttons/KnitCountDestructiveButton";
 
 const KnitCountDeleteModal = (props) => {
   return (

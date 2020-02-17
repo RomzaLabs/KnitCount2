@@ -6,8 +6,7 @@
     "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -24,7 +23,17 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.romzalabs.knitcount",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.romzalabs.knitcount",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     }
   }
 }

@@ -5,12 +5,12 @@ import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
-import KnitCountHeaderButton from "../components/KnitCountHeaderButton";
+import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
 import {NavigationActions} from "react-navigation";
 import Counter from "../models/Counter";
 import ProjectsStore from "../store/ProjectsStore";
-import KnitCountActionButton from "../components/KnitCountActionButton";
-import KnitCountPresetButton from "../components/KnitCountPresetButton";
+import KnitCountActionButton from "../components/buttons/KnitCountActionButton";
+import KnitCountListButton from "../components/buttons/KnitCountListButton";
 import {PRESET_COUNTERS} from "../models/Counter";
 
 const AddCounterScreen = observer((props) => {
@@ -85,7 +85,7 @@ const AddCounterScreen = observer((props) => {
           {
             PRESET_COUNTERS.map((counter, idx) => {
               return (
-                <KnitCountPresetButton
+                <KnitCountListButton
                   key={idx}
                   onPress={() => {
                     const newCounter = {...counter, projectId, stepsPerCount};

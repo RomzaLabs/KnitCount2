@@ -4,7 +4,7 @@ import Modal from "react-native-modal";
 import PropTypes from "prop-types";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
-import KnitCountActionButton from "../KnitCountActionButton";
+import KnitCountActionButton from "../buttons/KnitCountActionButton";
 import * as Permissions from "expo-permissions";
 
 const KnitCountImagePickerModal = (props) => {
