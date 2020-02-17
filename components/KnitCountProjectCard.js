@@ -17,7 +17,7 @@ const KnitCountProjectCard = (props) => {
               <ImageBackground
                 source={props.image ? {uri: props.image.imageUri} : require('../assets/ProjectPlaceholder.png')}
                 style={[styles.bgImageContainer, {backgroundColor: AppSettingsStore.mainColor}]}
-                imageStyle={styles.image}
+                imageStyle={props.image ? styles.image : styles.imagePlaceholder}
               >
                 <View style={styles.titleContainer}>
                   <Text style={[styles.title, {color: props.textColor}]} numberOfLines={2}>
@@ -56,6 +56,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   image: {
+    resizeMode: "cover"
+  },
+  imagePlaceholder: {
     margin: 20,
     resizeMode: "contain"
   },
