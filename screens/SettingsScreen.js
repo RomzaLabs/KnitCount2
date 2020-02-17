@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet} from 'react-native';
+import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet, ScrollView} from 'react-native';
 import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import Constants from 'expo-constants';
@@ -13,6 +13,8 @@ import SECTION_SETTINGS, {
   TUTORIAL
 } from "../constants/SECTION_SETTINGS";
 import KnitCountListButton from "../components/buttons/KnitCountListButton";
+import Colors from "../constants/Colors";
+import KnitCountColorButton from "../components/buttons/KnitCountColorButton";
 
 const SettingsScreen = observer((props) => {
 
@@ -35,7 +37,28 @@ const SettingsScreen = observer((props) => {
   };
 
   const renderAppColor = () => {
-    return <View><Text>TODO: App Color ScrollView</Text></View>;
+
+    const onColorPress = (color) => AppSettingsStore.setColor(color);
+
+    const renderColorCircles = () => {
+      const supportedColors = [
+        Colors.clearChillColor,
+        Colors.watermelonColor,
+        Colors.brightGreekColor,
+        Colors.coralColor,
+        Colors.ufoColor
+      ];
+
+      return supportedColors.map((color, idx) => {
+        return <KnitCountColorButton key={idx} onPress={() => onColorPress(color)} color={color} />;
+      });
+    };
+
+    return (
+      <ScrollView horizontal style={styles.circlesScrollView}>
+        {renderColorCircles()}
+      </ScrollView>
+    );
   };
 
   const renderGeneral = (item) => {
@@ -145,6 +168,11 @@ const styles = StyleSheet.create({
     marginTop: 24,
     fontFamily: "avenir-roman",
     textTransform: "uppercase",
+  },
+  circlesScrollView: {
+    marginTop: 6,
+    marginBottom: 12,
+    marginHorizontal: 12
   }
 });
 

@@ -22,6 +22,53 @@ class AppSettingsStore {
     this.settings = settings;
   };
 
+  @action setColor = (color) => {
+    switch (color) {
+      case Colors.clearChillColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.clearChillColor,
+          mainTextColor: Colors.clearChillTextColor,
+          mainBGColor: Colors.clearChillBGColor
+        };
+        break;
+      case Colors.watermelonColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.watermelonColor,
+          mainTextColor: Colors.watermelonTextColor,
+          mainBGColor: Colors.watermelonBGColor
+        };
+        break;
+      case Colors.brightGreekColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.brightGreekColor,
+          mainTextColor: Colors.brightGreekTextColor,
+          mainBGColor: Colors.brightGreekBGColor
+        };
+        break;
+      case Colors.coralColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.coralColor,
+          mainTextColor: Colors.coralTextColor,
+          mainBGColor: Colors.coralBGColor
+        };
+        break;
+      case Colors.ufoColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.ufoColor,
+          mainTextColor: Colors.ufoTextColor,
+          mainBGColor: Colors.ufoBGColor
+        };
+        break;
+      default: break;
+    }
+    this.persistSettings();
+  };
+
   @action
   updateFilterPreference = (filterPreference) => {
     this.settings.filterPreference = filterPreference;
