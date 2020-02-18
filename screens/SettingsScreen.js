@@ -110,7 +110,7 @@ const SettingsScreen = observer((props) => {
   };
 
   const renderAppVersion = () => {
-    const version = Constants.manifest.version;
+    const version = Constants.nativeAppVersion;
     return (
       <View>
         <KnitCountListButton
