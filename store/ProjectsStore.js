@@ -10,7 +10,7 @@ import {
   deleteImage,
   insertCounter,
   updateCounter,
-  deleteCounter
+  deleteCounter, deleteCountersForProject, deleteImagesForProject
 } from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 
@@ -65,6 +65,8 @@ class ProjectsStore {
     this.projects = this.projects.filter(p => p.id !== projectId);
     this.selectedProject = null;
     deleteProject(projectId);
+    deleteCountersForProject(projectId);
+    deleteImagesForProject(projectId);
   };
 
   @action
