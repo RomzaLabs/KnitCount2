@@ -36,7 +36,6 @@ const KnitCountNumberStepper = (props) => {
           <View style={[styles.buttonSubContainer]}>
             <Text
               style={[styles.buttonLabelContainer, { color: buttonsTextColor }]}
-              adjustsFontSizeToFit={true}
               numberOfLines={1}
             >
               {label}
@@ -50,7 +49,7 @@ const KnitCountNumberStepper = (props) => {
   const renderLeftButton = () => {
     return renderButton({
       flex: 'left',
-      label: '-',
+      label: '−',
       onPress: () => {
         let newValue = value - stepValue;
         if (newValue < minValue) newValue = value;
@@ -113,8 +112,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: 160,
-    height: 40,
+    width: 200,
+    height: 50,
     borderWidth: 1
   },
   buttonContainer: {
@@ -131,8 +130,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
     fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "avenir-roman"
+    fontFamily: "avenir-black",
+    marginTop: 6
   },
   labelContainer: {
     flex: 1,
@@ -141,11 +140,11 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   valueStyle: {
+    marginTop: 6,
     textAlign: "center",
     textAlignVertical: "center",
-    fontWeight: "bold",
     fontSize: 16,
-    fontFamily: "avenir-roman"
+    fontFamily: "avenir-black"
   }
 });
 
