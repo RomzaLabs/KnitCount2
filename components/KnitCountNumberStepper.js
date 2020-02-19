@@ -4,9 +4,19 @@ import PropTypes from "prop-types";
 
 const KnitCountNumberStepper = (props) => {
   const [value, setValue] = useState(props.value);
+  let {
+    minValue,
+    maxValue,
+    stepValue,
+    buttonsTextColor,
+    buttonsBackgroundColor,
+    labelTextColor,
+    labelBackgroundColor,
+    cornerRadius,
+    onChange
+  } = props;
 
   const renderButton = ({ flex, label, onPress }) => {
-    let { buttonsBackgroundColor, cornerRadius, buttonsTextColor, buttonsContainerWidth } = props;
     return (
       <View
         style={
@@ -18,9 +28,8 @@ const KnitCountNumberStepper = (props) => {
               borderTopLeftRadius: flex === "left" ? cornerRadius : 0,
               borderBottomRightRadius: flex === "right" ? cornerRadius : 0,
               borderBottomLeftRadius: flex === "left" ? cornerRadius : 0,
-              width: buttonsContainerWidth
             }
-            ]
+          ]
         }
       >
         <TouchableOpacity onPress={onPress} style={{flex: 1}}>
@@ -39,7 +48,6 @@ const KnitCountNumberStepper = (props) => {
   };
 
   const renderLeftButton = () => {
-    let { stepValue, minValue, maxValue, onChange } = props;
     return renderButton({
       flex: 'left',
       label: '-',
@@ -53,7 +61,6 @@ const KnitCountNumberStepper = (props) => {
   };
 
   const renderRightButton = () => {
-    let { stepValue, minValue, maxValue, onChange } = props;
     return renderButton({
       flex: 'right',
       label: '+',
@@ -66,9 +73,25 @@ const KnitCountNumberStepper = (props) => {
     });
   };
 
+  const renderLabelContainer = () => {
+    return (
+      <View style={[styles.labelContainer, { backgroundColor: labelBackgroundColor }]}>
+        <Text
+          style={[styles.valueStyle, { color: labelTextColor }]}
+          adjustsFontSizeToFit={true}
+          numberOfLines={1}
+        >
+          {value.toString()}
+        </Text>
+      </View>
+    );
+  };
+
   return (
-    <View>
-      <Text style={{color: "red"}}>Hello World</Text>
+    <View style={[styles.container, { borderRadius: cornerRadius, borderColor: labelTextColor }]} >
+      {renderLeftButton()}
+      {renderLabelContainer()}
+      {renderRightButton()}
     </View>
   );
 };
@@ -89,22 +112,14 @@ KnitCountNumberStepper.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  containerSmall: {
-    width: 150,
-    height: 35
-  },
-  containerMedium: {
+    justifyContent: "space-between",
     width: 160,
-    height: 40
-  },
-  containerLarge: {
-    width: 170,
-    height: 45
+    height: 40,
+    borderWidth: 1
   },
   buttonContainer: {
-    height: "100%"
+    height: "100%",
+    width: 50
   },
   buttonSubContainer: {
     flex: 1,
@@ -116,7 +131,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
     fontSize: 24,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: "avenir-roman"
   },
   labelContainer: {
     flex: 1,
@@ -127,16 +143,9 @@ const styles = StyleSheet.create({
   valueStyle: {
     textAlign: "center",
     textAlignVertical: "center",
-    fontWeight: "bold"
-  },
-  valueStyleSmall: {
-    fontSize: 14
-  },
-  valueStyleMedium: {
-    fontSize: 16
-  },
-  valueStyleLarge: {
-    fontSize: 18
+    fontWeight: "bold",
+    fontSize: 16,
+    fontFamily: "avenir-roman"
   }
 });
 
