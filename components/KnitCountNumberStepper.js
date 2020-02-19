@@ -38,6 +38,34 @@ const KnitCountNumberStepper = (props) => {
     );
   };
 
+  const renderLeftButton = () => {
+    let { stepValue, minValue, maxValue, onChange } = props;
+    return renderButton({
+      flex: 'left',
+      label: '-',
+      onPress: () => {
+        let newValue = value - stepValue;
+        if (newValue < minValue) newValue = value;
+        setValue(newValue);
+        onChange(newValue);
+      }
+    });
+  };
+
+  const renderRightButton = () => {
+    let { stepValue, minValue, maxValue, onChange } = props;
+    return renderButton({
+      flex: 'right',
+      label: '+',
+      onPress: () => {
+        let newValue = value + stepValue;
+        if (newValue > maxValue) newValue = value;
+        setValue(newValue);
+        onChange(newValue);
+      }
+    });
+  };
+
   return (
     <View>
       <Text style={{color: "red"}}>Hello World</Text>
