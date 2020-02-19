@@ -17,6 +17,18 @@ import {FilterPreference} from "../models/FilterPreference";
 const MyProjectsScreen = observer((props) => {
   const [projects, setProjects] = useState([]);
   const [filterPreference, setFilterPreference] = useState(ProjectStatus.WIP);
+  const projectsRef = ProjectsStore.projects;
+
+  useEffect(() => {
+    const filteredProjects = ProjectsStore.projects
+      .filter(p => {
+        if (filterPreference === FilterPreference.WIP) return p.status === ProjectStatus.WIP;
+        if (filterPreference === FilterPreference.FO) return p.status === ProjectStatus.FO;
+        return true;
+      });
+    setProjects(filteredProjects);
+  }, [projectsRef]);
+
 
   useEffect(() => {
     setFilterPreference(AppSettingsStore.filterPreference);

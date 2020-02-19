@@ -1,16 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import Modal from "react-native-modal";
 import PropTypes from "prop-types";
-import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../../store/AppSettingsStore";
 import KnitCountActionButton from "../buttons/KnitCountActionButton";
 import KnitCountDestructiveButton from "../buttons/KnitCountDestructiveButton";
+import KnitCountNumberStepper from "../KnitCountNumberStepper";
 
 const KnitCountCounterModal = (props) => {
-  const [counterLabel, setCounterLabel] = useState(props.counter.label);
-  const [stepsPerCount, setStepsPerCount] = useState(props.counter.stepsPerCount);
+  const [counterLabel, setCounterLabel] = useState('');
+  const [stepsPerCount, setStepsPerCount] = useState(0);
+
+  useEffect(() => { setCounterLabel(props.counter.label) }, [props.counter.label]);
+  useEffect(() => { setStepsPerCount(props.counter.stepsPerCount) }, [props.counter.stepsPerCount]);
 
   return (
     <Modal isVisible={props.isVisible} onBackdropPress={props.onBackdropPress}>
@@ -44,19 +47,16 @@ const KnitCountCounterModal = (props) => {
               Steps per count
             </Text>
             <View style={styles.actionItem}>
-              <RNNumberStepper
+              <KnitCountNumberStepper
                 value={stepsPerCount}
                 minValue={1}
                 maxValue={50}
                 stepValue={1}
-                height={35}
-                width={"100%"}
                 buttonsTextColor={AppSettingsStore.mainTextColor}
                 buttonsBackgroundColor={AppSettingsStore.mainColor}
                 labelTextColor={AppSettingsStore.mainTextColor}
                 labelBackgroundColor={AppSettingsStore.mainBGColor}
-                borderColor={"red"}
-                cornorRadius={5}
+                cornerRadius={5}
                 onChange={(e) => {
                   setStepsPerCount(e);
                   const newCounter = {...props.counter, stepsPerCount: e};

@@ -6,6 +6,7 @@ import { TapGestureHandler, PanGestureHandler, LongPressGestureHandler, State } 
 const MAX_ZEROES = 5;
 
 const KnitCountCounterButton = (props) => {
+  const [value, setValue] = useState(props.counter.value);
   const [bounceAnim, setBounceAnim] = useState(new Animated.Value(1));
 
   useEffect(() => {
@@ -25,7 +26,8 @@ const KnitCountCounterButton = (props) => {
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
-      const newValue = props.counter.value + props.counter.stepsPerCount;
+      const newValue = value + props.counter.stepsPerCount;
+      setValue(newValue);
       const newCounter = {...props.counter, value: newValue};
       props.onCounterChanged(newCounter);
     }
@@ -38,7 +40,8 @@ const KnitCountCounterButton = (props) => {
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
-      const newValue = props.counter.value + props.counter.stepsPerCount;
+      const newValue = value + props.counter.stepsPerCount;
+      setValue(newValue);
       const newCounter = {...props.counter, value: newValue};
       props.onCounterChanged(newCounter);
     }
@@ -49,8 +52,9 @@ const KnitCountCounterButton = (props) => {
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
-      const newValue = props.counter.value - props.counter.stepsPerCount;
+      const newValue = value - props.counter.stepsPerCount;
       const newValueOrZero = newValue < 0 ? 0 : newValue;
+      setValue(newValueOrZero);
       const newCounter = {...props.counter, value: newValueOrZero};
       props.onCounterChanged(newCounter);
     }
@@ -75,8 +79,8 @@ const KnitCountCounterButton = (props) => {
             ]
           }>
             <Text style={styles.countLabel}>
-              <Text style={{color: props.mainBGColor}}>{leadingZeroes(props.counter.value)}</Text>
-              <Text style={{color: props.mainTextColor}}>{props.counter.value}</Text>
+              <Text style={{color: props.mainBGColor}}>{leadingZeroes(value)}</Text>
+              <Text style={{color: props.mainTextColor}}>{value}</Text>
             </Text>
           </Animated.View>
         </TapGestureHandler>

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { View, Text, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { observer } from "mobx-react";
-import { RNNumberStepper } from "react-native-number-stepper";
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
@@ -12,6 +11,7 @@ import ProjectsStore from "../store/ProjectsStore";
 import KnitCountActionButton from "../components/buttons/KnitCountActionButton";
 import KnitCountListButton from "../components/buttons/KnitCountListButton";
 import {PRESET_COUNTERS} from "../models/Counter";
+import KnitCountNumberStepper from "../components/KnitCountNumberStepper";
 
 const AddCounterScreen = observer((props) => {
   const projectId = ProjectsStore.selectedProject.id;
@@ -55,18 +55,16 @@ const AddCounterScreen = observer((props) => {
             Steps per count
           </Text>
           <View style={styles.container}>
-            <RNNumberStepper
+            <KnitCountNumberStepper
               value={stepsPerCount}
               minValue={1}
               maxValue={50}
               stepValue={1}
-              height={50}
-              width={"100%"}
               buttonsTextColor={AppSettingsStore.mainTextColor}
               buttonsBackgroundColor={AppSettingsStore.mainColor}
               labelTextColor={AppSettingsStore.mainTextColor}
               labelBackgroundColor={AppSettingsStore.mainBGColor}
-              cornorRadius={5}
+              cornerRadius={5}
               onChange={(e) => {
                 setStepsPerCount(e);
                 const newCounter = {...counter, stepsPerCount: e};
