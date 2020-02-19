@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import Modal from "react-native-modal";
 import PropTypes from "prop-types";
@@ -9,8 +9,11 @@ import KnitCountDestructiveButton from "../buttons/KnitCountDestructiveButton";
 import KnitCountNumberStepper from "../KnitCountNumberStepper";
 
 const KnitCountCounterModal = (props) => {
-  const [counterLabel, setCounterLabel] = useState(props.counter.label);
-  const [stepsPerCount, setStepsPerCount] = useState(props.counter.stepsPerCount);
+  const [counterLabel, setCounterLabel] = useState('');
+  const [stepsPerCount, setStepsPerCount] = useState(0);
+
+  useEffect(() => { setCounterLabel(props.counter.label) }, [props.counter.label]);
+  useEffect(() => { setStepsPerCount(props.counter.stepsPerCount) }, [props.counter.stepsPerCount]);
 
   return (
     <Modal isVisible={props.isVisible} onBackdropPress={props.onBackdropPress}>
