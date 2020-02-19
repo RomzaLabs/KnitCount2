@@ -70,15 +70,13 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
   useEffect(() => {
     const newName = selectedProject ? selectedProject.name : "";
-    setName(newName);
-
     const newNotes = selectedProject ? selectedProject.notes : "";
-    setNotes(newNotes);
-
     const newStatus = selectedProject ? selectedProject.status : ProjectStatus.WIP;
-    setStatus(newStatus);
-
     const newImages = selectedProject ? selectedProject.images : [];
+
+    setName(newName);
+    setNotes(newNotes);
+    setStatus(newStatus);
     setImages(newImages);
   }, [selectedProject]);
 
@@ -121,8 +119,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     const image = await ImagePicker.launchCameraAsync(imagePickerOptions);
     if (image.uri) {
       const pickedImage = new Image(null, selectedProject.id, image.uri);
-      ProjectsStore.setImagesForSelectedProject([pickedImage, ...images]);
-      ProjectsStore.saveImage(selectedProject.id, pickedImage);
+      const dbResult = await ProjectsStore.saveImage(selectedProject.id, pickedImage);
+      const updatedImage = {...pickedImage, id: dbResult.insertId};
+      const newImages = [updatedImage, ...images];
+      ProjectsStore.setImagesForSelectedProject(newImages);
+      setImages(newImages);
     }
     toggleImagePickerModalVisible();
   };
@@ -131,8 +132,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
     if (image.uri) {
       const pickedImage = new Image(null, selectedProject.id, image.uri);
-      ProjectsStore.setImagesForSelectedProject([pickedImage, ...images]);
-      ProjectsStore.saveImage(selectedProject.id, pickedImage);
+      const dbResult = await ProjectsStore.saveImage(selectedProject.id, pickedImage);
+      const updatedImage = {...pickedImage, id: dbResult.insertId};
+      const newImages = [updatedImage, ...images];
+      ProjectsStore.setImagesForSelectedProject(newImages);
+      setImages(newImages);
     }
     toggleImagePickerModalVisible();
   };

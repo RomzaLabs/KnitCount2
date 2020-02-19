@@ -160,7 +160,7 @@ class ProjectsStore {
   }, 800, { trailing: true });
 
   @action saveImage = (projectId, image) => {
-    insertImage(projectId, image);
+    return insertImage(projectId, image);
   };
 
   @action saveCounter = (projectId, counter) => {
