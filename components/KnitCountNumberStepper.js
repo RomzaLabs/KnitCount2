@@ -4,7 +4,40 @@ import PropTypes from "prop-types";
 
 const KnitCountNumberStepper = (props) => {
   const [value, setValue] = useState(props.value);
-  
+
+  const renderButton = ({ flex, label, onPress }) => {
+    let { buttonsBackgroundColor, cornerRadius, buttonsTextColor, buttonsContainerWidth } = props;
+    return (
+      <View
+        style={
+          [
+            styles.buttonContainer,
+            {
+              backgroundColor: buttonsBackgroundColor,
+              borderTopRightRadius: flex === "right" ? cornerRadius : 0,
+              borderTopLeftRadius: flex === "left" ? cornerRadius : 0,
+              borderBottomRightRadius: flex === "right" ? cornerRadius : 0,
+              borderBottomLeftRadius: flex === "left" ? cornerRadius : 0,
+              width: buttonsContainerWidth
+            }
+            ]
+        }
+      >
+        <TouchableOpacity onPress={onPress} style={{flex: 1}}>
+          <View style={[styles.buttonSubContainer]}>
+            <Text
+              style={[styles.buttonLabelContainer, { color: buttonsTextColor }]}
+              adjustsFontSizeToFit={true}
+              numberOfLines={1}
+            >
+              {label}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View>
       <Text style={{color: "red"}}>Hello World</Text>
