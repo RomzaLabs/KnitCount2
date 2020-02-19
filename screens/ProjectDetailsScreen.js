@@ -254,8 +254,10 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         onBackdropPress={toggleImageModalVisible}
         selectedImage={selectedImage}
         onRemoveImage={(i) => {
+          const newImages = images.filter(image => image.id !== i.id);
+          setImages(newImages);
+          ProjectsStore.setImagesForSelectedProject(newImages);
           ProjectsStore.deleteImageFromProjectById(selectedProject.id, i.id);
-          ProjectsStore.setImagesForSelectedProject(images.filter(image => image.id !== i.id));
         }}
       />
     );
