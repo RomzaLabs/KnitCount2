@@ -239,11 +239,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
             if (c.id === updatedCounter.id) return updatedCounter;
             return c;
           });
-          // setSelectedProject({...selectedProject, counters: newCounters});
           setCounters(newCounters);
           ProjectsStore.setCountersForSelectedProject(newCounters);
         }}
         onCounterDeleted={(counter) => {
+          setCounters(counters.filter(c => c.id !== counter.id));
           ProjectsStore.deleteCounter(counter);
         }}
       />
