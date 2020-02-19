@@ -53,6 +53,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState(ProjectStatus.WIP);
   const [images, setImages] = useState([]);
+  const [counters, setCounters] = useState([]);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCounter, setSelectedCounter] = useState(null);
@@ -73,11 +74,13 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     const newNotes = selectedProject ? selectedProject.notes : "";
     const newStatus = selectedProject ? selectedProject.status : ProjectStatus.WIP;
     const newImages = selectedProject ? selectedProject.images : [];
+    const newCounters = selectedProject ? selectedProject.counters : [];
 
     setName(newName);
     setNotes(newNotes);
     setStatus(newStatus);
     setImages(newImages);
+    setCounters(newCounters);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -175,7 +178,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleLongPressForCounter = async(counterId) => {
-    const foundCounter = selectedProject.counters.find(counter => counter.id === counterId);
+    const foundCounter = counters.find(counter => counter.id === counterId);
     await setSelectedCounter(foundCounter);
     toggleCounterModalVisible();
   };
@@ -232,10 +235,12 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         onBackdropPress={toggleCounterModalVisible}
         counter={selectedCounter}
         onCounterChanged={(updatedCounter) => {
-          const newCounters = selectedProject.counters.map(c => {
+          const newCounters = counters.map(c => {
             if (c.id === updatedCounter.id) return updatedCounter;
             return c;
           });
+          // setSelectedProject({...selectedProject, counters: newCounters});
+          setCounters(newCounters);
           ProjectsStore.setCountersForSelectedProject(newCounters);
         }}
         onCounterDeleted={(counter) => {
@@ -290,8 +295,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         );
       }
 
-      if (!selectedProject && !selectedProject.counters) return null;
-      const counter = selectedProject.counters.find(counter => counter.id === counterId);
+      const counter = counters.find(counter => counter.id === counterId);
       if (!counter) return null;
       return (
         <View style={styles.gridItem}>
@@ -301,10 +305,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
             mainBGColor={AppSettingsStore.mainBGColor}
             counter={counter}
             onCounterChanged={(updatedCounter) => {
-              const newCounters = selectedProject.counters.map(c => {
+              const newCounters = counters.map(c => {
                 if (c.id === updatedCounter.id) return updatedCounter;
                 return c;
               });
+              setCounters(newCounters);
               ProjectsStore.setCountersForSelectedProject(newCounters);
             }}
             onLongPress={handleLongPressForCounter}
@@ -315,7 +320,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     };
 
     const addButtonData = {id: ADD_BUTTON_ID};
-    const counters = selectedProject && selectedProject.counters ? selectedProject.counters : [];
     const counterGridData = [addButtonData, ...counters];
     return (
       <FlatList
