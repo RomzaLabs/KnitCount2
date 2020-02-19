@@ -60,8 +60,6 @@ const AddCounterScreen = observer((props) => {
               minValue={1}
               maxValue={50}
               stepValue={1}
-              height={50}
-              width={"100%"}
               buttonsTextColor={AppSettingsStore.mainTextColor}
               buttonsBackgroundColor={AppSettingsStore.mainColor}
               labelTextColor={AppSettingsStore.mainTextColor}
