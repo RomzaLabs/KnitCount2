@@ -232,7 +232,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         onBackdropPress={toggleCounterModalVisible}
         counter={selectedCounter}
         onCounterChanged={(updatedCounter) => {
-          const newCounters = selectedProject.map(c => {
+          const newCounters = selectedProject.counters.map(c => {
             if (c.id === updatedCounter.id) return updatedCounter;
             return c;
           });
