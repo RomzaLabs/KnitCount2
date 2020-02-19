@@ -52,6 +52,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState(ProjectStatus.WIP);
+  const [images, setImages] = useState([]);
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedCounter, setSelectedCounter] = useState(null);
@@ -76,6 +77,9 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
     const newStatus = selectedProject ? selectedProject.status : ProjectStatus.WIP;
     setStatus(newStatus);
+
+    const newImages = selectedProject ? selectedProject.images : [];
+    setImages(newImages);
   }, [selectedProject]);
 
   const PROJECT_DETAILS_SECTIONS = [
@@ -94,9 +98,8 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
   const handleFavoriteImageMarked = (image) => {
     const updatedImage = {...image, dateAdded: +new Date()};
-    const sortedImages = selectedProject
-      ? [updatedImage, ...toJS(selectedProject.images).filter(i => i.id !== image.id)]
-      : [];
+    const sortedImages = images.length ? [updatedImage, ...images.filter(i => i.id !== image.id)] : [];
+    setImages(sortedImages);
     ProjectsStore.setImagesForSelectedProject(sortedImages);
   };
 
@@ -118,7 +121,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     const image = await ImagePicker.launchCameraAsync(imagePickerOptions);
     if (image.uri) {
       const pickedImage = new Image(null, selectedProject.id, image.uri);
-      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+      ProjectsStore.setImagesForSelectedProject([pickedImage, ...images]);
       ProjectsStore.saveImage(selectedProject.id, pickedImage);
     }
     toggleImagePickerModalVisible();
@@ -128,7 +131,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
     if (image.uri) {
       const pickedImage = new Image(null, selectedProject.id, image.uri);
-      ProjectsStore.setImagesForSelectedProject([pickedImage, ...toJS(selectedProject.images)]);
+      ProjectsStore.setImagesForSelectedProject([pickedImage, ...images]);
       ProjectsStore.saveImage(selectedProject.id, pickedImage);
     }
     toggleImagePickerModalVisible();
@@ -179,7 +182,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
       <KnitCountFinishedModal
         isVisible={isFinishedModalVisible}
         onBackdropPress={toggleFinishedModalVisible}
-        image={toJS(selectedProject.images).length ? toJS(selectedProject.images)[0] : null}
+        image={images.length ? images[0] : null}
         name={name}
         status={selectedProject.status}
         navigation={navigation}
@@ -248,7 +251,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         selectedImage={selectedImage}
         onRemoveImage={(i) => {
           ProjectsStore.deleteImageFromProjectById(selectedProject.id, i.id);
-          ProjectsStore.setImagesForSelectedProject(toJS(selectedProject.images).filter(image => image.id !== i.id));
+          ProjectsStore.setImagesForSelectedProject(images.filter(image => image.id !== i.id));
         }}
       />
     );
@@ -327,13 +330,10 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     };
 
     const renderImageCards = () => {
-      const images = selectedProject ? toJS(selectedProject.images) : [];
-      if (images.length) {
-        return images.map((image, idx) => {
-          return <KnitCountImageButton key={idx} onPress={() => onImageCardPress(image)} image={image} />;
-        });
-      }
-      return null;
+      if (!images.length) return null;
+      return images.map((image, idx) => {
+        return <KnitCountImageButton key={idx} onPress={() => onImageCardPress(image)} image={image} />;
+      });
     };
 
     return (
