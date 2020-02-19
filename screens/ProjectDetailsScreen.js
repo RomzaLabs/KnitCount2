@@ -12,7 +12,6 @@ import {
   View
 } from 'react-native';
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
-import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import * as ImagePicker from 'expo-image-picker';
 
