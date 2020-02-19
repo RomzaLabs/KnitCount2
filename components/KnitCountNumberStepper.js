@@ -3,6 +3,8 @@ import { ImageBackground, Platform, StyleSheet, Text, TouchableNativeFeedback, T
 import PropTypes from "prop-types";
 
 const KnitCountNumberStepper = (props) => {
+  const [value, setValue] = useState(props.value);
+  
   return (
     <View>
       <Text style={{color: "red"}}>Hello World</Text>
