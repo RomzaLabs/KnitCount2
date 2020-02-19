@@ -137,12 +137,16 @@ class ProjectsStore {
 
   @action updateSelectedProjectInProjects = () => {
     if (this.selectedProject) {
+      const modifiedDate = +new Date();
+      this.selectedProject = {...this.selectedProject, modifiedDate};
       const exists = this.projects.find(p => p.id === this.selectedProject.id);
       if (exists) {
-        this.projects = this.projects.map(p => {
-          if (p.id === this.selectedProject.id) return this.selectedProject;
-          return p;
-        })
+        this.projects = this.projects
+          .map(p => {
+            if (p.id === this.selectedProject.id) return this.selectedProject;
+            return p;
+          })
+          .sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
       } else {
         const oldProjects = this.projects.filter(p => p.id !== this.selectedProject.id);
         this.projects = [this.selectedProject, ...oldProjects]

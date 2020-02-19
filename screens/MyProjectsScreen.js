@@ -20,29 +20,26 @@ const MyProjectsScreen = observer((props) => {
   const projectsRef = ProjectsStore.projects;
 
   useEffect(() => {
+    props.navigation.setParams({filterPreference});
+  }, [filterPreference]);
+
+  const setFilteredProjects = () => {
     const filteredProjects = ProjectsStore.projects
       .filter(p => {
         if (filterPreference === FilterPreference.WIP) return p.status === ProjectStatus.WIP;
         if (filterPreference === FilterPreference.FO) return p.status === ProjectStatus.FO;
         return true;
-      });
+      })
+      .sort((a, b) => new Date(b.modifiedDate) - new Date(a.modifiedDate));
     setProjects(filteredProjects);
-  }, [projectsRef]);
+  };
+
+  useEffect(() => { setFilteredProjects() }, [projectsRef]);
 
 
   useEffect(() => {
     setFilterPreference(AppSettingsStore.filterPreference);
-    const filteredProjects = ProjectsStore.projects
-      .filter(p => {
-        if (filterPreference === FilterPreference.WIP) return p.status === ProjectStatus.WIP;
-        if (filterPreference === FilterPreference.FO) return p.status === ProjectStatus.FO;
-        return true;
-      });
-    setProjects(filteredProjects);
-  }, [filterPreference]);
-
-  useEffect(() => {
-    props.navigation.setParams({filterPreference});
+    setFilteredProjects();
   }, [filterPreference]);
 
   const renderKnitCountCard = (project) => {
