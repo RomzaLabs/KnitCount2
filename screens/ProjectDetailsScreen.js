@@ -47,7 +47,7 @@ import KnitCountImagePicker from "../components/KnitCountImagePicker";
 const ADD_BUTTON_ID = 0;
 
 const ProjectDetailsScreen = observer(({ navigation }) => {
-  const [selectedProject, setSelectedProject] = useState(null);
+  const { selectedProject } = ProjectsStore;
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
@@ -64,10 +64,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
   const [isImagePickerModalVisible, setIsImagePickerModalVisible] = useState(false);
-
-  useEffect(() => {
-    setSelectedProject(toJS(ProjectsStore.selectedProject));
-  }, []);
 
   useEffect(() => {
     const newName = selectedProject ? selectedProject.name : "";
@@ -191,7 +187,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         onBackdropPress={toggleFinishedModalVisible}
         image={images.length ? images[0] : null}
         name={name}
-        status={selectedProject.status}
+        status={status}
         navigation={navigation}
       />
     );
