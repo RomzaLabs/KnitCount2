@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ImageBackground, Platform, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import PropTypes from "prop-types";
 
 const KnitCountNumberStepper = (props) => {
