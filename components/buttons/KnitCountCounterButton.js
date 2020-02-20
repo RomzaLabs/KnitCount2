@@ -9,6 +9,8 @@ const KnitCountCounterButton = (props) => {
   const [value, setValue] = useState(props.counter.value);
   const [bounceAnim, setBounceAnim] = useState(new Animated.Value(1));
 
+  useEffect(() => { setValue(props.counter.value) }, [props.counter.value]);
+
   useEffect(() => {
     Animated.spring(bounceAnim, {
       toValue: 1,
