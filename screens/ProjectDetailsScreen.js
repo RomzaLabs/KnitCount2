@@ -14,6 +14,7 @@ import {
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import { observer } from "mobx-react";
 import * as ImagePicker from 'expo-image-picker';
+import { useKeepAwake } from 'expo-keep-awake';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -46,6 +47,7 @@ import KnitCountImagePicker from "../components/KnitCountImagePicker";
 const ADD_BUTTON_ID = 0;
 
 const ProjectDetailsScreen = observer(({ navigation }) => {
+  useKeepAwake();
   const { selectedProject } = ProjectsStore;
 
   const [name, setName] = useState('');
