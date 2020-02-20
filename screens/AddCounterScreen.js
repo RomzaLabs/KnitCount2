@@ -182,7 +182,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 8,
     borderRadius: 5,
-    margin: 12
+    margin: 12,
+    height: 50
   }
 });
 
