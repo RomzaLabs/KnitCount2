@@ -112,13 +112,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: 200,
+    width: "100%",
     height: 50,
     borderWidth: 1
   },
   buttonContainer: {
     height: "100%",
-    width: 50
+    width: "20%"
   },
   buttonSubContainer: {
     flex: 1,
