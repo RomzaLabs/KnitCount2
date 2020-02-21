@@ -19,6 +19,13 @@ const MyProjectsScreen = observer((props) => {
   const [filterPreference, setFilterPreference] = useState(ProjectStatus.WIP);
   const projectsRef = ProjectsStore.projects;
 
+  if (AppSettingsStore.appOpened) {
+    AppSettingsStore.doneWithAppOpened(); // Ask only once.
+    // TODO: Figure out if we need to ask for Store Review.
+    // TODO: Launch Store Review native modal.
+    // TODO: Clear settings for Store Review
+  }
+
   useEffect(() => {
     props.navigation.setParams({filterPreference});
   }, [filterPreference]);

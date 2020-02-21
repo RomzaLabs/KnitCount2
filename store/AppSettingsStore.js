@@ -9,6 +9,7 @@ class AppSettingsStore {
 
   // Observable Props
   @observable settings = null;
+  @observable appOpened = true; // Immediately flipped to false. Used to detect first launch.
 
   // Computed Props
   @computed get mainColor() { return this.settings ? this.settings.mainColor : Colors.primaryColor; }
@@ -17,10 +18,9 @@ class AppSettingsStore {
   @computed get filterPreference() { return this.settings ? this.settings.filterPreference : FilterPreference.WIP; }
 
   // Actions
-  @action
-  setSettings = (settings) => {
-    this.settings = settings;
-  };
+  @action setSettings = (settings) => this.settings = settings;
+
+  @action doneWithAppOpened = () => this.appOpened = false;
 
   @action setColor = (color) => {
     switch (color) {
