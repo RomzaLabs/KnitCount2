@@ -9,7 +9,9 @@ class AppSettings {
     mainColor = Colors.primaryColor,
     mainTextColor = Colors.primaryTextColor,
     mainBGColor = Colors.primaryBGColor,
-    filterPreference = FilterPreference.WIP
+    filterPreference = FilterPreference.WIP,
+    interactionsTowardsReviewAsk = 0,
+    lastAskedToReviewDate = null
   ) {
     this.id = id;
     this.isPremium = isPremium;
@@ -17,6 +19,8 @@ class AppSettings {
     this.mainTextColor = mainTextColor;
     this.mainBGColor = mainBGColor;
     this.filterPreference = filterPreference;
+    this.interactionsTowardsReviewAsk = interactionsTowardsReviewAsk;
+    this.lastAskedToReviewDate = lastAskedToReviewDate;
   }
 
 }

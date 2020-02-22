@@ -34,7 +34,8 @@
     "react-navigation-header-buttons": "^3.0.4",
     "react-navigation-stack": "^2.0.8",
     "reanimated-confetti": "0.0.5",
-    "expo-keep-awake": "~8.0.0"
+    "expo-keep-awake": "~8.0.0",
+    "expo-store-review": "~2.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",

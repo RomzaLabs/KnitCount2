@@ -14,7 +14,9 @@ export const initSettings = () => {
             main_color TEXT NOT NULL,
             main_text_color TEXT NOT NULL,
             main_bg_color TEXT NOT NULL,
-            filter_preference TEXT NOT NULL
+            filter_preference TEXT NOT NULL,
+            interactions_towards_review_ask INTEGER NOT NULL,
+            last_asked_to_review_date INTEGER NULL
           );
         `,
         [],
@@ -34,7 +36,17 @@ export const fetchSettings = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        `SELECT id, is_premium, main_color, main_text_color, main_bg_color, filter_preference FROM settings;`,
+        `
+        SELECT
+               id, 
+               is_premium, 
+               main_color, 
+               main_text_color, 
+               main_bg_color, 
+               filter_preference, 
+               interactions_towards_review_ask, 
+               last_asked_to_review_date 
+        FROM settings;`,
         [],
         (_, result) => {
           resolve(result);
@@ -53,10 +65,26 @@ export const insertSettings = (settings) => {
     db.transaction((tx) => {
       tx.executeSql(
         `
-          INSERT INTO settings (is_premium, main_color, main_text_color, main_bg_color, filter_preference)
-          VALUES (?, ?, ?, ?, ?);
+          INSERT INTO settings (
+                                is_premium, 
+                                main_color, 
+                                main_text_color, 
+                                main_bg_color, 
+                                filter_preference, 
+                                interactions_towards_review_ask, 
+                                last_asked_to_review_date
+                               )
+          VALUES (?, ?, ?, ?, ?, ?, ?);
         `,
-        [settings.isPremium, settings.mainColor, settings.mainTextColor, settings.mainBGColor, settings.filterPreference],
+        [
+          settings.isPremium,
+          settings.mainColor,
+          settings.mainTextColor,
+          settings.mainBGColor,
+          settings.filterPreference,
+          settings.interactionsTowardsReviewAsk,
+          settings.lastAskedToReviewDate
+        ],
         (_, result) => {
           resolve(result);
         },
@@ -75,10 +103,25 @@ export const updateSettings = (settings) => {
       tx.executeSql(
         `
           UPDATE settings
-          SET is_premium = ?, main_color = ?, main_text_color = ?, main_bg_color = ?, filter_preference = ?
+          SET 
+              is_premium = ?, 
+              main_color = ?, 
+              main_text_color = ?, 
+              main_bg_color = ?, 
+              filter_preference = ?,
+              interactions_towards_review_ask = ?,
+              last_asked_to_review_date = ?
           WHERE id = 1
         `,
-        [settings.isPremium, settings.mainColor, settings.mainTextColor, settings.mainBGColor, settings.filterPreference],
+        [
+          settings.isPremium,
+          settings.mainColor,
+          settings.mainTextColor,
+          settings.mainBGColor,
+          settings.filterPreference,
+          settings.interactionsTowardsReviewAsk,
+          settings.lastAskedToReviewDate
+        ],
         (_, result) => {
           resolve(result);
         },
