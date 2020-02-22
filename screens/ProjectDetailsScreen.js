@@ -308,6 +308,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               });
               setCounters(newCounters);
               ProjectsStore.setCountersForSelectedProject(newCounters);
+              AppSettingsStore.interactionTowardReviewAsk();
             }}
             onLongPress={handleLongPressForCounter}
           />

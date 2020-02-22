@@ -23,7 +23,8 @@ class AppSettingsStore {
     const MIN_INTERACTIONS = 50;
     const MIN_DAYS_BETWEEN_ASK = 14;
     const FOURTEEN_DAYS = MIN_DAYS_BETWEEN_ASK * 24 * 60 * 60 * 1000; // Not all days are 24 hours, but whatever.
-    const enoughInteractions = interactionsTowardsReviewAsk >= MIN_INTERACTIONS;
+    const interactions = interactionsTowardsReviewAsk ? interactionsTowardsReviewAsk : 0;
+    const enoughInteractions = interactions >= MIN_INTERACTIONS;
 
     if (!lastAskedToReviewDate) {
       // Never asked before so we can ask as long as they have more than MIN_INTERACTIONS;
@@ -42,14 +43,18 @@ class AppSettingsStore {
   @action doneWithAppOpened = () => this.appOpened = false;
 
   @action interactionTowardReviewAsk = () => {
-    const interactionsTowardsReviewAsk = this.settings.interactionsTowardsReviewAsk + 1;
-    this.settings = {...this.settings, interactionsTowardsReviewAsk};
+    const {interactionsTowardsReviewAsk} = this.settings;
+    const interactions = interactionsTowardsReviewAsk ? interactionsTowardsReviewAsk : 0;
+    const newInteractionsCount = interactions + 1;
+    this.settings = {...this.settings, interactionsTowardsReviewAsk: newInteractionsCount};
+    this.persistSettings();
   };
 
   @action resetInteractionsTowardsReviewAsk = () => {
     const interactionsTowardsReviewAsk = 0;
     const lastAskedToReviewDate = +new Date();
     this.settings = {...this.settings, interactionsTowardsReviewAsk, lastAskedToReviewDate};
+    this.persistSettings();
   };
 
   @action setColor = (color) => {
