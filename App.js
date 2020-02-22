@@ -37,7 +37,9 @@ const loadSettings = async() => {
       Colors.primaryColor,
       Colors.primaryTextColor,
       Colors.primaryBGColor,
-      FilterPreference.WIP
+      FilterPreference.WIP,
+      0,
+      null
     );
     AppSettingsStore.setSettings(defaultSettings);
     await insertSettings(defaultSettings);
@@ -49,7 +51,9 @@ const loadSettings = async() => {
       dbSettings.main_color,
       dbSettings.main_text_color,
       dbSettings.main_bg_color,
-      dbSettings.filter_preference
+      dbSettings.filter_preference,
+      dbSettings.interactions_towards_review_ask,
+      dbSettings.last_asked_to_review_date
     );
     AppSettingsStore.setSettings(userSettings);
   }

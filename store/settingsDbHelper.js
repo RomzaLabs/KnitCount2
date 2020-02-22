@@ -74,7 +74,7 @@ export const insertSettings = (settings) => {
                                 interactions_towards_review_ask, 
                                 last_asked_to_review_date
                                )
-          VALUES (?, ?, ?, ?, ?);
+          VALUES (?, ?, ?, ?, ?, ?, ?);
         `,
         [
           settings.isPremium,
