@@ -4,6 +4,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import SafeAreaView from 'react-native-safe-area-view';
 import { observer } from "mobx-react";
 import Modal from "react-native-modal";
+import * as StoreReview from 'expo-store-review';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import ProjectsStore from "../store/ProjectsStore";
@@ -19,11 +20,10 @@ const MyProjectsScreen = observer((props) => {
   const [filterPreference, setFilterPreference] = useState(ProjectStatus.WIP);
   const projectsRef = ProjectsStore.projects;
 
-  if (AppSettingsStore.appOpened) {
+  if (AppSettingsStore.allowedToAskForReview) {
+    const _ = StoreReview.requestReview();
+    AppSettingsStore.resetInteractionsTowardsReviewAsk();
     AppSettingsStore.doneWithAppOpened(); // Ask only once.
-    // TODO: Figure out if we need to ask for Store Review.
-    // TODO: Launch Store Review native modal.
-    // TODO: Clear settings for Store Review
   }
 
   useEffect(() => {
