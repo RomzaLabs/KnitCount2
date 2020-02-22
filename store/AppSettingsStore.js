@@ -22,6 +22,17 @@ class AppSettingsStore {
 
   @action doneWithAppOpened = () => this.appOpened = false;
 
+  @action interactionTowardReviewAsk = () => {
+    const interactionsTowardsReviewAsk = this.settings.interactionsTowardsReviewAsk + 1;
+    this.settings = {...this.settings, interactionsTowardsReviewAsk};
+  };
+
+  @action resetInteractionsTowardsReviewAsk = () => {
+    const interactionsTowardsReviewAsk = 0;
+    const lastAskedToReviewDate = +new Date();
+    this.settings = {...this.settings, interactionsTowardsReviewAsk, lastAskedToReviewDate};
+  };
+
   @action setColor = (color) => {
     switch (color) {
       case Colors.clearChillColor:
