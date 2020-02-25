@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
 import PropTypes from "prop-types";
 import { TapGestureHandler, PanGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
-import { Audio } from 'expo-av';
+
+import AudioManager from "../../constants/AudioManager";
+import {Taps, Rips} from "../../constants/Sounds";
 
 const MAX_ZEROES = 5;
 
@@ -23,20 +25,10 @@ const KnitCountCounterButton = (props) => {
   const digitsForCount = (count) => count.toString().length;
   const leadingZeroes = (count) => "0".repeat(MAX_ZEROES - digitsForCount(count));
 
-  const playTapSound = async() => {
-    const soundObject = new Audio.Sound();
-    try {
-      await soundObject.loadAsync(require('../../assets/sounds/taps/bubble-pop.wav'));
-      await soundObject.playAsync();
-    } catch (error) {
-      console.error("Unable to play tap sound: ", error);
-    }
-  };
-
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = playTapSound();
+      const _ = AudioManager.playTapSound(Taps.bubblePop);
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -51,6 +43,7 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
+      const _ = AudioManager.playTapSound(Taps.bubblePop);
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
