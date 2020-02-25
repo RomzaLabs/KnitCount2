@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
+import { Animated, Dimensions, Platform, StyleSheet, Text } from 'react-native';
 import PropTypes from "prop-types";
 import { TapGestureHandler, PanGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
 
 import AudioManager from "../../constants/AudioManager";
 import {Taps, Rips} from "../../constants/Sounds";
@@ -25,10 +26,16 @@ const KnitCountCounterButton = (props) => {
   const digitsForCount = (count) => count.toString().length;
   const leadingZeroes = (count) => "0".repeat(MAX_ZEROES - digitsForCount(count));
 
+  const addHapticFeedback = () => {
+    if (Platform.OS === "ios" && Platform.Version < 10) return undefined;
+    return Haptics.selectionAsync();
+  };
+
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
       const _ = AudioManager.playTapSound(Taps.bubblePop);
+      addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -44,6 +51,7 @@ const KnitCountCounterButton = (props) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
       const _ = AudioManager.playTapSound(Taps.bubblePop);
+      addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -57,6 +65,7 @@ const KnitCountCounterButton = (props) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
       const _ = AudioManager.playRipSound(Rips.frog);
+      addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -71,6 +80,7 @@ const KnitCountCounterButton = (props) => {
   const onLongPressEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
+      addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
       props.onLongPress(props.counter.id);
     }
