@@ -7,6 +7,8 @@ import AppSettingsStore from "../../store/AppSettingsStore";
 import KnitCountActionButton from "../buttons/KnitCountActionButton";
 import KnitCountDestructiveButton from "../buttons/KnitCountDestructiveButton";
 import KnitCountNumberStepper from "../KnitCountNumberStepper";
+import AudioManager from "../../constants/AudioManager";
+import {Rips} from "../../constants/Sounds";
 
 const KnitCountCounterModal = (props) => {
   const [counterLabel, setCounterLabel] = useState('');
@@ -70,6 +72,7 @@ const KnitCountCounterModal = (props) => {
               <View style={{margin: 6}}>
                 <KnitCountActionButton
                   onPress={() => {
+                    const _ = AudioManager.playRipSound(Rips.frog);
                     const newCounter = {...props.counter, value: 0};
                     props.onCounterChanged(newCounter);
                     props.onBackdropPress();
