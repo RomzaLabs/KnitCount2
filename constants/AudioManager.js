@@ -34,7 +34,21 @@ class AudioManager {
     } catch (error) {
       console.error("Unable to play rip sound: ", error);
     }
-  }
+  };
+
+  playCompleteSound = async(name) => {
+    const soundObject = new Audio.Sound();
+    try {
+      switch (name) {
+        case Complete.yay:
+        default:
+          await soundObject.loadAsync(yay);
+          await soundObject.playAsync();
+      }
+    } catch (error) {
+      console.error("Unable to play complete sound: ", error);
+    }
+  };
 
 }
 
