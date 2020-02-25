@@ -78,6 +78,8 @@ const MyProjectsScreen = observer((props) => {
         data={projects}
         keyExtractor={item => projects.indexOf(item).toString()}
         renderItem={({item}) => renderKnitCountCard(item)}
+        onEndReachedThreshold={3}
+        onEndReached={({distanceFromEnd}) => console.log("end reached")}
       />
       <Modal isVisible={ProjectsStore.isProjectModalVisible} onBackdropPress={ProjectsStore.toggleProjectModalVisible}>
         <View style={[styles.filterContent, {backgroundColor: AppSettingsStore.mainBGColor}]}>
