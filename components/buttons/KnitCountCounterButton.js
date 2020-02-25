@@ -56,6 +56,7 @@ const KnitCountCounterButton = (props) => {
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
+      const _ = AudioManager.playRipSound(Rips.frog);
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
