@@ -220,7 +220,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         onBackdropPress={toggleDeleteModalVisible}
         onDeleteProject={() => {
           ProjectsStore.deleteProjectById(selectedProject.id);
-          setSelectedProject(null);
           navigation.popToTop();
         }}
       />
