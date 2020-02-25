@@ -43,6 +43,8 @@ import KnitCountActionButton from "../components/buttons/KnitCountActionButton";
 import KnitCountDestructiveButton from "../components/buttons/KnitCountDestructiveButton";
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
+import AudioManager from "../constants/AudioManager";
+import {Complete} from "../constants/Sounds";
 
 const ADD_BUTTON_ID = 0;
 
@@ -102,6 +104,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleMarkFinished = () => {
+    const _ = AudioManager.playCompleteSound(Complete.yay);
     setStatus(ProjectStatus.FO);
     ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();

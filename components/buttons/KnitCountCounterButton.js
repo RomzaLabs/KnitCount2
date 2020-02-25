@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Animated, Dimensions, StyleSheet, Text } from 'react-native';
 import PropTypes from "prop-types";
 import { TapGestureHandler, PanGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
+
+import AudioManager from "../../constants/AudioManager";
+import {Taps, Rips} from "../../constants/Sounds";
 
 const MAX_ZEROES = 5;
 
@@ -25,6 +28,7 @@ const KnitCountCounterButton = (props) => {
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
+      const _ = AudioManager.playTapSound(Taps.bubblePop);
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -39,6 +43,7 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
+      const _ = AudioManager.playTapSound(Taps.bubblePop);
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -51,6 +56,7 @@ const KnitCountCounterButton = (props) => {
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
+      const _ = AudioManager.playRipSound(Rips.frog);
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
