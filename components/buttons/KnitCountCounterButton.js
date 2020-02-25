@@ -26,7 +26,7 @@ const KnitCountCounterButton = (props) => {
   const playTapSound = async() => {
     const soundObject = new Audio.Sound();
     try {
-      await soundObject.loadAsync(require('../../assets/sounds/bubble-pop.wav'));
+      await soundObject.loadAsync(require('../../assets/sounds/taps/bubble-pop.wav'));
       await soundObject.playAsync();
     } catch (error) {
       console.error("Unable to play tap sound: ", error);
