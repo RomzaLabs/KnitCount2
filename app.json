@@ -35,6 +35,18 @@
         "WRITE_EXTERNAL_STORAGE"
       ]
     },
-    "description": "KnitCount is the perfect way to store the stitch count for each of your knitting projects. Simple, intuitive design and animation makes for the cutest and easiest-to-use row counter available."
+    "description": "KnitCount is the perfect way to store the stitch count for each of your knitting projects. Simple, intuitive design and animation makes for the cutest and easiest-to-use row counter available.",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "romza-labs",
+            "project": "knitcount-2",
+            "authToken": "<REDACTED>"
+          }
+        }
+      ]
+    }
   }
 }
