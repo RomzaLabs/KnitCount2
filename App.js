@@ -3,17 +3,21 @@ import { AppLoading } from "expo";
 import { enableScreens } from "react-native-screens";
 import * as Font from 'expo-font';
 import ProjectsStore from "./store/ProjectsStore";
+import * as Sentry from 'sentry-expo';
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
 import AppSettingsStore from "./store/AppSettingsStore";
 import AppSettings from "./models/AppSettings";
 import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
-import { initProjects, fetchProjects, fetchCountersForProject, fetchImagesForProject } from './store/projectsDbHelper';
+import { initProjects } from './store/projectsDbHelper';
 import { initSettings, fetchSettings, insertSettings } from './store/settingsDbHelper';
-import Counter from "./models/Counter";
-import Project from "./models/Project";
-import Image from "./models/Image";
+
+Sentry.init({
+  dsn: 'https://0d46591ae0b9460f925fb006d1432a34@sentry.io/2980617',
+  enableInExpoDevelopment: true,
+  debug: true
+});
 
 enableScreens();
 initProjects();
