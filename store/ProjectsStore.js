@@ -10,9 +10,17 @@ import {
   deleteImage,
   insertCounter,
   updateCounter,
-  deleteCounter, deleteCountersForProject, deleteImagesForProject
+  deleteCounter,
+  deleteCountersForProject,
+  deleteImagesForProject,
+  fetchProjects,
+  fetchCountersForProject,
+  fetchImagesForProject
 } from "../store/projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
+import Counter from "../models/Counter";
+import Image from "../models/Image";
+import Project from "../models/Project";
 
 class ProjectsStore {
 
@@ -24,29 +32,30 @@ class ProjectsStore {
   // Computed Props
 
   // Actions
-  @action
-  loadProjects = (projects) => this.projects = projects;
+  @action loadProjects = (projects) => {
+    if (this.projects.length) {
+      this.projects = this.projects.concat(projects);
+    } else {
+      this.projects = projects;
+    }
+  };
 
-  @action
-  setSelectedProject = (project) => {
+  @action setSelectedProject = (project) => {
     this.selectedProject = project;
     this.updateSelectedProjectInProjects();
   };
 
-  @action
-  createNewProject = async(project) => {
+  @action createNewProject = async(project) => {
     const dbResult = await insertProject(project);
     project.id = dbResult.insertId;
     this.setSelectedProject(project);
   };
 
-  @action
-  toggleProjectModalVisible = () => {
+  @action toggleProjectModalVisible = () => {
     this.isProjectModalVisible = !this.isProjectModalVisible;
   };
 
-  @action
-  toggleStatusForProject = (projectId) => {
+  @action toggleStatusForProject = (projectId) => {
     this.projects = this.projects.map(p => {
       if (p.id === projectId) {
         const project = {
@@ -60,8 +69,7 @@ class ProjectsStore {
     });
   };
 
-  @action
-  deleteProjectById = (projectId) => {
+  @action deleteProjectById = (projectId) => {
     this.projects = this.projects.filter(p => p.id !== projectId);
     this.selectedProject = null;
     deleteProject(projectId);
@@ -69,8 +77,7 @@ class ProjectsStore {
     deleteImagesForProject(projectId);
   };
 
-  @action
-  deleteImageFromProjectById = (projectId, imageId) => {
+  @action deleteImageFromProjectById = (projectId, imageId) => {
     deleteImage(imageId);
   };
 
@@ -170,6 +177,39 @@ class ProjectsStore {
   @action saveCounter = (projectId, counter) => {
     return insertCounter(projectId, counter);
   };
+
+  // Helpers
+  loadProjectsFromDB = _.debounce(async(offset, limit) => {
+    const dbResult = await fetchProjects(offset, limit);
+    const dbProjects = dbResult.rows._array;
+
+    let projects = [];
+    for (const dbProject of dbProjects) {
+      const projectId = dbProject.id;
+
+      const dbCountersResult = await fetchCountersForProject(projectId);
+      const dbCounters = dbCountersResult.rows._array;
+      const counters = dbCounters.map(c => new Counter(c.id, c.project_id, c.label, c.value, c.steps_per_count));
+
+      const dbImagesResult = await fetchImagesForProject(projectId);
+      const dbImages = dbImagesResult.rows._array;
+      const images = dbImages.map(i => new Image(i.id, i.project_id, i.image_uri, i.date_added));
+
+      const project = new Project(
+        projectId,
+        dbProject.name,
+        dbProject.status,
+        counters,
+        dbProject.notes,
+        images,
+        dbProject.start_date,
+        dbProject.modified_date,
+        dbProject.end_date
+      );
+      projects.push(project);
+    }
+    this.loadProjects(projects);
+  }, 800, { leading: true, trailing: false });
 
 }
 

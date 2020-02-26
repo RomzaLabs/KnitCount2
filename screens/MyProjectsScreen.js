@@ -20,6 +20,10 @@ const MyProjectsScreen = observer((props) => {
   const [filterPreference, setFilterPreference] = useState(ProjectStatus.WIP);
   const projectsRef = ProjectsStore.projects;
 
+  const LIMIT = 20;
+  const [offset, setOffset] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   if (AppSettingsStore.allowedToAskForReview) {
     const _ = StoreReview.requestReview();
     AppSettingsStore.resetInteractionsTowardsReviewAsk();
@@ -78,6 +82,19 @@ const MyProjectsScreen = observer((props) => {
         data={projects}
         keyExtractor={item => projects.indexOf(item).toString()}
         renderItem={({item}) => renderKnitCountCard(item)}
+        refreshing={isRefreshing}
+        onEndReachedThreshold={3}
+        onEndReached={({distanceFromEnd}) => {
+          if (projects.length % LIMIT === 0) {
+            setIsRefreshing(true);
+            const newOffset = offset + LIMIT;
+            setOffset(newOffset);
+            ProjectsStore.loadProjectsFromDB(newOffset, LIMIT).then(() => {
+              setFilteredProjects();
+              setIsRefreshing(false);
+            })
+          }
+        }}
       />
       <Modal isVisible={ProjectsStore.isProjectModalVisible} onBackdropPress={ProjectsStore.toggleProjectModalVisible}>
         <View style={[styles.filterContent, {backgroundColor: AppSettingsStore.mainBGColor}]}>

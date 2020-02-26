@@ -59,38 +59,6 @@ const loadSettings = async() => {
   }
 };
 
-const loadProjects = async() => {
-  const dbResult = await fetchProjects(0, 20);
-  const dbProjects = dbResult.rows._array;
-
-  let projects = [];
-  for (const dbProject of dbProjects) {
-    const projectId = dbProject.id;
-
-    const dbCountersResult = await fetchCountersForProject(projectId);
-    const dbCounters = dbCountersResult.rows._array;
-    const counters = dbCounters.map(c => new Counter(c.id, c.project_id, c.label, c.value, c.steps_per_count));
-
-    const dbImagesResult = await fetchImagesForProject(projectId);
-    const dbImages = dbImagesResult.rows._array;
-    const images = dbImages.map(i => new Image(i.id, i.project_id, i.image_uri, i.date_added));
-
-    const project = new Project(
-      projectId,
-      dbProject.name,
-      dbProject.status,
-      counters,
-      dbProject.notes,
-      images,
-      dbProject.start_date,
-      dbProject.modified_date,
-      dbProject.end_date
-    );
-    projects.push(project);
-  }
-  ProjectsStore.loadProjects(projects);
-};
-
 const loadKnitCount = async () => {
   try {
     await loadFonts();
@@ -105,7 +73,7 @@ const loadKnitCount = async () => {
   }
 
   try {
-    await loadProjects();
+    await ProjectsStore.loadProjectsFromDB(0, 20);
   } catch (e) {
     console.error("Error loading projects.", e);
   }
