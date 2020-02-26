@@ -34,7 +34,7 @@ class ProjectsStore {
   // Actions
   @action loadProjects = (projects) => {
     if (this.projects.length) {
-      this.projects = [...this.projects, projects];
+      this.projects = this.projects.concat(projects);
     } else {
       this.projects = projects;
     }
