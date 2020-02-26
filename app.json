@@ -43,7 +43,7 @@
           "config": {
             "organization": "romza-labs",
             "project": "knitcount-2",
-            "authToken": "your auth token here"
+            "authToken": "<REDACTED>"
           }
         }
       ]
