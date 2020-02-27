@@ -3,6 +3,7 @@ import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet, ScrollView}
 import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
 import Constants from 'expo-constants';
+import { Linking } from 'expo';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import KnitCountHeaderButton from "../components/buttons/KnitCountHeaderButton";
@@ -99,7 +100,18 @@ const SettingsScreen = observer((props) => {
     return (
       <View>
         <KnitCountListButton
-          onPress={() => console.log(`TODO: Handle action for ${item}`)}
+          onPress={() => {
+            switch (item) {
+              case SEND_FEEDBACK:
+                Linking.openURL('mailto:knitcount@romzalabs.com');
+                break;
+              case TUTORIAL:
+              case INSTAGRAM:
+              case RATE:
+              default:
+                console.log(`TODO: Handle action for ${item}`)
+            }
+          }}
           label={label}
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
