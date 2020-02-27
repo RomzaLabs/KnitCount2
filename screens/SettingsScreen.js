@@ -107,6 +107,8 @@ const SettingsScreen = observer((props) => {
                 break;
               case TUTORIAL:
               case INSTAGRAM:
+                Linking.openURL('https://www.instagram.com/lizamakesthings/');
+                break;
               case RATE:
               default:
                 console.log(`TODO: Handle action for ${item}`)
