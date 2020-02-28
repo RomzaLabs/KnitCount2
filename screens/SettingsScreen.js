@@ -105,11 +105,17 @@ const SettingsScreen = observer((props) => {
               case SEND_FEEDBACK:
                 Linking.openURL('mailto:knitcount@romzalabs.com');
                 break;
-              case TUTORIAL:
+              case TUTORIAL: // TODO: Make the video.
               case INSTAGRAM:
                 Linking.openURL('https://www.instagram.com/lizamakesthings/');
                 break;
               case RATE:
+                // These won't work properly until the app is Public.
+                const androidURL = "https://play.google.com/store/apps/details?id=com.romzalabs.knitcount";
+                const iosURL = "itms-apps://itunes.apple.com/app/apple-store/id1499418814?mt=8&action=write-review";
+                const storeURL = Platform.OS === "android" ? androidURL : iosURL;
+                Linking.openURL(storeURL);
+                break;
               default:
                 console.log(`TODO: Handle action for ${item}`)
             }
