@@ -72,8 +72,7 @@ const styles = StyleSheet.create({
   cellLabel: {
     fontFamily: "avenir-roman",
     fontSize: 18,
-    paddingTop: 8,
-    textTransform: "capitalize"
+    paddingTop: 8
   },
   cellIcon: {
     marginRight: 12
