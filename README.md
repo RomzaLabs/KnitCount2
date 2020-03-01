@@ -1,6 +1,6 @@
 # KnitCount
 
-Version: 1.0.1 - 18 Feb 2020
+Version: 1.0.2 - 29 Feb 2020
 
 ## Description
 
