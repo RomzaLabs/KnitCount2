@@ -20,7 +20,7 @@ export const SECTION_SETTINGS = {
   GENERAL: {
     key: 2,
     title: "General",
-    data: [SEND_FEEDBACK, TUTORIAL, INSTAGRAM, RATE]
+    data: [SEND_FEEDBACK, INSTAGRAM] // [SEND_FEEDBACK, TUTORIAL, INSTAGRAM, RATE]
   },
   APP_VERSION: {
     key: 3,
