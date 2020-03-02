@@ -1,4 +1,6 @@
 import { Audio } from 'expo-av';
+import {isAudioEnabled} from "expo-av/build/Audio/AudioAvailability";
+import * as Sentry from 'sentry-expo';
 
 import { Taps, Rips, Complete } from "./Sounds";
 
@@ -9,6 +11,7 @@ const yay = require("../assets/sounds/complete/yay.mp3");
 class AudioManager {
 
   playTapSound = async(name) => {
+    if (!isAudioEnabled()) return undefined;
     const soundObject = new Audio.Sound();
     try {
       switch (name) {
@@ -18,11 +21,12 @@ class AudioManager {
           await soundObject.playAsync();
       }
     } catch (error) {
-      console.error("Unable to play tap sound: ", error);
+      Sentry.captureException(error);
     }
   };
 
   playRipSound = async(name) => {
+    if (!isAudioEnabled()) return undefined;
     const soundObject = new Audio.Sound();
     try {
       switch (name) {
@@ -32,11 +36,12 @@ class AudioManager {
           await soundObject.playAsync();
       }
     } catch (error) {
-      console.error("Unable to play rip sound: ", error);
+      Sentry.captureException(error);
     }
   };
 
   playCompleteSound = async(name) => {
+    if (!isAudioEnabled()) return undefined;
     const soundObject = new Audio.Sound();
     try {
       switch (name) {
@@ -46,7 +51,7 @@ class AudioManager {
           await soundObject.playAsync();
       }
     } catch (error) {
-      console.error("Unable to play complete sound: ", error);
+      Sentry.captureException(error);
     }
   };
 
