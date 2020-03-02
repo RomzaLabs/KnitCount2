@@ -3,6 +3,7 @@ import { Animated, Dimensions, Platform, StyleSheet, Text } from 'react-native';
 import PropTypes from "prop-types";
 import { TapGestureHandler, PanGestureHandler, LongPressGestureHandler, State } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
+import * as Sentry from 'sentry-expo';
 
 import AudioManager from "../../constants/AudioManager";
 import {Taps, Rips} from "../../constants/Sounds";
@@ -28,7 +29,11 @@ const KnitCountCounterButton = (props) => {
 
   const addHapticFeedback = () => {
     if (Platform.OS === "ios" && Platform.Version < 10) return undefined;
-    return Haptics.selectionAsync();
+    try {
+      return Haptics.selectionAsync();
+    } catch (error) {
+      Sentry.captureException(error);
+    }
   };
 
   const onSingleTapEvent = (e) => {
