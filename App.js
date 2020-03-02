@@ -4,6 +4,7 @@ import { enableScreens } from "react-native-screens";
 import * as Font from 'expo-font';
 import ProjectsStore from "./store/ProjectsStore";
 import * as Sentry from 'sentry-expo';
+import Constants from 'expo-constants';
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
 import AppSettingsStore from "./store/AppSettingsStore";
@@ -18,6 +19,8 @@ Sentry.init({
   enableInExpoDevelopment: true,
   debug: true
 });
+
+Sentry.setRelease(Constants.manifest.revisionId);
 
 enableScreens();
 initProjects();
