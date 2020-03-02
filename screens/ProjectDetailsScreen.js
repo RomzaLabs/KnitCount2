@@ -104,7 +104,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleMarkFinished = () => {
-    const _ = AudioManager.playCompleteSound(Complete.yay);
+    const _ = AudioManager.playCompleteSound(Complete.default);
     setStatus(ProjectStatus.FO);
     ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();

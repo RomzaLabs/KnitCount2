@@ -39,7 +39,7 @@ const KnitCountCounterButton = (props) => {
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playTapSound(Taps.bubblePop);
+      const _ = AudioManager.playTapSound(Taps.default);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -55,7 +55,7 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playTapSound(Taps.bubblePop);
+      const _ = AudioManager.playTapSound(Taps.default);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -69,7 +69,7 @@ const KnitCountCounterButton = (props) => {
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playRipSound(Rips.frog);
+      const _ = AudioManager.playRipSound(Rips.default);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }

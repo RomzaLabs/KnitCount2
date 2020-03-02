@@ -72,7 +72,7 @@ const KnitCountCounterModal = (props) => {
               <View style={{margin: 6}}>
                 <KnitCountActionButton
                   onPress={() => {
-                    const _ = AudioManager.playRipSound(Rips.frog);
+                    const _ = AudioManager.playRipSound(Rips.default);
                     const newCounter = {...props.counter, value: 0};
                     props.onCounterChanged(newCounter);
                     props.onBackdropPress();

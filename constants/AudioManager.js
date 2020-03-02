@@ -4,9 +4,9 @@ import * as Sentry from 'sentry-expo';
 
 import { Taps, Rips, Complete } from "./Sounds";
 
-const bubblePop = require("../assets/sounds/taps/bubble-pop.wav");
-const frog = require("../assets/sounds/rips/frog.wav");
-const yay = require("../assets/sounds/complete/yay.mp3");
+const tap = require("../assets/sounds/taps/default_tap.wav");
+const rip = require("../assets/sounds/rips/default_rip.wav");
+const complete = require("../assets/sounds/complete/default_complete.mp3");
 
 class AudioManager {
 
@@ -15,9 +15,9 @@ class AudioManager {
     const soundObject = new Audio.Sound();
     try {
       switch (name) {
-        case Taps.bubblePop:
+        case Taps.default:
         default:
-          await soundObject.loadAsync(bubblePop);
+          await soundObject.loadAsync(tap);
           await soundObject.playAsync();
       }
     } catch (error) {
@@ -30,9 +30,9 @@ class AudioManager {
     const soundObject = new Audio.Sound();
     try {
       switch (name) {
-        case Rips.frog:
+        case Rips.default:
         default:
-          await soundObject.loadAsync(frog);
+          await soundObject.loadAsync(rip);
           await soundObject.playAsync();
       }
     } catch (error) {
@@ -45,9 +45,9 @@ class AudioManager {
     const soundObject = new Audio.Sound();
     try {
       switch (name) {
-        case Complete.yay:
+        case Complete.default:
         default:
-          await soundObject.loadAsync(yay);
+          await soundObject.loadAsync(complete);
           await soundObject.playAsync();
       }
     } catch (error) {

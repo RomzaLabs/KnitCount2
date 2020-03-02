@@ -1,11 +1,11 @@
 export const Taps = {
-  bubblePop: "/assets/sounds/taps/bubble-pop.wav"
+  default: "/assets/sounds/taps/default_tap.wav"
 };
 
 export const Rips = {
-  frog: "/assets/sounds/rips/frog.wav"
+  default: "/assets/sounds/rips/default_rip.wav"
 };
 
 export const Complete = {
-  yay: "/assets/sounds/complete/yay.mp3"
+  default: "/assets/sounds/complete/default_complete.mp3"
 };
