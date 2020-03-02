@@ -83,19 +83,18 @@ const SettingsScreen = observer((props) => {
         label = "Send Feedback";
         iconName = Platform.OS === "android" ? "md-at" : "ios-at";
         break;
-      // case TUTORIAL:
-      //   label = "Tutorial";
-      //   iconName = Platform.OS === "android" ? "md-school" : "ios-school";
-      //   break;
+      case TUTORIAL:
+        label = "Tutorial";
+        iconName = Platform.OS === "android" ? "md-school" : "ios-school";
+        break;
       case INSTAGRAM:
-      default:
         label = "Instagram";
         iconName = "logo-instagram";
         break;
-      // case RATE:
-      // default:
-      //   label = "Rate KnitCount";
-      //   iconName = Platform.OS === "android" ? "md-heart" : "ios-heart";
+      case RATE:
+      default:
+        label = "Rate KnitCount";
+        iconName = Platform.OS === "android" ? "md-heart" : "ios-heart";
     }
 
     return (
