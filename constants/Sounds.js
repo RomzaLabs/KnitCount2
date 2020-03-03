@@ -1,20 +1,20 @@
-export const Taps = {
-  default: "/assets/sounds/taps/default_tap.wav",
-  brick: "/assets/sounds/taps/brick_tap.wav",
-  cat: "/assets/sounds/taps/cat_tap.wav",
-  lightswitch: "/assets/sounds/taps/lightswitch_tap.wav"
-};
+class AudioPack {
+  constructor(name) {
+    this.tap = `/assets/sounds/taps/${name}_tap.wav`;
+    this.rip = `/assets/sounds/rips/${name}_rip.wav`;
+    this.complete = `/assets/sounds/complete/${name}_complete.wav`;
+  }
+}
 
-export const Rips = {
-  default: "/assets/sounds/rips/default_rip.wav",
-  brick: "/assets/sounds/taps/brick_rip.wav",
-  cat: "/assets/sounds/taps/cat_rip.wav",
-  lightswitch: "/assets/sounds/taps/lightswitch_rip.wav"
-};
+const defaultPack = new AudioPack("default");
+const brickPack = new AudioPack("brick");
+const catPack = new AudioPack("cat");
+const lightswitchPack = new AudioPack("lightswitch");
 
-export const Complete = {
-  default: "/assets/sounds/complete/default_complete.mp3",
-  brick: "/assets/sounds/taps/brick_complete.wav",
-  cat: "/assets/sounds/taps/cat_complete.wav",
-  lightswitch: "/assets/sounds/taps/lightswitch_complete.wav"
+export const Sounds = {
+  none: "no-sounds",
+  default: defaultPack,
+  brick: brickPack,
+  cat: catPack,
+  lightswitch: lightswitchPack
 };
