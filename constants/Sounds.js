@@ -2,7 +2,7 @@ class AudioPack {
   constructor(name) {
     this.tap = `/assets/sounds/taps/${name}_tap.wav`;
     this.rip = `/assets/sounds/rips/${name}_rip.wav`;
-    this.complete = `/assets/sounds/complete/${name}_complete.wav`;
+    this.complete = `/assets/sounds/complete/${name}_complete.mp3`;
   }
 }
 
