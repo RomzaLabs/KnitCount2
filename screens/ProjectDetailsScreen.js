@@ -44,7 +44,7 @@ import KnitCountDestructiveButton from "../components/buttons/KnitCountDestructi
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 import AudioManager from "../constants/AudioManager";
-import {Complete} from "../constants/Sounds";
+import SoundType from "../constants/SoundType";
 
 const ADD_BUTTON_ID = 0;
 
@@ -67,6 +67,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
   const [isImagePickerModalVisible, setIsImagePickerModalVisible] = useState(false);
+  const chosenSoundPack = "cat"; // TODO: Get user's preference.
 
   useEffect(() => {
     const newName = selectedProject ? selectedProject.name : "";
@@ -104,7 +105,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleMarkFinished = () => {
-    const _ = AudioManager.playCompleteSound(Complete.default);
+    const _ = AudioManager.playSound(chosenSoundPack, SoundType.complete);
     setStatus(ProjectStatus.FO);
     ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();
