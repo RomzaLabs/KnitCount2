@@ -8,11 +8,12 @@ import KnitCountActionButton from "../buttons/KnitCountActionButton";
 import KnitCountDestructiveButton from "../buttons/KnitCountDestructiveButton";
 import KnitCountNumberStepper from "../KnitCountNumberStepper";
 import AudioManager from "../../constants/AudioManager";
-import {Rips} from "../../constants/Sounds";
+import SoundType from "../../constants/SoundType";
 
 const KnitCountCounterModal = (props) => {
   const [counterLabel, setCounterLabel] = useState('');
   const [stepsPerCount, setStepsPerCount] = useState(0);
+  const chosenSoundPack = "cat"; // TODO: Get user's preference.
 
   useEffect(() => { setCounterLabel(props.counter.label) }, [props.counter.label]);
   useEffect(() => { setStepsPerCount(props.counter.stepsPerCount) }, [props.counter.stepsPerCount]);
@@ -72,7 +73,7 @@ const KnitCountCounterModal = (props) => {
               <View style={{margin: 6}}>
                 <KnitCountActionButton
                   onPress={() => {
-                    const _ = AudioManager.playRipSound(Rips.default);
+                    const _ = AudioManager.playSound(chosenSoundPack, SoundType.rip);
                     const newCounter = {...props.counter, value: 0};
                     props.onCounterChanged(newCounter);
                     props.onBackdropPress();
