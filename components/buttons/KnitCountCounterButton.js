@@ -6,13 +6,14 @@ import * as Haptics from 'expo-haptics';
 import * as Sentry from 'sentry-expo';
 
 import AudioManager from "../../constants/AudioManager";
-import {Taps, Rips} from "../../constants/Sounds";
+import SoundType from "../../constants/SoundType";
 
 const MAX_ZEROES = 5;
 
 const KnitCountCounterButton = (props) => {
   const [value, setValue] = useState(props.counter.value);
   const [bounceAnim, setBounceAnim] = useState(new Animated.Value(1));
+  const chosenSoundPack = "cat"; // TODO: Get user's preference.
 
   useEffect(() => { setValue(props.counter.value) }, [props.counter.value]);
 
@@ -39,7 +40,7 @@ const KnitCountCounterButton = (props) => {
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playTapSound(Taps.default);
+      const _ = AudioManager.playSound(chosenSoundPack, SoundType.tap);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -55,7 +56,7 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playTapSound(Taps.default);
+      const _ = AudioManager.playSound(chosenSoundPack, SoundType.tap);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -69,7 +70,7 @@ const KnitCountCounterButton = (props) => {
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playRipSound(Rips.default);
+      const _ = AudioManager.playSound(chosenSoundPack, SoundType.rip);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
