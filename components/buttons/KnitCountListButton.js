@@ -5,13 +5,27 @@ import {Ionicons} from "@expo/vector-icons";
 
 const KnitCountListButton = (props) => {
   const hideChevron = props.hideChevron ? props.hideChevron : false;
+  const hideRightSelection = !props.rightSelection;
   const showIcon = !!props.iconName;
+
+  const renderRightSelection = () => {
+    if (hideRightSelection) return undefined;
+    const niceText = props.rightSelection.charAt(0).toUpperCase() + props.rightSelection.slice(1);
+    return (
+      <View style={styles.rightSelectionContainer}>
+        <Text style={[styles.rightSelection, {color: props.textColor}]} >{niceText}</Text>
+      </View>
+    );
+  };
 
   const renderChevron = () => {
     if (hideChevron) return undefined;
     return (
-      <View style={styles.cellIcon}>
-        <Ionicons name={"ios-arrow-forward"} size={24} color={props.textColor} />
+      <View style={styles.rightContainer}>
+        {renderRightSelection()}
+        <View style={styles.cellIcon}>
+          <Ionicons name={"ios-arrow-forward"} size={24} color={props.textColor} />
+        </View>
       </View>
     );
   };
@@ -52,7 +66,8 @@ KnitCountListButton.propTypes = {
   textColor: PropTypes.string.isRequired,
   bgColor: PropTypes.string.isRequired,
   hideChevron: PropTypes.bool,
-  iconName: PropTypes.string
+  iconName: PropTypes.string,
+  rightSelection: PropTypes.string
 };
 
 const styles = StyleSheet.create({
@@ -74,8 +89,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingTop: 8
   },
+  rightContainer: {
+    flexDirection: "row"
+  },
   cellIcon: {
-    marginRight: 12
+    marginRight: 12,
+  },
+  rightSelectionContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 6,
+    marginTop: 2
+  },
+  rightSelection: {
+    fontFamily: "avenir-roman",
+    fontSize: 14
   }
 });
 
