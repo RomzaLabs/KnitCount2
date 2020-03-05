@@ -1,5 +1,6 @@
 import Colors from "../constants/Colors";
 import {FilterPreference} from "./FilterPreference";
+import Sounds from "../constants/Sounds";
 
 class AppSettings {
 
@@ -11,7 +12,8 @@ class AppSettings {
     mainBGColor = Colors.primaryBGColor,
     filterPreference = FilterPreference.WIP,
     interactionsTowardsReviewAsk = 0,
-    lastAskedToReviewDate = null
+    lastAskedToReviewDate = null,
+    audioPack = Sounds.default
   ) {
     this.id = id;
     this.isPremium = isPremium;
@@ -21,6 +23,7 @@ class AppSettings {
     this.filterPreference = filterPreference;
     this.interactionsTowardsReviewAsk = interactionsTowardsReviewAsk;
     this.lastAskedToReviewDate = lastAskedToReviewDate;
+    this.audioPack = Sounds.default;
   }
 
 }
