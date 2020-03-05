@@ -16,7 +16,8 @@ export const initSettings = () => {
             main_bg_color TEXT NOT NULL,
             filter_preference TEXT NOT NULL,
             interactions_towards_review_ask INTEGER NOT NULL,
-            last_asked_to_review_date INTEGER NULL
+            last_asked_to_review_date INTEGER NULL,
+            audio_pack TEXT NOT NULL
           );
         `,
         [],
@@ -45,7 +46,8 @@ export const fetchSettings = () => {
                main_bg_color, 
                filter_preference, 
                interactions_towards_review_ask, 
-               last_asked_to_review_date 
+               last_asked_to_review_date,
+               audio_pack
         FROM settings;`,
         [],
         (_, result) => {
@@ -72,9 +74,10 @@ export const insertSettings = (settings) => {
                                 main_bg_color, 
                                 filter_preference, 
                                 interactions_towards_review_ask, 
-                                last_asked_to_review_date
+                                last_asked_to_review_date,
+                                audio_pack
                                )
-          VALUES (?, ?, ?, ?, ?, ?, ?);
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         `,
         [
           settings.isPremium,
@@ -83,7 +86,8 @@ export const insertSettings = (settings) => {
           settings.mainBGColor,
           settings.filterPreference,
           settings.interactionsTowardsReviewAsk,
-          settings.lastAskedToReviewDate
+          settings.lastAskedToReviewDate,
+          settings.audioPack
         ],
         (_, result) => {
           resolve(result);
@@ -110,7 +114,8 @@ export const updateSettings = (settings) => {
               main_bg_color = ?, 
               filter_preference = ?,
               interactions_towards_review_ask = ?,
-              last_asked_to_review_date = ?
+              last_asked_to_review_date = ?,
+              audio_pack = ?
           WHERE id = 1
         `,
         [
@@ -120,7 +125,8 @@ export const updateSettings = (settings) => {
           settings.mainBGColor,
           settings.filterPreference,
           settings.interactionsTowardsReviewAsk,
-          settings.lastAskedToReviewDate
+          settings.lastAskedToReviewDate,
+          settings.audioPack
         ],
         (_, result) => {
           resolve(result);
