@@ -84,6 +84,7 @@ const SettingsScreen = observer((props) => {
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
           iconName={Platform.OS === "android" ? "md-volume-low" : "ios-volume-low"}
+          rightSelection={AppSettingsStore.settings.audioPack}
         />
       </View>
     );
