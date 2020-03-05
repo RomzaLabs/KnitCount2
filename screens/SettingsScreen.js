@@ -75,6 +75,20 @@ const SettingsScreen = observer((props) => {
     );
   };
 
+  const renderSounds = () => {
+    return (
+      <View>
+        <KnitCountListButton
+          onPress={() => console.log("TODO: Navigate")}
+          label="Sound Pack"
+          textColor={AppSettingsStore.mainTextColor}
+          bgColor={AppSettingsStore.mainBGColor}
+          iconName={Platform.OS === "android" ? "md-volume-low" : "ios-volume-low"}
+        />
+      </View>
+    );
+  };
+
   const renderGeneral = (item) => {
     let label;
     let iconName;
@@ -154,6 +168,7 @@ const SettingsScreen = observer((props) => {
           switch (section.key) {
             case SECTION_SETTINGS.PREMIUM.key: return renderPremium();
             case SECTION_SETTINGS.APP_COLOR.key: return renderAppColor();
+            case SECTION_SETTINGS.SOUNDS.key: return renderSounds();
             case SECTION_SETTINGS.GENERAL.key: return renderGeneral(item);
             case SECTION_SETTINGS.APP_VERSION.key: return renderAppVersion();
             default: return null;
