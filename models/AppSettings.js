@@ -23,7 +23,7 @@ class AppSettings {
     this.filterPreference = filterPreference;
     this.interactionsTowardsReviewAsk = interactionsTowardsReviewAsk;
     this.lastAskedToReviewDate = lastAskedToReviewDate;
-    this.audioPack = Sounds.default;
+    this.audioPack = audioPack;
   }
 
 }
