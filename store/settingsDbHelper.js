@@ -1,4 +1,6 @@
 import * as SQLite from 'expo-sqlite';
+import AppSettings from "../models/AppSettings";
+import Sounds from "../constants/Sounds";
 
 // Connect or create DB
 const db = SQLite.openDatabase('knitcount.db');
@@ -33,6 +35,70 @@ export const initSettings = () => {
   return promise;
 };
 
+const migrateOldSettings = (resolveFetch) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `
+        SELECT
+               id, 
+               is_premium, 
+               main_color, 
+               main_text_color, 
+               main_bg_color, 
+               filter_preference, 
+               interactions_towards_review_ask, 
+               last_asked_to_review_date
+        FROM settings;`,
+        [],
+        (_, result) => {
+          const oldResult = result.rows._array[0];
+          const newSettings = new AppSettings(
+            oldResult.id,
+            oldResult.is_premium,
+            oldResult.main_color,
+            oldResult.main_text_color,
+            oldResult.main_bg_color,
+            oldResult.filter_preference,
+            oldResult.interactions_towards_review_ask,
+            oldResult.last_asked_to_review_date,
+            Sounds.default
+          );
+
+          dropSettings()
+            .then(initSettings)
+            .then(() => updateSettings(newSettings))
+            .then(() => resolveFetch(fetchSettings()));
+
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
+const dropSettings = () => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DROP TABLE settings;`,
+        [],
+        () => {
+          resolve();
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
+
 export const fetchSettings = () => {
   const promise = new Promise((resolve, reject) => {
     db.transaction((tx) => {
@@ -54,7 +120,11 @@ export const fetchSettings = () => {
           resolve(result);
         },
         (_, err) => {
-          reject(err);
+          if (err.message === "Error code 1: no such column: audio_pack") {
+            migrateOldSettings(resolve);
+          } else {
+            reject(err);
+          }
         }
       );
     });
