@@ -51,6 +51,7 @@ const ADD_BUTTON_ID = 0;
 const ProjectDetailsScreen = observer(({ navigation }) => {
   useKeepAwake();
   const { selectedProject } = ProjectsStore;
+  const { audioPack } = AppSettingsStore.settings;
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
@@ -67,7 +68,6 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isCounterModalVisible, setIsCounterModalVisible] = useState(false);
   const [isImagePickerModalVisible, setIsImagePickerModalVisible] = useState(false);
-  const chosenSoundPack = "cat"; // TODO: Get user's preference.
 
   useEffect(() => {
     const newName = selectedProject ? selectedProject.name : "";
@@ -105,7 +105,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleMarkFinished = () => {
-    const _ = AudioManager.playSound(chosenSoundPack, SoundType.complete);
+    const _ = AudioManager.playSound(audioPack, SoundType.complete);
     setStatus(ProjectStatus.FO);
     ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();
@@ -314,6 +314,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               AppSettingsStore.interactionTowardReviewAsk();
             }}
             onLongPress={handleLongPressForCounter}
+            audioPack={audioPack}
           />
           <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>{counter.label}</Text>
         </View>
