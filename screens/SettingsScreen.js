@@ -79,7 +79,7 @@ const SettingsScreen = observer((props) => {
     return (
       <View>
         <KnitCountListButton
-          onPress={() => console.log("TODO: Navigate")}
+          onPress={() => props.navigation.navigate("SoundPacks")}
           label="Sound Pack"
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
