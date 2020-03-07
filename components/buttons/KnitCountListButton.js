@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import PropTypes from "prop-types";
 import {Ionicons} from "@expo/vector-icons";
+import Sounds from "../../constants/Sounds";
 
 const KnitCountListButton = (props) => {
   const hideRightIcon = props.hideRightIcon ? props.hideRightIcon : false;
@@ -21,12 +22,15 @@ const KnitCountListButton = (props) => {
   const renderRightIcon = () => {
     if (hideRightIcon) return undefined;
     const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
+    if (props.label.toLowerCase() === Sounds.none && rightIconName.endsWith("play-circle")) return undefined;
     return (
       <View style={styles.rightContainer}>
         {renderRightSelection()}
-        <View style={styles.cellIcon}>
-          <Ionicons name={rightIconName} size={24} color={props.textColor} />
-        </View>
+        <TouchableWithoutFeedback onPress={() => console.log("TODO: On Press2")}>
+          <View style={styles.cellIcon}>
+            <Ionicons name={rightIconName} size={24} color={props.textColor} />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };

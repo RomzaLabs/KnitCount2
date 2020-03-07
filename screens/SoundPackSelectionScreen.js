@@ -18,7 +18,7 @@ const SoundPackSelectionScreen = (props) => {
     const friendlyTitle = title.charAt(0).toUpperCase() + title.slice(1);
     return (
       <KnitCountListButton
-        onPress={() => console.log("TODO: On Press")}
+        onPress={() => console.log("TODO: On Press1")}
         label={friendlyTitle}
         textColor={AppSettingsStore.mainTextColor}
         bgColor={AppSettingsStore.mainBGColor}
