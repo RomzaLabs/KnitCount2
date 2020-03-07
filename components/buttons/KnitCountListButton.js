@@ -5,15 +5,15 @@ import {Ionicons} from "@expo/vector-icons";
 
 const KnitCountListButton = (props) => {
   const hideChevron = props.hideChevron ? props.hideChevron : false;
-  const hideRightSelection = !props.rightSelection;
+  const hideRightSelectionText = !props.rightSelectionText;
   const showIcon = !!props.iconName;
 
   const renderRightSelection = () => {
-    if (hideRightSelection) return undefined;
-    const niceText = props.rightSelection.charAt(0).toUpperCase() + props.rightSelection.slice(1);
+    if (hideRightSelectionText) return undefined;
+    const niceText = props.rightSelectionText.charAt(0).toUpperCase() + props.rightSelectionText.slice(1);
     return (
-      <View style={styles.rightSelectionContainer}>
-        <Text style={[styles.rightSelection, {color: props.textColor}]} >{niceText}</Text>
+      <View style={styles.rightSelectionTextContainer}>
+        <Text style={[styles.rightSelectionText, {color: props.textColor}]} >{niceText}</Text>
       </View>
     );
   };
@@ -67,7 +67,7 @@ KnitCountListButton.propTypes = {
   bgColor: PropTypes.string.isRequired,
   hideChevron: PropTypes.bool,
   iconName: PropTypes.string,
-  rightSelection: PropTypes.string
+  rightSelectionText: PropTypes.string
 };
 
 const styles = StyleSheet.create({
@@ -95,13 +95,13 @@ const styles = StyleSheet.create({
   cellIcon: {
     marginRight: 12,
   },
-  rightSelectionContainer: {
+  rightSelectionTextContainer: {
     justifyContent: "center",
     alignItems: "center",
     marginRight: 6,
     marginTop: 2
   },
-  rightSelection: {
+  rightSelectionText: {
     fontFamily: "avenir-roman",
     fontSize: 14
   }
