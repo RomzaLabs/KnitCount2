@@ -25,7 +25,7 @@ const SoundPackSelectionScreen = (props) => {
         textColor={AppSettingsStore.mainTextColor}
         bgColor={AppSettingsStore.mainBGColor}
         rightIconName={Platform.OS === "android" ? "md-play-circle" : "ios-play-circle"}
-        onPreviewSoundPack={(sound) => AudioManager.playSound(sound, SoundType.tap)}
+        onPreviewSoundPack={() => AudioManager.playSound(title, SoundType.tap)}
       />
     );
   };
