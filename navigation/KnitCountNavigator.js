@@ -9,6 +9,7 @@ import CreateProjectScreen from "../screens/CreateProjectScreen";
 import MyProjectsScreen from "../screens/MyProjectsScreen";
 import ProjectDetailsScreen from "../screens/ProjectDetailsScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import SoundPackSelectionScreen from "../screens/SoundPackSelectionScreen";
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -63,7 +64,13 @@ const MainNavigator = createStackNavigator(
       screen: MyProjectsScreen,
     },
     ProjectDetails: ProjectDetailsScreen,
-    Settings: SettingsScreen
+    Settings: SettingsScreen,
+    SoundPacks: {
+      screen: SoundPackSelectionScreen,
+      navigationOptions: {
+        headerTitle: "Sound Packs"
+      }
+    }
   },
   {
     initialRouteName: "MyProjects",

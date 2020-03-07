@@ -13,6 +13,7 @@ import {FilterPreference} from "./models/FilterPreference";
 import Colors from "./constants/Colors";
 import { initProjects } from './store/projectsDbHelper';
 import { initSettings, fetchSettings, insertSettings } from './store/settingsDbHelper';
+import Sounds from "./constants/Sounds";
 
 Sentry.init({
   dsn: 'https://0d46591ae0b9460f925fb006d1432a34@sentry.io/2980617',
@@ -46,7 +47,8 @@ const loadSettings = async() => {
       Colors.primaryBGColor,
       FilterPreference.WIP,
       0,
-      null
+      null,
+      Sounds.default
     );
     AppSettingsStore.setSettings(defaultSettings);
     await insertSettings(defaultSettings);
@@ -60,7 +62,8 @@ const loadSettings = async() => {
       dbSettings.main_bg_color,
       dbSettings.filter_preference,
       dbSettings.interactions_towards_review_ask,
-      dbSettings.last_asked_to_review_date
+      dbSettings.last_asked_to_review_date,
+      dbSettings.audio_pack
     );
     AppSettingsStore.setSettings(userSettings);
   }

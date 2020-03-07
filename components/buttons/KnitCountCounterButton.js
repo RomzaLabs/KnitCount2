@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 import * as Sentry from 'sentry-expo';
 
 import AudioManager from "../../constants/AudioManager";
-import {Taps, Rips} from "../../constants/Sounds";
+import SoundType from "../../constants/SoundType";
 
 const MAX_ZEROES = 5;
 
@@ -39,7 +39,7 @@ const KnitCountCounterButton = (props) => {
   const onSingleTapEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playTapSound(Taps.bubblePop);
+      const _ = AudioManager.playSound(props.audioPack, SoundType.tap);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -55,7 +55,7 @@ const KnitCountCounterButton = (props) => {
   const onDragRight = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playTapSound(Taps.bubblePop);
+      const _ = AudioManager.playSound(props.audioPack, SoundType.tap);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -69,7 +69,7 @@ const KnitCountCounterButton = (props) => {
   const onDragLeft = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      const _ = AudioManager.playRipSound(Rips.frog);
+      const _ = AudioManager.playSound(props.audioPack, SoundType.rip);
       addHapticFeedback();
       setBounceAnim(new Animated.Value(0.9));
     }
@@ -118,7 +118,8 @@ KnitCountCounterButton.propTypes = {
   mainBGColor: PropTypes.string.isRequired,
   counter: PropTypes.object.isRequired,
   onCounterChanged: PropTypes.func.isRequired,
-  onLongPress: PropTypes.func.isRequired
+  onLongPress: PropTypes.func.isRequired,
+  audioPack: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({

@@ -2,16 +2,40 @@ import React from 'react';
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import PropTypes from "prop-types";
 import {Ionicons} from "@expo/vector-icons";
+import Sounds from "../../constants/Sounds";
 
 const KnitCountListButton = (props) => {
-  const hideChevron = props.hideChevron ? props.hideChevron : false;
+  const hideRightIcon = props.hideRightIcon ? props.hideRightIcon : false;
+  const hideRightSelectionText = !props.rightSelectionText;
   const showIcon = !!props.iconName;
 
-  const renderChevron = () => {
-    if (hideChevron) return undefined;
+  const renderRightSelection = () => {
+    if (hideRightSelectionText) return undefined;
+    const niceText = props.rightSelectionText.charAt(0).toUpperCase() + props.rightSelectionText.slice(1);
     return (
-      <View style={styles.cellIcon}>
-        <Ionicons name={"ios-arrow-forward"} size={24} color={props.textColor} />
+      <View style={styles.rightSelectionTextContainer}>
+        <Text style={[styles.rightSelectionText, {color: props.textColor}]} >{niceText}</Text>
+      </View>
+    );
+  };
+
+  const handleIconPress = (rightIconName) => {
+    if (rightIconName.endsWith("play-circle")) return props.onPreviewSoundPack();
+    return props.onPress();
+  };
+
+  const renderRightIcon = () => {
+    if (hideRightIcon) return undefined;
+    const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
+    if (props.label.toLowerCase() === Sounds.none && rightIconName.endsWith("play-circle")) return undefined;
+    return (
+      <View style={styles.rightContainer}>
+        {renderRightSelection()}
+        <TouchableWithoutFeedback onPress={() => handleIconPress(rightIconName)}>
+          <View style={styles.cellIcon}>
+            <Ionicons name={rightIconName} size={24} color={props.textColor} />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     );
   };
@@ -40,7 +64,7 @@ const KnitCountListButton = (props) => {
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={[styles.presetCell, {borderColor: props.bgColor}]}>
         {renderLabel()}
-        {renderChevron()}
+        {renderRightIcon()}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -51,8 +75,11 @@ KnitCountListButton.propTypes = {
   label: PropTypes.string.isRequired,
   textColor: PropTypes.string.isRequired,
   bgColor: PropTypes.string.isRequired,
-  hideChevron: PropTypes.bool,
-  iconName: PropTypes.string
+  iconName: PropTypes.string,
+  rightIconName: PropTypes.string,
+  hideRightIcon: PropTypes.bool,
+  rightSelectionText: PropTypes.string,
+  onPreviewSoundPack: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -74,8 +101,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingTop: 8
   },
+  rightContainer: {
+    flexDirection: "row"
+  },
   cellIcon: {
-    marginRight: 12
+    marginRight: 12,
+  },
+  rightSelectionTextContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 6,
+    marginTop: 2
+  },
+  rightSelectionText: {
+    fontFamily: "avenir-roman",
+    fontSize: 14
   }
 });
 

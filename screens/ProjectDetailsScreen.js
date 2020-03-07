@@ -44,13 +44,14 @@ import KnitCountDestructiveButton from "../components/buttons/KnitCountDestructi
 import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 import AudioManager from "../constants/AudioManager";
-import {Complete} from "../constants/Sounds";
+import SoundType from "../constants/SoundType";
 
 const ADD_BUTTON_ID = 0;
 
 const ProjectDetailsScreen = observer(({ navigation }) => {
   useKeepAwake();
   const { selectedProject } = ProjectsStore;
+  const { audioPack } = AppSettingsStore.settings;
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
@@ -104,7 +105,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleMarkFinished = () => {
-    const _ = AudioManager.playCompleteSound(Complete.yay);
+    const _ = AudioManager.playSound(audioPack, SoundType.complete);
     setStatus(ProjectStatus.FO);
     ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();
@@ -313,6 +314,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
               AppSettingsStore.interactionTowardReviewAsk();
             }}
             onLongPress={handleLongPressForCounter}
+            audioPack={audioPack}
           />
           <Text style={[styles.gridItemLabel, {color: AppSettingsStore.mainTextColor}]}>{counter.label}</Text>
         </View>

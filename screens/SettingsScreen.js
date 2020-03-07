@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet, ScrollView} from 'react-native';
 import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
@@ -16,8 +16,11 @@ import SECTION_SETTINGS, {
 import KnitCountListButton from "../components/buttons/KnitCountListButton";
 import Colors from "../constants/Colors";
 import KnitCountColorButton from "../components/buttons/KnitCountColorButton";
+import Sounds from "../constants/Sounds";
 
 const SettingsScreen = observer((props) => {
+  const [audioPack, setAudioPack] = useState(Sounds.default);
+  const settingsRef = AppSettingsStore.settings;
 
   useEffect(() => {
     props.navigation.setParams({
@@ -25,6 +28,8 @@ const SettingsScreen = observer((props) => {
       mainTextColor: AppSettingsStore.mainTextColor
     });
   }, []);
+
+  useEffect(() => { setAudioPack(settingsRef.audioPack) }, [settingsRef]);
 
   const renderSectionHeader = (title, fontColor) => {
     return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
@@ -39,6 +44,7 @@ const SettingsScreen = observer((props) => {
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
           iconName={Platform.OS === "android" ? "md-star" : "ios-star"}
+          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
         />
       </View>
     );
@@ -75,6 +81,22 @@ const SettingsScreen = observer((props) => {
     );
   };
 
+  const renderSounds = () => {
+    return (
+      <View>
+        <KnitCountListButton
+          onPress={() => props.navigation.navigate("SoundPacks")}
+          label="Sound Pack"
+          textColor={AppSettingsStore.mainTextColor}
+          bgColor={AppSettingsStore.mainBGColor}
+          iconName={Platform.OS === "android" ? "md-volume-low" : "ios-volume-low"}
+          rightSelectionText={audioPack}
+          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
+        />
+      </View>
+    );
+  };
+
   const renderGeneral = (item) => {
     let label;
     let iconName;
@@ -83,19 +105,18 @@ const SettingsScreen = observer((props) => {
         label = "Send Feedback";
         iconName = Platform.OS === "android" ? "md-at" : "ios-at";
         break;
-      // case TUTORIAL:
-      //   label = "Tutorial";
-      //   iconName = Platform.OS === "android" ? "md-school" : "ios-school";
-      //   break;
+      case TUTORIAL:
+        label = "Tutorial";
+        iconName = Platform.OS === "android" ? "md-school" : "ios-school";
+        break;
       case INSTAGRAM:
-      default:
         label = "Instagram";
         iconName = "logo-instagram";
         break;
-      // case RATE:
-      // default:
-      //   label = "Rate KnitCount";
-      //   iconName = Platform.OS === "android" ? "md-heart" : "ios-heart";
+      case RATE:
+      default:
+        label = "Rate KnitCount";
+        iconName = Platform.OS === "android" ? "md-heart" : "ios-heart";
     }
 
     return (
@@ -125,6 +146,7 @@ const SettingsScreen = observer((props) => {
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
           iconName={iconName}
+          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
         />
       </View>
     );
@@ -139,7 +161,7 @@ const SettingsScreen = observer((props) => {
           label={`KnitCount ${version}`}
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
-          hideChevron={true}
+          hideRightIcon={true}
         />
       </View>
     );
@@ -155,6 +177,7 @@ const SettingsScreen = observer((props) => {
           switch (section.key) {
             case SECTION_SETTINGS.PREMIUM.key: return renderPremium();
             case SECTION_SETTINGS.APP_COLOR.key: return renderAppColor();
+            case SECTION_SETTINGS.SOUNDS.key: return renderSounds();
             case SECTION_SETTINGS.GENERAL.key: return renderGeneral(item);
             case SECTION_SETTINGS.APP_VERSION.key: return renderAppVersion();
             default: return null;
