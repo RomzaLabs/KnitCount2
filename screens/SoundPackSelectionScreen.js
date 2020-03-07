@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
 
 import AppSettingsStore from "../store/AppSettingsStore";
+import { SOUND_DATA } from "../constants/Sounds";
+import KnitCountListButton from "../components/buttons/KnitCountListButton";
 
 const SoundPackSelectionScreen = (props) => {
 
@@ -12,9 +14,26 @@ const SoundPackSelectionScreen = (props) => {
     });
   }, []);
 
+  const SoundPackCell = ({ title }) => {
+    const friendlyTitle = title.charAt(0).toUpperCase() + title.slice(1);
+    return (
+      <KnitCountListButton
+        onPress={() => console.log("TODO: On Press")}
+        label={friendlyTitle}
+        textColor={AppSettingsStore.mainTextColor}
+        bgColor={AppSettingsStore.mainBGColor}
+        hideChevron={true}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}>
-      <Text>Hello World</Text>
+      <FlatList
+        data={SOUND_DATA}
+        renderItem={({ item }) => <SoundPackCell title={item.title} />}
+        keyExtractor={item => item.id}
+      />
     </SafeAreaView>
   );
 
