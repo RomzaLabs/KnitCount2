@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Platform, SafeAreaView, SectionList, StyleSheet, ScrollView} from 'react-native';
 import { observer } from "mobx-react";
 import {HeaderButtons, Item} from "react-navigation-header-buttons";
@@ -16,8 +16,11 @@ import SECTION_SETTINGS, {
 import KnitCountListButton from "../components/buttons/KnitCountListButton";
 import Colors from "../constants/Colors";
 import KnitCountColorButton from "../components/buttons/KnitCountColorButton";
+import Sounds from "../constants/Sounds";
 
 const SettingsScreen = observer((props) => {
+  const [audioPack, setAudioPack] = useState(Sounds.default);
+  const settingsRef = AppSettingsStore.settings;
 
   useEffect(() => {
     props.navigation.setParams({
@@ -25,6 +28,8 @@ const SettingsScreen = observer((props) => {
       mainTextColor: AppSettingsStore.mainTextColor
     });
   }, []);
+
+  useEffect(() => { setAudioPack(settingsRef.audioPack) }, [settingsRef]);
 
   const renderSectionHeader = (title, fontColor) => {
     return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
@@ -85,7 +90,7 @@ const SettingsScreen = observer((props) => {
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
           iconName={Platform.OS === "android" ? "md-volume-low" : "ios-volume-low"}
-          rightSelectionText={AppSettingsStore.settings.audioPack}
+          rightSelectionText={audioPack}
           rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
         />
       </View>

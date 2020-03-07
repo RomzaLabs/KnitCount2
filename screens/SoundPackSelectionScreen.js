@@ -16,11 +16,18 @@ const SoundPackSelectionScreen = (props) => {
     });
   }, []);
 
+  const onSoundPackSelection = (sound) => {
+    const settings = {...AppSettingsStore.settings, audioPack: sound};
+    AppSettingsStore.setSettings(settings);
+    AppSettingsStore.persistSettings();
+    props.navigation.goBack();
+  };
+
   const SoundPackCell = ({ title }) => {
     const friendlyTitle = title.charAt(0).toUpperCase() + title.slice(1);
     return (
       <KnitCountListButton
-        onPress={() => console.log("TODO: On Press1")}
+        onPress={() => onSoundPackSelection(title)}
         label={friendlyTitle}
         textColor={AppSettingsStore.mainTextColor}
         bgColor={AppSettingsStore.mainBGColor}
