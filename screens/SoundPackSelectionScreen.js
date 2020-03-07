@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {FlatList, Platform, SafeAreaView, StyleSheet, Text} from 'react-native';
 
 import AppSettingsStore from "../store/AppSettingsStore";
 import { SOUND_DATA } from "../constants/Sounds";
@@ -22,7 +22,7 @@ const SoundPackSelectionScreen = (props) => {
         label={friendlyTitle}
         textColor={AppSettingsStore.mainTextColor}
         bgColor={AppSettingsStore.mainBGColor}
-        hideChevron={true}
+        rightIconName={Platform.OS === "android" ? "md-play-circle" : "ios-play-circle"}
       />
     );
   };

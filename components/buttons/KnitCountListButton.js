@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import {Ionicons} from "@expo/vector-icons";
 
 const KnitCountListButton = (props) => {
-  const hideChevron = props.hideChevron ? props.hideChevron : false;
+  const hideRightIcon = props.hideRightIcon ? props.hideRightIcon : false;
   const hideRightSelectionText = !props.rightSelectionText;
   const showIcon = !!props.iconName;
 
@@ -18,13 +18,14 @@ const KnitCountListButton = (props) => {
     );
   };
 
-  const renderChevron = () => {
-    if (hideChevron) return undefined;
+  const renderRightIcon = () => {
+    if (hideRightIcon) return undefined;
+    const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
     return (
       <View style={styles.rightContainer}>
         {renderRightSelection()}
         <View style={styles.cellIcon}>
-          <Ionicons name={"ios-arrow-forward"} size={24} color={props.textColor} />
+          <Ionicons name={rightIconName} size={24} color={props.textColor} />
         </View>
       </View>
     );
@@ -54,7 +55,7 @@ const KnitCountListButton = (props) => {
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={[styles.presetCell, {borderColor: props.bgColor}]}>
         {renderLabel()}
-        {renderChevron()}
+        {renderRightIcon()}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -65,8 +66,9 @@ KnitCountListButton.propTypes = {
   label: PropTypes.string.isRequired,
   textColor: PropTypes.string.isRequired,
   bgColor: PropTypes.string.isRequired,
-  hideChevron: PropTypes.bool,
   iconName: PropTypes.string,
+  rightIconName: PropTypes.string,
+  hideRightIcon: PropTypes.bool,
   rightSelectionText: PropTypes.string
 };
 

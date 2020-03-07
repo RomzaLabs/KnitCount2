@@ -39,6 +39,7 @@ const SettingsScreen = observer((props) => {
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
           iconName={Platform.OS === "android" ? "md-star" : "ios-star"}
+          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
         />
       </View>
     );
@@ -85,6 +86,7 @@ const SettingsScreen = observer((props) => {
           bgColor={AppSettingsStore.mainBGColor}
           iconName={Platform.OS === "android" ? "md-volume-low" : "ios-volume-low"}
           rightSelectionText={AppSettingsStore.settings.audioPack}
+          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
         />
       </View>
     );
@@ -139,6 +141,7 @@ const SettingsScreen = observer((props) => {
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
           iconName={iconName}
+          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
         />
       </View>
     );
@@ -153,7 +156,7 @@ const SettingsScreen = observer((props) => {
           label={`KnitCount ${version}`}
           textColor={AppSettingsStore.mainTextColor}
           bgColor={AppSettingsStore.mainBGColor}
-          hideChevron={true}
+          hideRightIcon={true}
         />
       </View>
     );

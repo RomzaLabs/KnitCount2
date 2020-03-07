@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { Platform, View, Text, KeyboardAvoidingView, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { observer } from "mobx-react";
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -94,6 +94,7 @@ const AddCounterScreen = observer((props) => {
                   label={counter.label}
                   textColor={AppSettingsStore.mainTextColor}
                   bgColor={AppSettingsStore.mainBGColor}
+                  rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
                 />
               );
             })
