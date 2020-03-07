@@ -19,6 +19,11 @@ const KnitCountListButton = (props) => {
     );
   };
 
+  const handleIconPress = (rightIconName, sound) => {
+    if (rightIconName.endsWith("play-circle")) return props.onPreviewSoundPack(sound);
+    return props.onPress();
+  };
+
   const renderRightIcon = () => {
     if (hideRightIcon) return undefined;
     const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
@@ -26,7 +31,7 @@ const KnitCountListButton = (props) => {
     return (
       <View style={styles.rightContainer}>
         {renderRightSelection()}
-        <TouchableWithoutFeedback onPress={() => console.log("TODO: On Press2")}>
+        <TouchableWithoutFeedback onPress={() => handleIconPress(rightIconName, props.label.toLowerCase())}>
           <View style={styles.cellIcon}>
             <Ionicons name={rightIconName} size={24} color={props.textColor} />
           </View>
@@ -73,7 +78,8 @@ KnitCountListButton.propTypes = {
   iconName: PropTypes.string,
   rightIconName: PropTypes.string,
   hideRightIcon: PropTypes.bool,
-  rightSelectionText: PropTypes.string
+  rightSelectionText: PropTypes.string,
+  onPreviewSoundPack: PropTypes.func
 };
 
 const styles = StyleSheet.create({

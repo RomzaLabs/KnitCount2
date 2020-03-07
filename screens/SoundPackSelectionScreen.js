@@ -4,6 +4,8 @@ import {FlatList, Platform, SafeAreaView, StyleSheet, Text} from 'react-native';
 import AppSettingsStore from "../store/AppSettingsStore";
 import { SOUND_DATA } from "../constants/Sounds";
 import KnitCountListButton from "../components/buttons/KnitCountListButton";
+import AudioManager from "../constants/AudioManager";
+import SoundType from "../constants/SoundType";
 
 const SoundPackSelectionScreen = (props) => {
 
@@ -23,6 +25,7 @@ const SoundPackSelectionScreen = (props) => {
         textColor={AppSettingsStore.mainTextColor}
         bgColor={AppSettingsStore.mainBGColor}
         rightIconName={Platform.OS === "android" ? "md-play-circle" : "ios-play-circle"}
+        onPreviewSoundPack={(sound) => AudioManager.playSound(sound, SoundType.tap)}
       />
     );
   };
