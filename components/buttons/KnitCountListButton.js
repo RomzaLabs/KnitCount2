@@ -8,6 +8,8 @@ const KnitCountListButton = (props) => {
   const hideRightIcon = props.hideRightIcon ? props.hideRightIcon : false;
   const hideRightSelectionText = !props.rightSelectionText;
   const showIcon = !!props.iconName;
+  const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
+  const isPlayIcon = rightIconName.endsWith("play-circle");
 
   const renderRightSelection = () => {
     if (hideRightSelectionText) return undefined;
@@ -26,15 +28,13 @@ const KnitCountListButton = (props) => {
 
   const renderRightIcon = () => {
     if (hideRightIcon) return undefined;
-    const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
-    const isPlayIcon = rightIconName.endsWith("play-circle");
     if (props.label.toLowerCase() === Sounds.none && isPlayIcon) return undefined;
     return (
       <View style={styles.rightContainer}>
         {renderRightSelection()}
         <TouchableWithoutFeedback onPress={() => handleIconPress(rightIconName)}>
           <View style={styles.cellIcon}>
-            <Ionicons name={rightIconName} size={isPlayIcon ? 40 : 24} color={props.textColor} />
+            <Ionicons name={rightIconName} size={isPlayIcon ? 50 : 24} color={props.textColor} />
           </View>
         </TouchableWithoutFeedback>
       </View>
@@ -63,7 +63,7 @@ const KnitCountListButton = (props) => {
 
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
-      <View style={[styles.presetCell, {borderColor: props.bgColor}]}>
+      <View style={[styles.presetCell, {borderColor: props.bgColor, height: isPlayIcon ? 60 : 50}]}>
         {renderLabel()}
         {renderRightIcon()}
       </View>
@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: 12,
     borderBottomWidth: 1,
-    height: 50,
     alignItems: "center",
     justifyContent: "space-between"
   },
