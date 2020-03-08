@@ -389,7 +389,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const renderSectionHeader = (title, fontColor) => {
-    return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
+    return <Text style={[styles.header, {color: fontColor, backgroundColor: AppSettingsStore.mainColor}]}>{title}</Text>;
   };
 
   return (
