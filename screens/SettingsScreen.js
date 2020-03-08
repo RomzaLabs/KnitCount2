@@ -32,7 +32,7 @@ const SettingsScreen = observer((props) => {
   useEffect(() => { setAudioPack(settingsRef.audioPack) }, [settingsRef]);
 
   const renderSectionHeader = (title, fontColor) => {
-    return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
+    return <Text style={[styles.header, {color: fontColor, backgroundColor: AppSettingsStore.mainColor}]}>{title}</Text>;
   };
 
   const renderPremium = () => {
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     marginTop: 24,
     fontFamily: "avenir-roman",
-    textTransform: "uppercase",
+    textTransform: "uppercase"
   },
   circlesScrollView: {
     marginTop: 6,
