@@ -27,13 +27,14 @@ const KnitCountListButton = (props) => {
   const renderRightIcon = () => {
     if (hideRightIcon) return undefined;
     const rightIconName = props.rightIconName ? props.rightIconName : "ios-arrow-forward";
-    if (props.label.toLowerCase() === Sounds.none && rightIconName.endsWith("play-circle")) return undefined;
+    const isPlayIcon = rightIconName.endsWith("play-circle");
+    if (props.label.toLowerCase() === Sounds.none && isPlayIcon) return undefined;
     return (
       <View style={styles.rightContainer}>
         {renderRightSelection()}
         <TouchableWithoutFeedback onPress={() => handleIconPress(rightIconName)}>
           <View style={styles.cellIcon}>
-            <Ionicons name={rightIconName} size={24} color={props.textColor} />
+            <Ionicons name={rightIconName} size={isPlayIcon ? 40 : 24} color={props.textColor} />
           </View>
         </TouchableWithoutFeedback>
       </View>
