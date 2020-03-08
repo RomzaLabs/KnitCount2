@@ -52,6 +52,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   useKeepAwake();
   const { selectedProject } = ProjectsStore;
   const { audioPack } = AppSettingsStore.settings;
+  let sectionListRef = null;
 
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
@@ -378,6 +379,11 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
           ]}
           placeholder="Enter notes"
           value={notes}
+          onFocus={() => {
+            if (sectionListRef) {
+              sectionListRef.scrollToLocation({animated: true, sectionIndex: 2, itemIndex: 0, viewPosition: 0});
+            }
+          }}
           onChangeText={(e) => {
             setNotes(e);
             ProjectsStore.setNotesForSelectedProject(e);
@@ -389,13 +395,13 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const renderSectionHeader = (title, fontColor) => {
-    return <Text style={[styles.header, {color: fontColor}]}>{title}</Text>;
+    return <Text style={[styles.header, {color: fontColor, backgroundColor: AppSettingsStore.mainColor}]}>{title}</Text>;
   };
 
   return (
     <KeyboardAvoidingView
       behavior='padding'
-      keyboardVerticalOffset={50}
+      keyboardVerticalOffset={Platform.OS === "android" ? 100 : 50}
       style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
     >
       <SafeAreaView style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]} >
@@ -406,6 +412,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
           style={{backgroundColor: AppSettingsStore.mainColor}}
           sections={PROJECT_DETAILS_SECTIONS}
           keyExtractor={(item, index) => item + index}
+          ref={ref => (sectionListRef = ref)}
           renderItem={({ section, item }) => {
             switch (section.key) {
               case SECTION_DETAILS.COUNTERS.key: return renderCounters();

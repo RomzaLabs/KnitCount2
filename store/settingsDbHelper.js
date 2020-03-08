@@ -120,7 +120,7 @@ export const fetchSettings = () => {
           resolve(result);
         },
         (_, err) => {
-          if (err.message === "Error code 1: no such column: audio_pack") {
+          if (err.message.includes("no such column")) {
             migrateOldSettings(resolve);
           } else {
             reject(err);
