@@ -175,7 +175,7 @@ const SettingsScreen = observer((props) => {
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
           switch (section.key) {
-            case SECTION_SETTINGS.PREMIUM.key: return renderPremium();
+            // case SECTION_SETTINGS.PREMIUM.key: return renderPremium();
             case SECTION_SETTINGS.APP_COLOR.key: return renderAppColor();
             case SECTION_SETTINGS.SOUNDS.key: return renderSounds();
             case SECTION_SETTINGS.GENERAL.key: return renderGeneral(item);
