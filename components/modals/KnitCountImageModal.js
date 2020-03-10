@@ -34,7 +34,7 @@ const KnitCountImageModal = (props) => {
                 props.onRemoveImage(props.selectedImage);
                 props.onBackdropPress();
               }}
-              label={"Delete this image."}
+              label={"Delete this image"}
             />
           </View>
 

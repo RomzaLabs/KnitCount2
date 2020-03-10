@@ -18,7 +18,7 @@ const KnitCountDeleteModal = (props) => {
           <View style={{width: "100%", marginTop: 6}}>
             <KnitCountActionButton
               onPress={props.onBackdropPress}
-              label={"Oops! Don't delete."}
+              label={"Oops! Don't delete"}
               bgColor={AppSettingsStore.mainTextColor}
               textColor={AppSettingsStore.mainColor}
             />
@@ -29,7 +29,7 @@ const KnitCountDeleteModal = (props) => {
                 props.onDeleteProject();
                 props.onBackdropPress();
               }}
-              label={"Yes, delete this project."}
+              label={"Yes, delete this project"}
             />
           </View>
         </View>
