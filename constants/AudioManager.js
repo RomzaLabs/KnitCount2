@@ -23,6 +23,15 @@ class AudioManager {
   playSound = async(name, soundType) => {
     if (!isAudioEnabled()) return undefined;
     if (name === Sounds.none) return undefined;
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      staysActiveInBackground: false,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      shouldDuckAndroid: true,
+      playThroughEarpieceAndroid: true
+    });
     const soundObject = new Audio.Sound();
     const source = this.getSource(name, soundType);
     try {
