@@ -62,6 +62,7 @@ class ProjectsStore {
           ...p,
           status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP
         };
+        this.selectedProject = project;
         updateProject(project);
         return project;
       }
