@@ -33,12 +33,12 @@ const AddCounterScreen = observer((props) => {
 
         <View style={styles.container}>
           <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
-            Create your own
+            Counter title
           </Text>
           <View>
             <TextInput
               style={[styles.input, {backgroundColor: AppSettingsStore.mainBGColor, color: AppSettingsStore.mainTextColor}]}
-              placeholder="Enter counter label"
+              placeholder="Enter counter title"
               value={customName}
               onChangeText={(e) => {
                 setCustomName(e);
@@ -52,7 +52,37 @@ const AddCounterScreen = observer((props) => {
 
         <View style={styles.container}>
           <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
+            Or choose a preset title
+          </Text>
+        </View>
+        <View style={styles.cellContainer}>
+          {
+            PRESET_COUNTERS.map((counter, idx) => {
+              return (
+                <KnitCountListButton
+                  key={idx}
+                  onPress={() => {
+                    const newCounter = {...counter, projectId, stepsPerCount};
+                    setCounter(newCounter);
+                    setCustomName(newCounter.label);
+                    setDisabled(false);
+                  }}
+                  label={counter.label}
+                  textColor={AppSettingsStore.mainTextColor}
+                  bgColor={AppSettingsStore.mainBGColor}
+                  hideRightIcon={true}
+                />
+              );
+            })
+          }
+        </View>
+
+        <View style={styles.container}>
+          <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
             Steps per count
+          </Text>
+          <Text style={[styles.subtitle, {color: AppSettingsStore.mainTextColor}]}>
+            Steps per count is the number of steps changed each time you press the counter.
           </Text>
           <View style={styles.container}>
             <KnitCountNumberStepper
@@ -72,33 +102,6 @@ const AddCounterScreen = observer((props) => {
               }}
             />
           </View>
-        </View>
-
-        <View style={styles.container}>
-          <Text style={[styles.header, {color: AppSettingsStore.mainTextColor}]}>
-            Or choose a preset
-          </Text>
-        </View>
-        <View style={styles.cellContainer}>
-          {
-            PRESET_COUNTERS.map((counter, idx) => {
-              return (
-                <KnitCountListButton
-                  key={idx}
-                  onPress={() => {
-                    const newCounter = {...counter, projectId, stepsPerCount};
-                    setCounter(newCounter);
-                    setCustomName(newCounter.label);
-                    setDisabled(false);
-                  }}
-                  label={counter.label}
-                  textColor={AppSettingsStore.mainTextColor}
-                  bgColor={AppSettingsStore.mainBGColor}
-                  rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
-                />
-              );
-            })
-          }
         </View>
 
         <View style={styles.container}>
@@ -177,6 +180,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     fontFamily: "avenir-roman",
     textTransform: "uppercase"
+  },
+  subtitle: {
+    fontSize: 12,
+    marginHorizontal: 12,
+    fontFamily: "avenir-roman"
   },
   input: {
     fontFamily: "avenir-roman",
