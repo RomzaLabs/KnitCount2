@@ -5,44 +5,52 @@ import * as Sentry from 'sentry-expo';
 import Sounds from "./Sounds";
 import SoundType from "./SoundType";
 
-const default_tap = require("../assets/sounds/taps/default_tap.wav");
-const default_rip = require("../assets/sounds/rips/default_rip.wav");
-const default_complete = require("../assets/sounds/complete/default_complete.mp3");
-const brick_tap = require("../assets/sounds/taps/brick_tap.wav");
-const brick_rip = require("../assets/sounds/rips/brick_rip.wav");
-const brick_complete = require("../assets/sounds/complete/brick_complete.mp3");
-const cat_tap = require("../assets/sounds/taps/cat_tap.wav");
-const cat_rip = require("../assets/sounds/rips/cat_rip.wav");
-const cat_complete = require("../assets/sounds/complete/cat_complete.mp3");
-const lightswitch_tap = require("../assets/sounds/taps/lightswitch_tap.wav");
-const lightswitch_rip = require("../assets/sounds/rips/lightswitch_rip.wav");
-const lightswitch_complete = require("../assets/sounds/complete/lightswitch_complete.mp3");
-
 class AudioManager {
+
+  constructor() {
+    /* Preload all sounds. */
+    this.defaultTapSoundObject = new Audio.Sound();
+    this.defaultTapSoundObject.loadAsync(require("../assets/sounds/taps/default_tap.wav")).then();
+    this.defaultRipSoundObject = new Audio.Sound();
+    this.defaultRipSoundObject.loadAsync(require("../assets/sounds/rips/default_rip.wav")).then();
+    this.defaultCompleteSoundObject = new Audio.Sound();
+    this.defaultCompleteSoundObject.loadAsync(require("../assets/sounds/complete/default_complete.mp3")).then();
+
+    this.brickTapSoundObject = new Audio.Sound();
+    this.brickTapSoundObject.loadAsync(require("../assets/sounds/taps/brick_tap.wav")).then();
+    this.brickRipSoundObject = new Audio.Sound();
+    this.brickRipSoundObject.loadAsync(require("../assets/sounds/rips/brick_rip.wav")).then();
+    this.brickCompleteSoundObject = new Audio.Sound();
+    this.brickCompleteSoundObject.loadAsync(require("../assets/sounds/complete/brick_complete.mp3")).then();
+
+    this.catTapSoundObject = new Audio.Sound();
+    this.catTapSoundObject.loadAsync(require("../assets/sounds/taps/cat_tap.wav")).then();
+    this.catRipSoundObject = new Audio.Sound();
+    this.catRipSoundObject.loadAsync(require("../assets/sounds/rips/cat_rip.wav")).then();
+    this.catCompleteSoundObject = new Audio.Sound();
+    this.catCompleteSoundObject.loadAsync(require("../assets/sounds/complete/cat_complete.mp3")).then();
+
+    this.lightswitchTapSoundObject = new Audio.Sound();
+    this.lightswitchTapSoundObject.loadAsync(require("../assets/sounds/taps/lightswitch_tap.wav")).then();
+    this.lightswitchRipSoundObject = new Audio.Sound();
+    this.lightswitchRipSoundObject.loadAsync(require("../assets/sounds/rips/lightswitch_rip.wav")).then();
+    this.lightswitchCompleteSoundObject = new Audio.Sound();
+    this.lightswitchCompleteSoundObject.loadAsync(require("../assets/sounds/complete/lightswitch_complete.mp3")).then();
+  }
 
   playSound = async(name, soundType) => {
     if (!isAudioEnabled()) return undefined;
     if (name === Sounds.none) return undefined;
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      playsInSilentModeIOS: true,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      staysActiveInBackground: false,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      shouldDuckAndroid: true,
-      playThroughEarpieceAndroid: true
-    });
-    const soundObject = new Audio.Sound();
-    const source = this.getSource(name, soundType);
+    const soundObject = this.getSoundObject(name, soundType);
     try {
-      await soundObject.loadAsync(source);
+      await soundObject.setPositionAsync(0);
       await soundObject.playAsync();
     } catch (error) {
       Sentry.captureException(error);
     }
   };
 
-  getSource = (name, soundType) => {
+  getSoundObject = (name, soundType) => {
     if (soundType === SoundType.tap) return this.getTapSound(name);
     if (soundType === SoundType.rip) return this.getRipSound(name);
     if (soundType === SoundType.complete) return this.getCompleteSound(name);
@@ -51,28 +59,28 @@ class AudioManager {
 
   getTapSound = (name) => {
     switch (name) {
-      case Sounds.brick: return brick_tap;
-      case Sounds.cat: return cat_tap;
-      case Sounds.lightswitch: return lightswitch_tap;
-      default: return default_tap;
+      case Sounds.brick: return this.brickTapSoundObject;
+      case Sounds.cat: return this.catTapSoundObject;
+      case Sounds.lightswitch: return this.lightswitchTapSoundObject;
+      default: return this.defaultTapSoundObject;
     }
   };
 
   getRipSound = (name) => {
     switch (name) {
-      case Sounds.brick: return brick_rip;
-      case Sounds.cat: return cat_rip;
-      case Sounds.lightswitch: return lightswitch_rip;
-      default: return default_rip;
+      case Sounds.brick: return this.brickRipSoundObject;
+      case Sounds.cat: return this.catRipSoundObject;
+      case Sounds.lightswitch: return this.lightswitchRipSoundObject;
+      default: return this.defaultRipSoundObject;
     }
   };
 
   getCompleteSound = (name) => {
     switch (name) {
-      case Sounds.brick: return brick_complete;
-      case Sounds.cat: return cat_complete;
-      case Sounds.lightswitch: return lightswitch_complete;
-      default: return default_complete;
+      case Sounds.brick: return this.brickCompleteSoundObject;
+      case Sounds.cat: return this.catCompleteSoundObject;
+      case Sounds.lightswitch: return this.lightswitchCompleteSoundObject;
+      default: return this.lightswitchCompleteSoundObject;
     }
   };
 
