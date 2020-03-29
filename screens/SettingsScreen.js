@@ -35,21 +35,6 @@ const SettingsScreen = observer((props) => {
     return <Text style={[styles.header, {color: fontColor, backgroundColor: AppSettingsStore.mainColor}]}>{title}</Text>;
   };
 
-  const renderPremium = () => {
-    return (
-      <View>
-        <KnitCountListButton
-          onPress={() => console.log("Unlock Premium")}
-          label="Unlock Premium"
-          textColor={AppSettingsStore.mainTextColor}
-          bgColor={AppSettingsStore.mainBGColor}
-          iconName={Platform.OS === "android" ? "md-star" : "ios-star"}
-          rightIconName={Platform.OS === "android" ? "md-arrow-forward" : "ios-arrow-forward"}
-        />
-      </View>
-    );
-  };
-
   const renderAppColor = () => {
 
     const onColorPress = (color) => {
@@ -175,7 +160,6 @@ const SettingsScreen = observer((props) => {
         keyExtractor={(item, index) => item + index}
         renderItem={({ section, item }) => {
           switch (section.key) {
-            case SECTION_SETTINGS.PREMIUM.key: return renderPremium();
             case SECTION_SETTINGS.APP_COLOR.key: return renderAppColor();
             case SECTION_SETTINGS.SOUNDS.key: return renderSounds();
             case SECTION_SETTINGS.GENERAL.key: return renderGeneral(item);
