@@ -99,6 +99,30 @@ class AppSettingsStore {
           mainBGColor: Colors.ufoBGColor
         };
         break;
+      case Colors.pinkColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.pinkColor,
+          mainTextColor: Colors.pinkTextColor,
+          mainBGColor: Colors.pinkBGColor
+        };
+        break;
+      case Colors.blackColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.blackColor,
+          mainTextColor: Colors.blackTextColor,
+          mainBGColor: Colors.blackBGColor
+        };
+        break;
+      case Colors.lavenderColor:
+        this.settings = {
+          ...this.settings,
+          mainColor: Colors.lavenderColor,
+          mainTextColor: Colors.lavenderTextColor,
+          mainBGColor: Colors.lavenderBGColor
+        };
+        break;
       default: break;
     }
     this.persistSettings();

@@ -51,7 +51,10 @@ const SettingsScreen = observer((props) => {
         Colors.watermelonColor,
         Colors.brightGreekColor,
         Colors.coralColor,
-        Colors.ufoColor
+        Colors.ufoColor,
+        Colors.pinkColor,
+        Colors.blackColor,
+        Colors.lavenderColor
       ];
 
       return supportedColors.map((color, idx) => {
