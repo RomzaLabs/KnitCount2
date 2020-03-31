@@ -51,9 +51,9 @@ const SettingsScreen = observer((props) => {
         Colors.watermelonColor,
         Colors.brightGreekColor,
         Colors.coralColor,
-        Colors.ufoColor,
-        Colors.pinkColor,
         Colors.blackColor,
+        Colors.pinkColor,
+        Colors.ufoColor,
         Colors.lavenderColor
       ];
 
