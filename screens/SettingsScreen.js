@@ -45,27 +45,32 @@ const SettingsScreen = observer((props) => {
       });
     };
 
-    const renderColorCircles = () => {
-      const supportedColors = [
-        Colors.clearChillColor,
-        Colors.watermelonColor,
-        Colors.brightGreekColor,
-        Colors.coralColor,
-        Colors.blackColor,
-        Colors.pinkColor,
-        Colors.ufoColor,
-        Colors.lavenderColor
-      ];
+    const supportedColors = [
+      Colors.clearChillColor,
+      Colors.watermelonColor,
+      Colors.brightGreekColor,
+      Colors.coralColor,
+      Colors.pinkColor,
+      Colors.ufoColor,
+      Colors.blackColor,
+      Colors.lavenderColor
+    ];
 
-      return supportedColors.map((color, idx) => {
-        return <KnitCountColorButton key={idx} onPress={() => onColorPress(color)} color={color} />;
+    const renderRowColorCircles = (startIdx, endIdx) => {
+      return supportedColors.slice(startIdx, endIdx).map((color, idx) => {
+        return <KnitCountColorButton key={idx} style={{flex: 1}} onPress={() => onColorPress(color)} color={color} />;
       });
     };
 
     return (
-      <ScrollView horizontal style={styles.circlesScrollView}>
-        {renderColorCircles()}
-      </ScrollView>
+      <View style={styles.colorsContainer}>
+        <View style={styles.colorsRow}>
+          {renderRowColorCircles(0, 4)}
+        </View>
+        <View style={styles.colorsRow}>
+          {renderRowColorCircles(4, 8)}
+        </View>
+      </View>
     );
   };
 
@@ -214,6 +219,13 @@ const styles = StyleSheet.create({
     marginTop: 24,
     fontFamily: "avenir-roman",
     textTransform: "uppercase"
+  },
+  colorsContainer: {
+    marginHorizontal: 30
+  },
+  colorsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   circlesScrollView: {
     marginTop: 6,
