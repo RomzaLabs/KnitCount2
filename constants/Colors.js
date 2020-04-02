@@ -1,7 +1,7 @@
 export default {
-  primaryColor: "#00A8E2",
+  primaryColor: "#FEC34C",
   primaryTextColor: "#FDFDFD",
-  primaryBGColor: "#66CAED",
+  primaryBGColor: "#FEDB93",
   clearChillColor: "#00A8E2",
   clearChillTextColor: "#FDFDFD",
   clearChillBGColor: "#66CAED",
