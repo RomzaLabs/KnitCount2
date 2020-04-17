@@ -120,7 +120,9 @@ const SettingsScreen = observer((props) => {
               case SEND_FEEDBACK:
                 Linking.openURL('mailto:knitcount@romzalabs.com');
                 break;
-              case TUTORIAL: // TODO: Make the video.
+              case TUTORIAL:
+                Linking.openURL('https://www.youtube.com/watch?v=7KsW2X-eXJo');
+                break;
               case INSTAGRAM:
                 Linking.openURL('https://www.instagram.com/lizamakesthings/');
                 break;
