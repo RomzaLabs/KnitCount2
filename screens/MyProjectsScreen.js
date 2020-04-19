@@ -54,7 +54,10 @@ const MyProjectsScreen = observer((props) => {
     setFilteredProjects();
   }, [filterPreference]);
 
-  const toggleTutorialModalVisible = () => setIsTutorialModalVisible(!isTutorialModalVisible);
+  const toggleTutorialModalVisible = () => {
+    AppSettingsStore.resetInteractionsTowardsReviewAsk();
+    setIsTutorialModalVisible(!isTutorialModalVisible);
+  }
 
   const renderKnitCountCard = (project) => {
     return (
