@@ -37,6 +37,10 @@ class AppSettingsStore {
     }
   }
 
+  @computed get allowedToShowTutorial() {
+    return this.settings.lastAskedToReviewDate == null;
+  }
+
   // Actions
   @action setSettings = (settings) => this.settings = settings;
 
