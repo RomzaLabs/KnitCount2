@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import { Button, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import SafeAreaView from 'react-native-safe-area-view';
 import { observer } from "mobx-react";
-import Modal from "react-native-modal";
 import * as StoreReview from 'expo-store-review';
 
 import AppSettingsStore from "../store/AppSettingsStore";
@@ -15,6 +14,7 @@ import KnitCountProjectCard from "../components/KnitCountProjectCard";
 import {ProjectStatus} from "../models/ProjectStatus";
 import {FilterPreference} from "../models/FilterPreference";
 import KnitCountTutorialModal from "../components/modals/KnitCountTutorialModal";
+import KnitCountFilterModal from "../components/modals/KnitCountFilterModal";
 
 const MyProjectsScreen = observer((props) => {
   const [projects, setProjects] = useState([]);
@@ -71,6 +71,16 @@ const MyProjectsScreen = observer((props) => {
     );
   };
 
+  const renderFilterModal = () => {
+    return (
+      <KnitCountFilterModal
+        isVisible={ProjectsStore.isProjectModalVisible}
+        onBackdropPress={ProjectsStore.toggleProjectModalVisible}
+        onFilterChosen={setFilterPreference}
+      />
+    );
+  };
+
   const renderTutorialModal = () => {
     if (!AppSettingsStore.allowedToShowTutorial) return undefined;
     return <KnitCountTutorialModal isVisible={isTutorialModalVisible} onBackdropPress={toggleTutorialModalVisible}/>;
@@ -104,47 +114,7 @@ const MyProjectsScreen = observer((props) => {
           }
         }}
       />
-      <Modal isVisible={ProjectsStore.isProjectModalVisible} onBackdropPress={ProjectsStore.toggleProjectModalVisible}>
-        <View style={[styles.filterContent, {backgroundColor: AppSettingsStore.mainBGColor}]}>
-          <Text style={[styles.popupTitle,{color: AppSettingsStore.mainTextColor}]}>Filter Projects</Text>
-          <View style={styles.filterBtnContainer}>
-            <Button
-              style={[styles.filterButton]}
-              title="💪 All Projects 💪"
-              color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
-              onPress={() => {
-                setFilterPreference(FilterPreference.ALL);
-                AppSettingsStore.updateFilterPreference(FilterPreference.ALL);
-                ProjectsStore.toggleProjectModalVisible();
-              }}
-            />
-          </View>
-          <View style={styles.filterBtnContainer}>
-            <Button
-              style={[styles.filterButton]}
-              title="🚧 Only WIPs 🚧"
-              color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
-              onPress={() => {
-                setFilterPreference(FilterPreference.WIP);
-                AppSettingsStore.updateFilterPreference(FilterPreference.WIP);
-                ProjectsStore.toggleProjectModalVisible();
-              }}
-            />
-          </View>
-          <View style={styles.filterBtnContainer}>
-            <Button
-              style={[styles.filterButton]}
-              title="✨ Only FOs ✨"
-              color={Platform.OS === "android" ? AppSettingsStore.mainColor : AppSettingsStore.mainTextColor}
-              onPress={() => {
-                setFilterPreference(FilterPreference.FO);
-                AppSettingsStore.updateFilterPreference(FilterPreference.FO);
-                ProjectsStore.toggleProjectModalVisible();
-              }}
-            />
-          </View>
-        </View>
-      </Modal>
+      { renderFilterModal() }
       { renderTutorialModal() }
     </SafeAreaView>
   );
@@ -200,25 +170,6 @@ const styles = StyleSheet.create({
   },
   projectsContainer: {
     marginHorizontal: 12
-  },
-  filterContent: {
-    padding: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    borderColor: 'rgba(0, 0, 0, 0.1)'
-  },
-  popupTitle: {
-    fontFamily: "avenir-black",
-    fontSize: 18,
-    margin: 10
-  },
-  filterBtnContainer: {
-    margin: 6,
-    width: 200,
-  },
-  filterButton: {
-    width: 200
   },
   myProjectsCustomHeader: {
     width: '100%',
