@@ -24,12 +24,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.romzalabs.knitcount",
-      "buildNumber": "1.0.3",
+      "buildNumber": "1.0.4",
       "supportsTablet": false
     },
     "android": {
       "package": "com.romzalabs.knitcount",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": [
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE"
