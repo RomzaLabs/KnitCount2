@@ -14,10 +14,12 @@ import KnitCountAddButton from "../components/buttons/KnitCountAddButton";
 import KnitCountProjectCard from "../components/KnitCountProjectCard";
 import {ProjectStatus} from "../models/ProjectStatus";
 import {FilterPreference} from "../models/FilterPreference";
+import KnitCountTutorialModal from "../components/modals/KnitCountTutorialModal";
 
 const MyProjectsScreen = observer((props) => {
   const [projects, setProjects] = useState([]);
   const [filterPreference, setFilterPreference] = useState(ProjectStatus.WIP);
+  const [isTutorialModalVisible, setIsTutorialModalVisible] = useState(true);
   const projectsRef = ProjectsStore.projects;
 
   const LIMIT = 20;
@@ -47,11 +49,12 @@ const MyProjectsScreen = observer((props) => {
 
   useEffect(() => { setFilteredProjects() }, [projectsRef]);
 
-
   useEffect(() => {
     setFilterPreference(AppSettingsStore.filterPreference);
     setFilteredProjects();
   }, [filterPreference]);
+
+  const toggleTutorialModalVisible = () => setIsTutorialModalVisible(!isTutorialModalVisible);
 
   const renderKnitCountCard = (project) => {
     return (
@@ -66,6 +69,11 @@ const MyProjectsScreen = observer((props) => {
         textColor={AppSettingsStore.mainTextColor}
       />
     );
+  };
+
+  const renderTutorialModal = () => {
+    if (!AppSettingsStore.allowedToShowTutorial) return undefined;
+    return <KnitCountTutorialModal isVisible={isTutorialModalVisible} onBackdropPress={toggleTutorialModalVisible}/>;
   };
 
   return (
@@ -137,6 +145,7 @@ const MyProjectsScreen = observer((props) => {
           </View>
         </View>
       </Modal>
+      { renderTutorialModal() }
     </SafeAreaView>
   );
 });
