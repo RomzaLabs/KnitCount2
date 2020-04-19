@@ -86,7 +86,13 @@ const MyProjectsScreen = observer((props) => {
 
   const renderTutorialModal = () => {
     if (!AppSettingsStore.allowedToShowTutorial) return undefined;
-    return <KnitCountTutorialModal isVisible={isTutorialModalVisible} onBackdropPress={toggleTutorialModalVisible}/>;
+    return (
+      <KnitCountTutorialModal
+        isVisible={isTutorialModalVisible}
+        onBackdropPress={toggleTutorialModalVisible}
+        isFirstLaunch={true}
+      />
+    );
   };
 
   return (

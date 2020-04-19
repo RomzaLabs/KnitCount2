@@ -45,6 +45,7 @@ import {ProjectStatus} from "../models/ProjectStatus";
 import KnitCountImagePicker from "../components/KnitCountImagePicker";
 import AudioManager from "../constants/AudioManager";
 import SoundType from "../constants/SoundType";
+import KnitCountTutorialModal from "../components/modals/KnitCountTutorialModal";
 
 const ADD_BUTTON_ID = 0;
 
@@ -398,6 +399,15 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
     return <Text style={[styles.header, {color: fontColor, backgroundColor: AppSettingsStore.mainColor}]}>{title}</Text>;
   };
 
+  const renderTutorialModal = () => {
+    return (
+      <KnitCountTutorialModal
+        isVisible={ProjectsStore.isTutorialModalVisible}
+        onBackdropPress={ProjectsStore.toggleTutorialModalVisible}
+      />
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       behavior='padding'
@@ -431,6 +441,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
         { renderCounterActionsModal() }
         { renderImageModal() }
         { renderImagePickerModal() }
+        { renderTutorialModal() }
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -456,7 +467,7 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
             <Item
               title="Help"
               iconName={Platform.OS === "android" ? "md-help-circle" : "ios-help-circle"}
-              onPress={() => {}}
+              onPress={() => ProjectsStore.toggleTutorialModalVisible()}
             />
           </HeaderButtons>
         );
