@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     margin: 12,
     fontFamily: "avenir-roman",
     fontSize: 16
-  },
+  }
 });
 
 export default KnitCountTutorialModal;
