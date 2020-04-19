@@ -106,7 +106,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
   };
 
   const handleMarkFinished = () => {
-    const _ = AudioManager.playSound(audioPack, SoundType.complete);
+    AudioManager.playSound(audioPack, SoundType.complete).then();
     setStatus(ProjectStatus.FO);
     ProjectsStore.toggleStatusForProject(selectedProject.id);
     toggleFinishedModalVisible();
@@ -446,6 +446,17 @@ ProjectDetailsScreen.navigationOptions = (navData) => {
               title="My Projects"
               iconName={Platform.OS === "android" ? "md-home" : "ios-home"}
               onPress={() => navData.navigation.popToTop()}
+            />
+          </HeaderButtons>
+        );
+      },
+      headerRight: () => {
+        return (
+          <HeaderButtons HeaderButtonComponent={KnitCountHeaderButton} title="Help">
+            <Item
+              title="Help"
+              iconName={Platform.OS === "android" ? "md-help-circle" : "ios-help-circle"}
+              onPress={() => {}}
             />
           </HeaderButtons>
         );
