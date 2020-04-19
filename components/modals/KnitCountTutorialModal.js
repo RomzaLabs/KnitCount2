@@ -13,11 +13,18 @@ const KnitCountTutorialModal = (props) => {
       <View style={[styles.modalContainer, {backgroundColor: AppSettingsStore.mainColor}]}>
         <View style={styles.tutorialContainer}>
           <Text style={[styles.modalHeader, {color: AppSettingsStore.mainTextColor}]}>
-            Welcome to KnitCount!
+            {props.isFirstLaunch ? "Welcome to KnitCount!" : "KnitCount Help"}
           </Text>
           <Text style={[styles.modalText, {color: AppSettingsStore.mainTextColor}]}>
-            We recommend that you start by watching this brief tutorial. If you want to view it again, it's in the app
-            settings screen.
+            {
+              props.isFirstLaunch
+                ? "We recommend that you start by watching this brief tutorial. If you want to view it again, it's " +
+                "in the app settings screen."
+                : "Tap Add Counter to add a counter\n" +
+                "Tap a counter to increase the counter\n" +
+                "Swipe left to decrease the counter\n" +
+                "Tap and Hold to show the advanced counter actions"
+            }
           </Text>
         </View>
         <View style={styles.actionContainer}>
@@ -30,14 +37,18 @@ const KnitCountTutorialModal = (props) => {
                 textColor={AppSettingsStore.mainColor}
               />
             </View>
-            <View style={{margin: 6}}>
-              <KnitCountActionButton
-                onPress={props.onBackdropPress}
-                label={"I'm ready! 🧶"}
-                bgColor={AppSettingsStore.mainTextColor}
-                textColor={AppSettingsStore.mainColor}
-              />
-            </View>
+            {
+              props.isFirstLaunch && (
+                <View style={{margin: 6}}>
+                  <KnitCountActionButton
+                    onPress={props.onBackdropPress}
+                    label={"I'm ready! 🧶"}
+                    bgColor={AppSettingsStore.mainTextColor}
+                    textColor={AppSettingsStore.mainColor}
+                  />
+                </View>
+              )
+            }
           </View>
         </View>
       </View>
@@ -47,7 +58,8 @@ const KnitCountTutorialModal = (props) => {
 
 KnitCountTutorialModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
-  onBackdropPress: PropTypes.func.isRequired
+  onBackdropPress: PropTypes.func.isRequired,
+  isFirstLaunch: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

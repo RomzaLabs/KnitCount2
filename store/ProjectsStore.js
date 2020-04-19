@@ -28,6 +28,7 @@ class ProjectsStore {
   @observable projects = [];
   @observable selectedProject = null;
   @observable isProjectModalVisible = false;
+  @observable isTutorialModalVisible = false;
 
   // Computed Props
 
@@ -53,6 +54,10 @@ class ProjectsStore {
 
   @action toggleProjectModalVisible = () => {
     this.isProjectModalVisible = !this.isProjectModalVisible;
+  };
+
+  @action toggleTutorialModalVisible = () => {
+    this.isTutorialModalVisible = !this.isTutorialModalVisible;
   };
 
   @action toggleStatusForProject = (projectId) => {
