@@ -19,7 +19,6 @@ import KnitCountFilterModal from "../components/modals/KnitCountFilterModal";
 const MyProjectsScreen = observer((props) => {
   const [projects, setProjects] = useState([]);
   const [filterPreference, setFilterPreference] = useState(ProjectStatus.WIP);
-  const [isTutorialModalVisible, setIsTutorialModalVisible] = useState(true);
   const projectsRef = ProjectsStore.projects;
 
   const LIMIT = 20;
@@ -56,7 +55,7 @@ const MyProjectsScreen = observer((props) => {
 
   const toggleTutorialModalVisible = () => {
     AppSettingsStore.resetInteractionsTowardsReviewAsk();
-    setIsTutorialModalVisible(!isTutorialModalVisible);
+    ProjectsStore.toggleTutorialModalVisible()
   }
 
   const renderKnitCountCard = (project) => {
@@ -86,9 +85,10 @@ const MyProjectsScreen = observer((props) => {
 
   const renderTutorialModal = () => {
     if (!AppSettingsStore.allowedToShowTutorial) return undefined;
+    ProjectsStore.isTutorialModalVisible = true;
     return (
       <KnitCountTutorialModal
-        isVisible={isTutorialModalVisible}
+        isVisible={ProjectsStore.isTutorialModalVisible}
         onBackdropPress={toggleTutorialModalVisible}
         isFirstLaunch={true}
       />
