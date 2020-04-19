@@ -28,8 +28,8 @@
       "supportsTablet": false
     },
     "android": {
-      "package": "com.romzalabs.knitcount",
-      "versionCode": 5,
+      "package": "com.romzalabs.knitcount2",
+      "versionCode": 1,
       "permissions": [
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE"
