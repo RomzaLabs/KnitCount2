@@ -27,7 +27,8 @@
       "buildNumber": "1.0.5",
       "supportsTablet": false,
       "infoPlist": {
-        "NSCameraUsageDescription": "KnitCount uses the camera to add images to your projects."
+        "NSCameraUsageDescription": "KnitCount uses the camera to add images to your projects.",
+        "NSPhotoLibraryUsageDescription": "KnitCount needs permission to access your photos to add them to your projects."
       }
     },
     "android": {
