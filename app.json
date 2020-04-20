@@ -25,7 +25,10 @@
     "ios": {
       "bundleIdentifier": "com.romzalabs.knitcount",
       "buildNumber": "1.0.5",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "KnitCount uses the camera to add images to your projects."
+      }
     },
     "android": {
       "package": "com.romzalabs.knitcount2",
