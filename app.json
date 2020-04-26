@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "KnitCount",
+    "name": "KnitCount 2",
     "slug": "KnitCount2",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -39,7 +39,7 @@
         "WRITE_EXTERNAL_STORAGE"
       ]
     },
-    "description": "KnitCount is the perfect way to store the stitch count for each of your knitting projects. Simple, intuitive design and animation makes for the cutest and easiest-to-use row counter available.",
+    "description": "KnitCount is the perfect way to store stitch counters for each of your knitting or crocheting projects. Simple, intuitive design and animation makes for the cutest and easiest-to-use row counter available.\n\nSelect from the row, repeat, increase and decrease counter presets to add them to your project, or create your own customized counter. Add pictures and photos to your projects so you can visualize your progress. Customize the app colors under settings so this app is as unique as your projects.\n\n\nFeatures:\n* Add as many projects as your heart desires.\n* Add as many counters as your want.\n* Ability to create and customize your own counters.\n* Ability to change the steps per count for each counter.\n* Ability to mark projects as WIPs (Work-in-progress) or FOs (Finished Objects).\n* Ability to add notes and images to a project.\n* 8 fun colors to choose from.\n* 4 sound packs for added fun.\n* Simple, intuitive design and animations make the app easy and pleasurable to use.",
     "hooks": {
       "postPublish": [
         {
