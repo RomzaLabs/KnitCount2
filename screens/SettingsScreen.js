@@ -128,7 +128,7 @@ const SettingsScreen = observer((props) => {
                 break;
               case RATE:
                 // These won't work properly until the app is Public.
-                const androidURL = "https://play.google.com/store/apps/details?id=com.romzalabs.knitcount";
+                const androidURL = "https://play.google.com/store/apps/details?id=com.romzalabs.knitcount2";
                 const iosURL = "itms-apps://itunes.apple.com/app/apple-store/id1499418814?mt=8&action=write-review";
                 const storeURL = Platform.OS === "android" ? androidURL : iosURL;
                 Linking.openURL(storeURL);
