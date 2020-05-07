@@ -45,10 +45,12 @@ class AudioManager {
     try {
       await soundObject.playFromPositionAsync(0);
     } catch (error) {
-      Sentry.withScope(function(scope) {
-        Sentry.setContext("sound", {"name": name, "soundType": soundType});
-        Sentry.captureException(error);
-      });
+      if (error.name !== "AudioFocusNotAcquiredException") {
+        Sentry.withScope(function(scope) {
+          Sentry.setContext("sound", {"name": name, "soundType": soundType});
+          Sentry.captureException(error);
+        });
+      }
     }
   };
 
