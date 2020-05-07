@@ -43,8 +43,7 @@ class AudioManager {
     if (name === Sounds.none) return undefined;
     const soundObject = this.getSoundObject(name, soundType);
     try {
-      await soundObject.setPositionAsync(0);
-      await soundObject.playAsync();
+      await soundObject.playFromPositionAsync(0);
     } catch (error) {
       Sentry.captureException(error);
     }
