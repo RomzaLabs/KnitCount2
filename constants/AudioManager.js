@@ -45,7 +45,10 @@ class AudioManager {
     try {
       await soundObject.playFromPositionAsync(0);
     } catch (error) {
-      Sentry.captureException(error);
+      Sentry.withScope(function(scope) {
+        Sentry.setContext("sound", {"name": name, "soundType": soundType});
+        Sentry.captureException(error);
+      });
     }
   };
 
