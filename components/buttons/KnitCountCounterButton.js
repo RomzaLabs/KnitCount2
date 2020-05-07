@@ -27,12 +27,15 @@ const KnitCountCounterButton = (props) => {
   const digitsForCount = (count) => count.toString().length;
   const leadingZeroes = (count) => "0".repeat(MAX_ZEROES - digitsForCount(count));
 
-  const addHapticFeedback = () => {
+  const addHapticFeedback = async() => {
     if (Platform.OS === "ios" && Platform.Version < 10) return undefined;
     try {
-      return Haptics.selectionAsync();
+      await Haptics.selectionAsync();
     } catch (error) {
-      Sentry.captureException(error);
+      Sentry.withScope(function(scope) {
+        Sentry.setContext("haptics", {"platformOS": Platform.OS, "platformVersion": Platform.Version});
+        Sentry.captureException(error);
+      });
     }
   };
 
@@ -40,7 +43,7 @@ const KnitCountCounterButton = (props) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
       const _ = AudioManager.playSound(props.audioPack, SoundType.tap);
-      addHapticFeedback();
+      addHapticFeedback().then();
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -56,7 +59,7 @@ const KnitCountCounterButton = (props) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
       const _ = AudioManager.playSound(props.audioPack, SoundType.tap);
-      addHapticFeedback();
+      addHapticFeedback().then();
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -70,7 +73,7 @@ const KnitCountCounterButton = (props) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
       const _ = AudioManager.playSound(props.audioPack, SoundType.rip);
-      addHapticFeedback();
+      addHapticFeedback().then();
       setBounceAnim(new Animated.Value(0.9));
     }
     if (state === State.END) {
@@ -85,7 +88,7 @@ const KnitCountCounterButton = (props) => {
   const onLongPressEvent = (e) => {
     const { state } = e.nativeEvent;
     if (state === State.ACTIVE) {
-      addHapticFeedback();
+      addHapticFeedback().then();
       setBounceAnim(new Animated.Value(0.9));
       props.onLongPress(props.counter.id);
     }
