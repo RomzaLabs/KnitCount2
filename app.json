@@ -35,6 +35,7 @@
       "versionCode": 3,
       "permissions": [
         "CAMERA",
+        "VIBRATE",
         "WRITE_EXTERNAL_STORAGE"
       ]
     },
