@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import ProjectsStore from "./store/ProjectsStore";
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
+import 'mobx-react-lite/batchingForReactNative';
 
 import KnitCountNavigator from "./navigation/KnitCountNavigator";
 import AppSettingsStore from "./store/AppSettingsStore";
