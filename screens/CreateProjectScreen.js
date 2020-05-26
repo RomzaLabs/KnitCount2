@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     margin: 20,
     padding: 20,
     width: "90%",
-    borderRadius: 5
+    borderRadius: 5,
+    minHeight: 60
   }
 });
 

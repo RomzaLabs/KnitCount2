@@ -410,7 +410,7 @@ const ProjectDetailsScreen = observer(({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior='padding'
+      behavior={Platform.OS === "ios" ? 'padding': undefined}
       keyboardVerticalOffset={Platform.OS === "android" ? 100 : 50}
       style={[styles.screen, {backgroundColor: AppSettingsStore.mainColor}]}
     >
