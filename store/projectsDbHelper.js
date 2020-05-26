@@ -229,7 +229,6 @@ const insertImages = async(projectId, images) => {
     try {
       await insertImage(projectId, image);
     } catch (e) {
-      console.error(e);
       throw e;
     }
   }
