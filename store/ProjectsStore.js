@@ -1,22 +1,9 @@
 import _ from "lodash";
 import { observable, action } from "mobx";
 import {toJS} from "mobx";
+import * as Sentry from 'sentry-expo';
 
-import {
-  insertProject,
-  updateProject,
-  deleteProject,
-  insertImage,
-  deleteImage,
-  insertCounter,
-  updateCounter,
-  deleteCounter,
-  deleteCountersForProject,
-  deleteImagesForProject,
-  fetchProjects,
-  fetchCountersForProject,
-  fetchImagesForProject
-} from "../store/projectsDbHelper";
+import * as DB from "./projectsDbHelper";
 import {ProjectStatus} from "../models/ProjectStatus";
 import Counter from "../models/Counter";
 import Image from "../models/Image";
@@ -47,9 +34,13 @@ class ProjectsStore {
   };
 
   @action createNewProject = async(project) => {
-    const dbResult = await insertProject(project);
-    project.id = dbResult.insertId;
-    this.setSelectedProject(project);
+    try {
+      const dbResult = await DB.insertProject(project);
+      project.id = dbResult.insertId;
+      this.setSelectedProject(project);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action toggleProjectModalVisible = () => {
@@ -61,51 +52,71 @@ class ProjectsStore {
   };
 
   @action toggleStatusForProject = (projectId) => {
-    this.projects = this.projects.map(p => {
-      if (p.id === projectId) {
-        const project = {
-          ...p,
-          status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP
-        };
-        this.selectedProject = project;
-        updateProject(project);
-        return project;
-      }
-      return p;
-    });
+    try {
+      this.projects = this.projects.map(p => {
+        if (p.id === projectId) {
+          const project = {
+            ...p,
+            status: p.status === ProjectStatus.WIP ? ProjectStatus.FO : ProjectStatus.WIP
+          };
+          this.selectedProject = project;
+          updateProject(project);
+          return project;
+        }
+        return p;
+      });
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action deleteProjectById = (projectId) => {
-    this.projects = this.projects.filter(p => p.id !== projectId);
-    this.selectedProject = null;
-    deleteProject(projectId);
-    deleteCountersForProject(projectId);
-    deleteImagesForProject(projectId);
+    try {
+      this.projects = this.projects.filter(p => p.id !== projectId);
+      this.selectedProject = null;
+      DB.deleteProject(projectId);
+      DB.deleteCountersForProject(projectId);
+      DB.deleteImagesForProject(projectId);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action deleteImageFromProjectById = (projectId, imageId) => {
-    deleteImage(imageId);
+    try {
+      DB.deleteImage(imageId);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action updateCounterLabel = (counter, newLabel) => {
-    const updatedCounter = {...counter, label: newLabel};
-    updateCounter(updatedCounter);
-    this.projects = this.projects.map(p => {
-      if (p.id === counter.projectId) {
-        const counters = p.counters.map(c => {
-          if (c.id === counter.id) return updatedCounter;
-          return c;
-        });
-        return {...p, counters};
-      }
-      return p;
-    });
+    try {
+      const updatedCounter = {...counter, label: newLabel};
+      DB.updateCounter(updatedCounter);
+      this.projects = this.projects.map(p => {
+        if (p.id === counter.projectId) {
+          const counters = p.counters.map(c => {
+            if (c.id === counter.id) return updatedCounter;
+            return c;
+          });
+          return {...p, counters};
+        }
+        return p;
+      });
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action deleteCounter = (counter) => {
-    deleteCounter(counter.id);
-    const newCounters = this.selectedProject.counters.filter(c => c.id !== counter.id);
-    this.setCountersForSelectedProject(newCounters);
+    try {
+      DB.deleteCounter(counter.id);
+      const newCounters = this.selectedProject.counters.filter(c => c.id !== counter.id);
+      this.setCountersForSelectedProject(newCounters);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action setImagesForSelectedProject = (images) => {
@@ -169,53 +180,69 @@ class ProjectsStore {
   };
 
   @action saveSelectedProject = _.debounce(async() => {
-    await updateProject(toJS(this.selectedProject));
-    const counters = toJS(this.selectedProject.counters);
-    for (const c of counters) {
-      await updateCounter(c);
+    try {
+      await DB.updateProject(toJS(this.selectedProject));
+      const counters = toJS(this.selectedProject.counters);
+      for (const c of counters) {
+        await DB.updateCounter(c);
+      }
+    } catch (e) {
+      Sentry.captureException(e);
     }
   }, 800, { trailing: true });
 
   @action saveImage = (projectId, image) => {
-    return insertImage(projectId, image);
+    try {
+      return DB.insertImage(projectId, image);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   @action saveCounter = (projectId, counter) => {
-    return insertCounter(projectId, counter);
+    try {
+      return DB.insertCounter(projectId, counter);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   };
 
   // Helpers
-  loadProjectsFromDB = _.debounce(async(offset, limit) => {
-    const dbResult = await fetchProjects(offset, limit);
-    const dbProjects = dbResult.rows._array;
+  loadProjectsFromDB = async(offset, limit) => {
+    try {
+      const dbResult = await DB.fetchProjects(offset, limit);
+      const dbProjects = dbResult.rows._array;
 
-    let projects = [];
-    for (const dbProject of dbProjects) {
-      const projectId = dbProject.id;
+      let projects = [];
+      for (const dbProject of dbProjects) {
+        const projectId = dbProject.id;
 
-      const dbCountersResult = await fetchCountersForProject(projectId);
-      const dbCounters = dbCountersResult.rows._array;
-      const counters = dbCounters.map(c => new Counter(c.id, c.project_id, c.label, c.value, c.steps_per_count));
+        const dbCountersResult = await DB.fetchCountersForProject(projectId);
+        const dbCounters = dbCountersResult.rows._array;
+        const counters = dbCounters.map(c => new Counter(c.id, c.project_id, c.label, c.value, c.steps_per_count));
 
-      const dbImagesResult = await fetchImagesForProject(projectId);
-      const dbImages = dbImagesResult.rows._array;
-      const images = dbImages.map(i => new Image(i.id, i.project_id, i.image_uri, i.date_added));
+        const dbImagesResult = await DB.fetchImagesForProject(projectId);
+        const dbImages = dbImagesResult.rows._array;
+        const images = dbImages.map(i => new Image(i.id, i.project_id, i.image_uri, i.date_added));
 
-      const project = new Project(
-        projectId,
-        dbProject.name,
-        dbProject.status,
-        counters,
-        dbProject.notes,
-        images,
-        dbProject.start_date,
-        dbProject.modified_date,
-        dbProject.end_date
-      );
-      projects.push(project);
+        const project = new Project(
+          projectId,
+          dbProject.name,
+          dbProject.status,
+          counters,
+          dbProject.notes,
+          images,
+          dbProject.start_date,
+          dbProject.modified_date,
+          dbProject.end_date
+        );
+        projects.push(project);
+      }
+      this.loadProjects(projects);
+    } catch (e) {
+      Sentry.captureException(e);
     }
-    this.loadProjects(projects);
-  }, 800, { leading: true, trailing: false });
+  };
 
 }
 
