@@ -25,8 +25,12 @@ Sentry.init({
 Sentry.setRelease(Constants.manifest.revisionId);
 
 enableScreens();
-initProjects();
-initSettings();
+try {
+  initProjects();
+  initSettings();
+} catch (e) {
+  Sentry.captureException(e);
+}
 
 const loadFonts = async () => {
   return await Font.loadAsync({
@@ -37,36 +41,40 @@ const loadFonts = async () => {
 };
 
 const loadSettings = async() => {
-  const dbResult = await fetchSettings();
-  const isBrandNewUser = dbResult.rows.length === 0;
-  if (isBrandNewUser) {
-    const defaultSettings = new AppSettings(
-      1,
-      false,
-      Colors.primaryColor,
-      Colors.primaryTextColor,
-      Colors.primaryBGColor,
-      FilterPreference.WIP,
-      0,
-      null,
-      Sounds.default
-    );
-    AppSettingsStore.setSettings(defaultSettings);
-    await insertSettings(defaultSettings);
-  } else {
-    const dbSettings = dbResult.rows._array[0];
-    const userSettings = new AppSettings(
-      dbSettings.id,
-      dbSettings.is_premium,
-      dbSettings.main_color,
-      dbSettings.main_text_color,
-      dbSettings.main_bg_color,
-      dbSettings.filter_preference,
-      dbSettings.interactions_towards_review_ask,
-      dbSettings.last_asked_to_review_date,
-      dbSettings.audio_pack
-    );
-    AppSettingsStore.setSettings(userSettings);
+  try {
+    const dbResult = await fetchSettings();
+    const isBrandNewUser = dbResult.rows.length === 0;
+    if (isBrandNewUser) {
+      const defaultSettings = new AppSettings(
+        1,
+        false,
+        Colors.primaryColor,
+        Colors.primaryTextColor,
+        Colors.primaryBGColor,
+        FilterPreference.WIP,
+        0,
+        null,
+        Sounds.default
+      );
+      AppSettingsStore.setSettings(defaultSettings);
+      await insertSettings(defaultSettings);
+    } else {
+      const dbSettings = dbResult.rows._array[0];
+      const userSettings = new AppSettings(
+        dbSettings.id,
+        dbSettings.is_premium,
+        dbSettings.main_color,
+        dbSettings.main_text_color,
+        dbSettings.main_bg_color,
+        dbSettings.filter_preference,
+        dbSettings.interactions_towards_review_ask,
+        dbSettings.last_asked_to_review_date,
+        dbSettings.audio_pack
+      );
+      AppSettingsStore.setSettings(userSettings);
+    }
+  } catch (e) {
+    Sentry.captureException(e);
   }
 };
 
@@ -74,19 +82,19 @@ const loadKnitCount = async () => {
   try {
     await loadFonts();
   } catch (e) {
-    console.error("Error loading fonts.", e);
+    Sentry.captureException(e);
   }
 
   try {
     await loadSettings();
   } catch (e) {
-    console.error("Error loading settings.", e);
+    Sentry.captureException(e);
   }
 
   try {
     await ProjectsStore.loadProjectsFromDB(0, 20);
   } catch (e) {
-    console.error("Error loading projects.", e);
+    Sentry.captureException(e);
   }
 };
 
