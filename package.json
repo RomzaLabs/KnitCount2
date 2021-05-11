@@ -19,7 +19,7 @@
     "expo-permissions": "~8.1.0",
     "expo-sqlite": "~8.1.0",
     "expo-store-review": "~2.1.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "mobx": "^5.15.1",
     "mobx-react": "^6.1.4",
     "prop-types": "^15.7.2",
