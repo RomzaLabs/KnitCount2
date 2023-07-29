@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.6",
-    "expo": "^37.0.0",
+    "expo": "^49.0.5",
     "expo-av": "~8.1.0",
     "expo-constants": "~9.0.0",
     "expo-font": "~8.1.0",
@@ -41,7 +41,7 @@
     "sentry-expo": "^2.0.4"
   },
   "devDependencies": {
-    "babel-preset-expo": "^8.1.0",
+    "babel-preset-expo": "^9.5.1",
     "@babel/core": "^7.0.0"
   },
   "private": true
